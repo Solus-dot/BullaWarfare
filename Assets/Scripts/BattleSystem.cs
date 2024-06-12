@@ -27,9 +27,19 @@ public class BattleSystem : MonoBehaviour {
 	public Button move3Button;
 	public Button move4Button;
 
+	public TMP_Text move1Button_Text;
+	public TMP_Text move2Button_Text;
+	public TMP_Text move3Button_Text;
+	public TMP_Text move4Button_Text;
+
 	private float turnDelay = 1f; // Delay between turns
 
 	void Start() {
+		move1Button_Text.text = "";
+		move2Button_Text.text = "";
+		move3Button_Text.text = "";
+		move4Button_Text.text = "";
+
 		state = BattleState.START;
 		StartCoroutine(SetupBattle());
 	}
@@ -62,8 +72,17 @@ public class BattleSystem : MonoBehaviour {
 
 		if (state == BattleState.P1_TURN) {
 			dialogueText.text = "Player 1's Turn: Choose an action.";
+			move1Button_Text.text = P1_Unit.GetMove(0).moveName;
+			move2Button_Text.text = P1_Unit.GetMove(1).moveName;
+			move3Button_Text.text = P1_Unit.GetMove(2).moveName;
+			move4Button_Text.text = P1_Unit.GetMove(3).moveName;
+
 		} else if (state == BattleState.P2_TURN) {
 			dialogueText.text = "Player 2's Turn: Choose an action.";
+			move1Button_Text.text = P2_Unit.GetMove(0).moveName;
+			move2Button_Text.text = P2_Unit.GetMove(1).moveName;
+			move3Button_Text.text = P2_Unit.GetMove(2).moveName;
+			move4Button_Text.text = P2_Unit.GetMove(3).moveName;
 		}
 
 		yield return new WaitForSeconds(turnDelay);

@@ -349,6 +349,10 @@ MonoBehaviour:
   move2Button: {fileID: 813530610}
   move3Button: {fileID: 1311924454}
   move4Button: {fileID: 1407892290}
+  move1Button_Text: {fileID: 696575864}
+  move2Button_Text: {fileID: 1276166470}
+  move3Button_Text: {fileID: 1854490338}
+  move4Button_Text: {fileID: 1419715589}
 --- !u!1 &303671748
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +434,7 @@ GameObject:
   - component: {fileID: 615623343}
   - component: {fileID: 615623342}
   m_Layer: 0
-  m_Name: AttackButton
+  m_Name: Move1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,7 +566,7 @@ GameObject:
   - component: {fileID: 696575865}
   - component: {fileID: 696575864}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Move1Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -607,7 +611,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Attack
+  m_text: Move1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
   m_sharedMaterial: {fileID: -6756554428829496531, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
@@ -634,13 +638,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
-  m_fontSizeBase: 0.3
+  m_fontSize: 0.2
+  m_fontSizeBase: 0.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -772,7 +776,7 @@ GameObject:
   - component: {fileID: 813530611}
   - component: {fileID: 813530610}
   m_Layer: 0
-  m_Name: DoNothingButton
+  m_Name: Move2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1202,7 +1206,7 @@ GameObject:
   - component: {fileID: 1276166471}
   - component: {fileID: 1276166470}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Move2Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1247,7 +1251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Nothing
+  m_text: Move2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
   m_sharedMaterial: {fileID: -6756554428829496531, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
@@ -1274,13 +1278,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
-  m_fontSizeBase: 0.3
+  m_fontSize: 0.2
+  m_fontSizeBase: 0.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1557,7 +1561,7 @@ GameObject:
   - component: {fileID: 1311924455}
   - component: {fileID: 1311924454}
   m_Layer: 0
-  m_Name: HealButton
+  m_Name: Move3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1690,7 +1694,7 @@ GameObject:
   - component: {fileID: 1407892291}
   - component: {fileID: 1407892290}
   m_Layer: 0
-  m_Name: Button4
+  m_Name: Move4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1857,7 +1861,7 @@ GameObject:
   - component: {fileID: 1419715590}
   - component: {fileID: 1419715589}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Move4Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1929,13 +1933,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
-  m_fontSizeBase: 0.3
+  m_fontSize: 0.2
+  m_fontSizeBase: 0.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2192,7 +2196,7 @@ Transform:
   m_GameObject: {fileID: 1463783919}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.4, y: -0.8, z: 0}
+  m_LocalPosition: {x: 3.5, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2402,7 +2406,7 @@ Transform:
   m_GameObject: {fileID: 1505942981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.4, y: 4, z: 0}
+  m_LocalPosition: {x: -3.5, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3200,7 +3204,7 @@ GameObject:
   - component: {fileID: 1854490339}
   - component: {fileID: 1854490338}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Move3Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3245,7 +3249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Heal
+  m_text: Move3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
   m_sharedMaterial: {fileID: -6756554428829496531, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
@@ -3272,13 +3276,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
-  m_fontSizeBase: 0.3
+  m_fontSize: 0.2
+  m_fontSizeBase: 0.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
