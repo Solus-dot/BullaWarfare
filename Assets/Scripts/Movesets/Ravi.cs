@@ -33,8 +33,10 @@ public class Ravi : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = true,
-			attackChange = 1,
-			defenseChange = 0
+			selfAttackChange = 1,
+			selfDefenseChange = 0,
+			oppAttackChange = 0,
+			oppDefenseChange = 0
 		},
 
 		// Equity Promise Move
@@ -48,8 +50,10 @@ public class Ravi : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = true,
-			attackChange = -2,
-			defenseChange = 0
+			selfAttackChange = 0,
+			selfDefenseChange = 0,
+			oppAttackChange = -2,
+			oppDefenseChange = 0
 		},
 
 		// Alt F4 IRL Move
@@ -63,8 +67,6 @@ public class Ravi : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = false,
-			attackChange = 0,
-			defenseChange = 0
 		},
 
 		// Volleyball Smash Move
@@ -78,8 +80,6 @@ public class Ravi : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = false,
-			attackChange = 0,
-			defenseChange = 0
 		}
 	};
 

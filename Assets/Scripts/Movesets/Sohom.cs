@@ -33,8 +33,10 @@ public class Sohom : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = true,
-			attackChange = 0,
-			defenseChange = -1
+			selfAttackChange = 0,
+			selfDefenseChange = 0,
+			oppAttackChange = 0,
+			oppDefenseChange = -1
 		},
 
 		// MCDonel Move
@@ -48,8 +50,6 @@ public class Sohom : MonoBehaviour
 			isHealingMove = true,
 			healAmount = 100, //100 for now, will switch to 30% later
 			isStatChange = false,
-			attackChange = 0,
-			defenseChange = 0
 		},
 
 		// Brainrot Spew Move
@@ -63,8 +63,11 @@ public class Sohom : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = true,
-			attackChange = -2,
-			defenseChange = 0
+			selfAttackChange = 0,
+			selfDefenseChange = 0,
+			oppAttackChange = -2,
+			oppDefenseChange = 0
+
 		},
 
 		// Mr Fresher Smash Move
@@ -78,8 +81,6 @@ public class Sohom : MonoBehaviour
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = false,
-			attackChange = 0,
-			defenseChange = 0
 		}
 	};
 

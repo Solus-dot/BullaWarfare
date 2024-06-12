@@ -46,7 +46,7 @@ public class BattleSystem : MonoBehaviour {
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
 
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(1f);
 
 		state = BattleState.P1_TURN;
 		StartCoroutine(PlayerTurn());
@@ -93,42 +93,43 @@ public class BattleSystem : MonoBehaviour {
 
 	IEnumerator HandleMove(Unit attacker, Unit defender, int moveIndex) {
 		actionInProgress = true;
-
 		Move move = attacker.GetMove(moveIndex);
+		bool isDead = false;
 
 		if (move.isDamaging) {
 			int damage = attacker.attack * move.damage/20; // Calculate effective damage
-			bool isDead = defender.TakeDamage(damage);
+			isDead = defender.TakeDamage(damage);
 			dialogueText.text = damage + "!!";
 
 			if (attacker == P1_Unit) {
 				P2_HUD.SetHP(defender.currentHP);
 			} else {
 				P1_HUD.SetHP(defender.currentHP);
-			}
-			
-			
-			yield return new WaitForSeconds(turnDelay);
+			}		
+		} 
 
-			if (isDead) {
-				state = (state == BattleState.P1_TURN) ? BattleState.P1_WIN : BattleState.P2_WIN;
-				EndBattle();
-			} else {
-				SwitchTurn();
-			}
-
-		} else if (move.isHealingMove) {
+		if (move.isHealingMove) {
 			int healAmount = move.healAmount; // Implement proper heal logic
 			attacker.Heal(healAmount);
 			dialogueText.text = move.moveDesc;
-			yield return new WaitForSeconds(turnDelay);
-			SwitchTurn();
 
-		} else if (move.isStatChange) {
-			attacker.attack += move.attackChange;
-			defender.defense += move.defenseChange;
-			dialogueText.text = move.moveDesc;
-			yield return new WaitForSeconds(turnDelay);
+		} 
+
+		if (move.isStatChange) {
+			if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
+			if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
+			if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
+			if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
+
+			P1_HUD.SetStatChange(P1_Unit);
+			P2_HUD.SetStatChange(P2_Unit);
+		}
+
+		yield return new WaitForSeconds(turnDelay);
+		if (isDead) {
+			state = (state == BattleState.P1_TURN) ? BattleState.P1_WIN : BattleState.P2_WIN;
+			EndBattle();
+		} else {
 			SwitchTurn();
 		}
 
