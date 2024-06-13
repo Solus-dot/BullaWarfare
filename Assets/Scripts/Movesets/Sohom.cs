@@ -85,9 +85,9 @@ public class Sohom : MonoBehaviour
 	};
 
 	public Move GetMoveAt(int index) {
-        if (index >= 0 && index < moves.Count) {
-            return moves[index];
-        }
-        return null;
-    }
+		if (index >= 0 && index < moves.Count) {
+			return moves[index];
+		}
+		return null;
+	}
 }
