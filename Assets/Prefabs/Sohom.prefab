@@ -46,11 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d8d7ed9646504888a5702b5d7ed33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Solus
+  unitName: Sohom
   unitLevel: 10
   maxHP: 92
   attack: 22
   defense: 15
+  attackStage: 0
+  defenseStage: 0
   currentHP: 92
   recvEffectiveDamage: 0
 --- !u!114 &-4110435084787679591
@@ -77,8 +79,10 @@ MonoBehaviour:
     isHealingMove: 0
     healAmount: 0
     isStatChange: 1
-    attackChange: 0
-    defenseChange: -1
+    selfAttackChange: 0
+    selfDefenseChange: 0
+    oppAttackChange: 0
+    oppDefenseChange: -1
   - moveName: MCDonel
     moveDesc: 'Orders Mcdonald''s in the middle of the fight,
 
@@ -92,8 +96,10 @@ MonoBehaviour:
     isHealingMove: 1
     healAmount: 100
     isStatChange: 0
-    attackChange: 0
-    defenseChange: 0
+    selfAttackChange: 0
+    selfDefenseChange: 0
+    oppAttackChange: 0
+    oppDefenseChange: 0
   - moveName: Brainrot Spew
     moveDesc: "Spews insane brainrot phrases at the opponent, \nCauses the opponent
       to lose his Attack by two stages."
@@ -105,8 +111,10 @@ MonoBehaviour:
     isHealingMove: 0
     healAmount: 0
     isStatChange: 1
-    attackChange: -2
-    defenseChange: 0
+    selfAttackChange: 0
+    selfDefenseChange: 0
+    oppAttackChange: -2
+    oppDefenseChange: 0
   - moveName: Mr. Fresher Smash
     moveDesc: 'Uses his status as Mr. Fresher to summon hordes of fangirls to attack
       the opponent,
@@ -120,8 +128,10 @@ MonoBehaviour:
     isHealingMove: 0
     healAmount: 0
     isStatChange: 0
-    attackChange: 0
-    defenseChange: 0
+    selfAttackChange: 0
+    selfDefenseChange: 0
+    oppAttackChange: 0
+    oppDefenseChange: 0
 --- !u!212 &4359680699597046753
 SpriteRenderer:
   m_ObjectHideFlags: 0

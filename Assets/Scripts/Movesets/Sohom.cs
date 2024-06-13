@@ -43,10 +43,9 @@ public class Sohom : MonoBehaviour
 		new Move() {
 			moveName = "MCDonel",
 			moveDesc = "Orders Mcdonald's in the middle of the fight,\nHeals 30% of total HP.",
-			isDamaging = false,
-			damage = 0,
 			cooldown = 0,
 			accuracy = 100,
+			isDamaging = false,
 			isHealingMove = true,
 			healAmount = 100, //100 for now, will switch to 30% later
 			isStatChange = false,
@@ -56,12 +55,10 @@ public class Sohom : MonoBehaviour
 		new Move() { 
 			moveName = "Brainrot Spew",
 			moveDesc = "Spews insane brainrot phrases at the opponent, \nCauses the opponent to lose his Attack by two stages.",
-			isDamaging = false,
-			damage = 0,
 			cooldown = 0,
 			accuracy = 100,
+			isDamaging = false,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = true,
 			selfAttackChange = 0,
 			selfDefenseChange = 0,
@@ -74,12 +71,11 @@ public class Sohom : MonoBehaviour
 		new Move() {
 			moveName = "Mr. Fresher Smash",
 			moveDesc = "Uses his status as Mr. Fresher to summon hordes of fangirls to attack the opponent,\nDeals massive damage but needs to be recharged after used.",
-			isDamaging = true,
-			damage = 20,
 			cooldown = 1,
 			accuracy = 100,
+			isDamaging = true,
+			damage = 20,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = false,
 		}
 	};

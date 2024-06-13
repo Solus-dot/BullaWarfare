@@ -26,12 +26,10 @@ public class Ravi : MonoBehaviour
 		new Move() {
 			moveName = "Bhangra",
 			moveDesc = "Dances in front of the opponent like a true chad, \nBoosts Attack by One Stage.",
-			isDamaging = false,
-			damage = 0,
 			cooldown = 0,
 			accuracy = 100,
+			isDamaging = false,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = true,
 			selfAttackChange = 1,
 			selfDefenseChange = 0,
@@ -43,12 +41,10 @@ public class Ravi : MonoBehaviour
 		new Move() {
 			moveName = "Equity Promise",
 			moveDesc = "Promises some %share of his future package to the opponent, \nin exchange for Opponent losing his attack stat by 2 stages.",
-			isDamaging = false,
-			damage = 0,
 			cooldown = 0,
 			accuracy = 100,
+			isDamaging = false,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = true,
 			selfAttackChange = 0,
 			selfDefenseChange = 0,
@@ -60,12 +56,11 @@ public class Ravi : MonoBehaviour
 		new Move() {
 			moveName = "Alt F4 IRL",
 			moveDesc = "Uses an illegal shortcut arriving from the depths of /dev/null,\nDeals moderate damage the opponent.",
-			isDamaging = true,
-			damage = 20,
 			cooldown = 0,
 			accuracy = 80,
+			isDamaging = true,
+			damage = 20,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = false,
 		},
 
@@ -73,12 +68,11 @@ public class Ravi : MonoBehaviour
 		new Move() {
 			moveName = "Volleyball Smash",
 			moveDesc = "Hits the opponent with a smashed volleyball, dealing insane damage, \nbut because of his terrible accuracy can only hit it 50% of the time.",
-			isDamaging = true,
-			damage = 20,
 			cooldown = 0,
 			accuracy = 50,
+			isDamaging = true,
+			damage = 20,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = false,
 		}
 	};

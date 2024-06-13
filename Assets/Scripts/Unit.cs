@@ -7,10 +7,11 @@
 		public string moveDesc;			// Description of the move in character selection
 		public string moveMessage;		// Message to be printed on the dialogue when the move is used
 
-		public bool isDamaging;			// Flag indicating if the move deals damage
-		public int damage;				// Base damage dealt by the move
 		public float cooldown;			// Time (turns) before reuse (optional)
 		public int accuracy;			// Percentage chance of hitting (optional)
+
+		public bool isDamaging;			// Flag indicating if the move deals damage
+		public int damage;				// Base damage dealt by the move
 
 		public bool isHealingMove;		// Flag indicating if the move heals (optional)
 		public int healAmount;			// Amount of health healed (if isHealingMove is true)
@@ -39,8 +40,9 @@
 	private float flashDuration = 0.2f; 
 
 	//Moveset Objects
-	private Sohom sohom; // Reference to the Sohom script
-	private Ravi ravi; // Reference to the Ravi script
+	private Sohom sohom;	// Reference to the Sohom script
+	private Ravi ravi;		// Reference to the Ravi script
+	private Manas manas;	// Reference to the Manas script
 
 	void Start() {
 		unitRenderer = GetComponent<SpriteRenderer>();
@@ -48,10 +50,12 @@
 			originalColor = unitRenderer.material.color;
 		}
 
-		// Get the Sohom or Ravi script component from the same GameObject
+		// Get the Character Moveset script component from the same GameObject
 		sohom = GetComponent<Sohom>();
 		ravi = GetComponent<Ravi>();
-		if (sohom == null && ravi == null) {
+		manas = GetComponent<Manas>();
+
+		if (sohom == null && ravi == null && manas == null) {
 			Debug.LogError("Moveset script not found on the unit prefab.");
 			return;
 		}
@@ -91,6 +95,8 @@
 			return sohom.GetMoveAt(index);
 		} else if (ravi != null) {
 			return ravi.GetMoveAt(index);
+		} else if (manas != null) {
+			return manas.GetMoveAt(index);
 		} else {
 			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;
