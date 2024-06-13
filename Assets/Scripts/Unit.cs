@@ -92,7 +92,7 @@
 		} else if (ravi != null) {
 			return ravi.GetMoveAt(index);
 		} else {
-			Debug.LogError("Moveset script is not assigned.");
+			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;
 		}
 	}
