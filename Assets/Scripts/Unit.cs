@@ -37,6 +37,8 @@
 	private Renderer unitRenderer;
 	private Color originalColor;
 	private float flashDuration = 0.2f; 
+
+	//Moveset Objects
 	private Sohom sohom; // Reference to the Sohom script
 	private Ravi ravi; // Reference to the Ravi script
 
