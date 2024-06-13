@@ -133,6 +133,7 @@ public class CharacterSelectManager : MonoBehaviour {
 		Unit unit = prefab.GetComponent<Unit>();
 		NameText.text = unit.unitName;
 		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
+		//Fixed the issue
 		MovesText.text = unit.GetMove(0).moveName + "\n" + unit.GetMove(1).moveName + "\n" +  unit.GetMove(2).moveName + "\n" + unit.GetMove(3).moveName;
 	}
 
