@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH }
 
 [System.Serializable]
 public class Move {
@@ -87,6 +87,8 @@ public class Unit : MonoBehaviour {
 			return Ravi.moves[index];
 		} else if (moveset == MovesetEnum.MANAS) {
 			return Manas.moves[index];
+		} else if (moveset == MovesetEnum.HARSH) {
+			return Harsh.moves[index];
 		} else {
 			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;

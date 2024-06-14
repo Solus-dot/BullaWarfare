@@ -2,11 +2,11 @@
 
 // Move 1: Bhangra 
 // Dances in front of the opponent like a true chad,
-// Boosts Attack by One Stage
+// Boosts Attack by one stage.
 
 // Move 2: Equity Promise
 // Promises some %share of his future package to the opponent 
-// in exchange for Opponent losing his attack stat by 2 stages. Can only be used once per opponent
+// In exchange for Opponent losing his Attack stat by 2 stages. Can only be used once per opponent.
 
 // Move 3: Alt F4 IRL
 // Uses an illegal shortcut arriving from the depths of /dev/null,
@@ -14,7 +14,7 @@
 
 // Move 4: Volleyball Smash
 // Hits the opponent with a smashed volleyball, dealing insane damage,
-// but because of his terrible accuracy can only hit it 50% of the time
+// But because of his terrible accuracy can only hit it 50% of the time.
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ public static class Ravi
 		// Equity Promise Move
 		new Move() {
 			moveName = "Equity Promise",
-			moveDesc = "Promises some %share of his future package to the opponent, \nin exchange for Opponent losing his attack stat by 2 stages.",
+			moveDesc = "Promises some %share of his future package to the opponent, \nIn exchange for Opponent losing his attack stat by 2 stages.",
 			cooldown = 0,
 			accuracy = 100,			
 			isDamaging = false,
@@ -67,7 +67,7 @@ public static class Ravi
 		// Volleyball Smash Move
 		new Move() {
 			moveName = "Volleyball Smash",
-			moveDesc = "Hits the opponent with a smashed volleyball, dealing insane damage, \nbut because of his terrible accuracy can only hit it 50% of the time.",
+			moveDesc = "Hits the opponent with a smashed volleyball, dealing insane damage, \nBut because of his terrible accuracy can only hit it 50% of the time.",
 			cooldown = 0,
 			accuracy = 50,
 			isDamaging = true,

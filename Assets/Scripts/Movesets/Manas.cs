@@ -10,11 +10,11 @@
 
 // Move 3: Toxic Rant
 // Uses a variety of various slurs and roasts to dishearten the opponent,
-// Lowers Attack. If used after Silly Pookie, lowers both Attack and Defence
+// Lowers Attack. If used after Silly Pookie, lowers both Attack and Defense.
 
 // Move 4: Cooler Throw
 // In a fit of rage and fury about the ownership of the cooler,
-// the user smashes the opponent into the cooler, dealing huge damage
+// The user smashes the opponent into the cooler, dealing huge damage.
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -67,7 +67,7 @@ public static class Manas
 		// Cooler Throw Move
 		new Move() {
 			moveName = "Cooler Throw",
-			moveDesc = "In a fit of rage and fury about the ownership of the cooler,\nthe user smashes the opponent into the cooler, dealing huge damage",
+			moveDesc = "In a fit of rage and fury about the ownership of the cooler,\nThe user smashes the opponent into the cooler, dealing huge damage",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,

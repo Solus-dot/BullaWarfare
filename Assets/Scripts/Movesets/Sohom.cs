@@ -1,20 +1,20 @@
 // Sohom 
 
 // Move 1: Chokehold
-// comes sneakily behind the opponent and chokes them for some damage, 
-// causes opponent to lose defense stat
+// Comes sneakily behind the opponent and chokes them for some damage, 
+// Causes opponent to lose Defense stat.
 
 // Move 2: MCDonel
 // Orders Mcdonald's in the middle of the fight, 
-// heals 30% of total HP
+// Heals 30% of total HP.
 
 // Move 3: Brainrot Spew
 // Spews insane brainrot phrases at the opponent, 
-// causes the opponent to lose his attack by two stages
+// causes the opponent to lose his Attack by two stages.
 
 // Move 4: Mr Fresher Smash
 // Uses his status as Mr Fresher to summon hordes of fangirls to attack the opponent, 
-// deals massive damage but needs to be recharged after used
+// Deals massive damage but needs to be recharged after used.
 
 using UnityEngine;
 using System.Collections.Generic;
