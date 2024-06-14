@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1214169731801516086}
   - component: {fileID: 4136278435108665487}
-  - component: {fileID: -4110435084787679591}
   - component: {fileID: 4359680699597046753}
   m_Layer: 0
   m_Name: Sohom
@@ -55,19 +54,8 @@ MonoBehaviour:
   attackStage: 0
   defenseStage: 0
   currentHP: 92
+  moveset: 0
   recvEffectiveDamage: 0
---- !u!114 &-4110435084787679591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6884295409158445089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4aa061cfde0d4ff4bb9f832702d67cea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &4359680699597046753
 SpriteRenderer:
   m_ObjectHideFlags: 0

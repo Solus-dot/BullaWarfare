@@ -19,9 +19,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Manas : MonoBehaviour 
+public static class Manas 
 {
-	public List<Move> moves = new List<Move>() {
+	public static List<Move> moves = new List<Move>() {
 		// Mosquito Rack-hit Move
 		new Move() {
 			moveName = "Mosquito Rack-hit",
@@ -76,11 +76,4 @@ public class Manas : MonoBehaviour
 			isStatChange = false,
 		}
 	};
-
-	public Move GetMoveAt(int index) {
-		if (index >= 0 && index < moves.Count) {
-			return moves[index];
-		}
-		return null;
-	}
 }

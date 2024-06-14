@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
+public enum MovesetEnum { SOHOM, RAVI, MANAS }
+
+[System.Serializable]
 public class Move {
 	public string moveName;			// Name of the move
 	public string moveDesc;			// Description of the move in character selection
@@ -33,36 +37,18 @@ public class Unit : MonoBehaviour {
 	public int attackStage = 0;
 	public int defenseStage = 0;
 	public int currentHP;
+	public MovesetEnum moveset;
 
 	public int recvEffectiveDamage; // Effective damage received
 	private Renderer unitRenderer;
 	private Color originalColor;
 	private float flashDuration = 0.2f; 
 
-	//Moveset Objects
-	private Sohom sohom;	// Reference to the Sohom script
-	private Ravi ravi;		// Reference to the Ravi script
-	private Manas manas;	// Reference to the Manas script
-
 	void Start() {
 		unitRenderer = GetComponent<SpriteRenderer>();
 		if (unitRenderer != null) {
 			originalColor = unitRenderer.material.color;
 		}
-
-		// Get the Character Moveset script component from the same GameObject
-		sohom = GetComponent<Sohom>();
-		ravi = GetComponent<Ravi>();
-		manas = GetComponent<Manas>();
-
-		if (sohom == null && ravi == null && manas == null) {
-			Debug.LogError("Moveset script not found on the unit prefab.");
-			return;
-		}
-
-		if(sohom != null) {Debug.Log("Sohom is active");}
-		if(ravi != null) {Debug.Log("Ravi is active");}
-		if(manas != null) {Debug.Log("Manas is active");}
 	}
 
 	public bool TakeDamage(int dmg) {
@@ -95,17 +81,17 @@ public class Unit : MonoBehaviour {
 	}
 
 	public Move GetMove(int index) {
-        Move move = null;
-        if (sohom != null) {
-            move = sohom.GetMoveAt(index);
-        } else if (ravi != null) {
-            move = ravi.GetMoveAt(index);
+		if (moveset == MovesetEnum.SOHOM) {
+			return Sohom.moves[index];
+		} else if (moveset == MovesetEnum.RAVI) {
+			return Ravi.moves[index];
+		} else if (moveset == MovesetEnum.MANAS) {
+			return Manas.moves[index];
+		} else {
+			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
+			return null;
 		}
-        if (move == null) {
-            Debug.LogError("No Move found at index: " + index);
-        }
-        return move;
-    }
+	}
 
 	private IEnumerator FlashRed() {
 		unitRenderer.material.color = Color.red;

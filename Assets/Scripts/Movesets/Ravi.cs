@@ -19,9 +19,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Ravi : MonoBehaviour 
+public static class Ravi
 {
-	public List<Move> moves = new List<Move>() {
+	public static List<Move> moves = new List<Move>() {
 		// Bhangra Move
 		new Move() {
 			moveName = "Bhangra",
@@ -42,7 +42,7 @@ public class Ravi : MonoBehaviour
 			moveName = "Equity Promise",
 			moveDesc = "Promises some %share of his future package to the opponent, \nin exchange for Opponent losing his attack stat by 2 stages.",
 			cooldown = 0,
-			accuracy = 100,
+			accuracy = 100,			
 			isDamaging = false,
 			isHealingMove = false,
 			isStatChange = true,
@@ -57,7 +57,7 @@ public class Ravi : MonoBehaviour
 			moveName = "Alt F4 IRL",
 			moveDesc = "Uses an illegal shortcut arriving from the depths of /dev/null,\nDeals moderate damage the opponent.",
 			cooldown = 0,
-			accuracy = 80,
+			accuracy = 100,
 			isDamaging = true,
 			damage = 20,
 			isHealingMove = false,
@@ -76,11 +76,4 @@ public class Ravi : MonoBehaviour
 			isStatChange = false,
 		}
 	};
-
-	public Move GetMoveAt(int index) {
-		if (index >= 0 && index < moves.Count) {
-			return moves[index];
-		}
-		return null;
-	}
 }

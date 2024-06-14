@@ -19,17 +19,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Sohom : MonoBehaviour 
+public static class Sohom
 {
-	public List<Move> moves = new List<Move>() {
+	public static List<Move> moves = new List<Move>() {
 		// Chokehold Move
 		new Move() {
 			moveName = "Chokehold",
 			moveDesc = "Comes up sneakily behind the opponent and chokes them for some damage, \nCauses the opponent to lose Defense.",
-			isDamaging = true,
-			damage = 20,
 			cooldown = 0,
 			accuracy = 100,
+			isDamaging = true,
+			damage = 20,
 			isHealingMove = false,
 			healAmount = 0,
 			isStatChange = true,
@@ -79,11 +79,4 @@ public class Sohom : MonoBehaviour
 			isStatChange = false,
 		}
 	};
-
-	public Move GetMoveAt(int index) {
-		if (index >= 0 && index < moves.Count) {
-			return moves[index];
-		}
-		return null;
-	}
 }
