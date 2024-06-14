@@ -29,6 +29,7 @@
 	public int maxHP;
 	public int attack;
 	public int defense;
+	public int baseAccuracy = 100;
 
 	public int attackStage = 0;
 	public int defenseStage = 0;

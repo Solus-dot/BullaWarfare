@@ -115,36 +115,44 @@ public class BattleSystem : MonoBehaviour {
 		Move move = attacker.GetMove(moveIndex);
 		bool isDead = false;
 
-		if (move.isDamaging) {
-			int damage = attacker.attack * move.damage/20; // Calculate effective damage
-			isDead = defender.TakeDamage(damage);
-			dialogueText.text = damage + "!!";
+		// Calculate if the move hits or misses
+    	int hitChance = attacker.baseAccuracy * move.accuracy / 100;
+    	int randomValue = Random.Range(0, 100);
 
-			if (attacker == P1_Unit) {
-				P2_HUD.SetHP(defender.currentHP);
-			} else {
-				P1_HUD.SetHP(defender.currentHP);
-			}		
-		} 
+		if (randomValue <= hitChance) {
+			if (move.isDamaging) {
+				int damage = attacker.attack * move.damage / 20; // Calculate effective damage
+				isDead = defender.TakeDamage(damage);
+				dialogueText.text = damage + "!!";
 
-		if (move.isHealingMove) {
-			int healAmount = move.healAmount; // Implement proper heal logic
-			attacker.Heal(healAmount);
-			dialogueText.text = move.moveDesc;
+				if (attacker == P1_Unit) {
+					P2_HUD.SetHP(defender.currentHP);
+				} else {
+					P1_HUD.SetHP(defender.currentHP);
+				}		
+			} 
 
-		} 
+			if (move.isHealingMove) {
+				int healAmount = move.healAmount; // Implement proper heal logic
+				attacker.Heal(healAmount);
+				dialogueText.text = move.moveDesc;
+			} 
 
-		if (move.isStatChange) {
-			if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
-			if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
-			if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
-			if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
+			if (move.isStatChange) {
+				if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
+				if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
+				if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
+				if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
 
-			P1_HUD.SetStatChange(P1_Unit);
-			P2_HUD.SetStatChange(P2_Unit);
+				P1_HUD.SetStatChange(P1_Unit);
+				P2_HUD.SetStatChange(P2_Unit);
+			}
+		} else {
+			dialogueText.text = "The move missed!";
 		}
 
 		yield return new WaitForSeconds(turnDelay);
+
 		if (isDead) {
 			state = (state == BattleState.P1_TURN) ? BattleState.P1_WIN : BattleState.P2_WIN;
 			EndBattle();
