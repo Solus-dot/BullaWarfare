@@ -118,8 +118,8 @@ public class BattleSystem : MonoBehaviour {
 		// Calculate if the move hits or misses
     	int hitChance = attacker.baseAccuracy * move.accuracy / 100;
     	int randomValue = Random.Range(0, 100);
-
-		if (randomValue <= hitChance) {
+		
+		if (randomValue < hitChance) {
 			if (move.isDamaging) {
 				int damage = attacker.attack * move.damage / 20; // Calculate effective damage
 				isDead = defender.TakeDamage(damage);

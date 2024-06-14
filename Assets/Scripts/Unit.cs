@@ -1,29 +1,28 @@
-﻿	using UnityEngine;
-	using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 
-	[System.Serializable]
-	public class Move {
-		public string moveName;			// Name of the move
-		public string moveDesc;			// Description of the move in character selection
-		public string moveMessage;		// Message to be printed on the dialogue when the move is used
+public class Move {
+	public string moveName;			// Name of the move
+	public string moveDesc;			// Description of the move in character selection
+	public string moveMessage;		// Message to be printed on the dialogue when the move is used
 
-		public float cooldown;			// Time (turns) before reuse (optional)
-		public int accuracy;			// Percentage chance of hitting (optional)
+	public float cooldown;			// Time (turns) before reuse (optional)
+	public int accuracy;			// Percentage chance of hitting (optional)
 
-		public bool isDamaging;			// Flag indicating if the move deals damage
-		public int damage;				// Base damage dealt by the move
+	public bool isDamaging;			// Flag indicating if the move deals damage
+	public int damage;				// Base damage dealt by the move
 
-		public bool isHealingMove;		// Flag indicating if the move heals (optional)
-		public int healAmount;			// Amount of health healed (if isHealingMove is true)
+	public bool isHealingMove;		// Flag indicating if the move heals (optional)
+	public int healAmount;			// Amount of health healed (if isHealingMove is true)
 
-		public bool isStatChange;		// Flag indicating if the move changes stats
-		public int selfAttackChange;	// Amount by which the self attack stat changes (positive for increase, negative for decrease)
-		public int selfDefenseChange;	// Amount by which the self defense stat changes (positive for increase, negative for decrease)
-		public int oppAttackChange;		// Amount by which the opponent attack stat changes (positive for increase, negative for decrease)
-		public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
-	}
+	public bool isStatChange;		// Flag indicating if the move changes stats
+	public int selfAttackChange;	// Amount by which the self attack stat changes (positive for increase, negative for decrease)
+	public int selfDefenseChange;	// Amount by which the self defense stat changes (positive for increase, negative for decrease)
+	public int oppAttackChange;		// Amount by which the opponent attack stat changes (positive for increase, negative for decrease)
+	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
+}
 
-	public class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour {
 	public string unitName;
 	public int unitLevel;
 	public int maxHP;
@@ -113,4 +112,4 @@
 		yield return new WaitForSeconds(flashDuration);
 		unitRenderer.material.color = originalColor;
 	}
-	}
+}

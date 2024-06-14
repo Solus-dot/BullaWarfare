@@ -51,6 +51,7 @@ MonoBehaviour:
   maxHP: 92
   attack: 22
   defense: 15
+  baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
   currentHP: 92
@@ -72,10 +73,10 @@ MonoBehaviour:
     moveDesc: "Comes up sneakily behind the opponent and chokes them for some damage,
       \nCauses the opponent to lose Defense."
     moveMessage: 
-    isDamaging: 1
-    damage: 50
     cooldown: 0
     accuracy: 100
+    isDamaging: 1
+    damage: 20
     isHealingMove: 0
     healAmount: 0
     isStatChange: 1
@@ -89,10 +90,10 @@ MonoBehaviour:
       Heals 30% of
       total HP.'
     moveMessage: 
-    isDamaging: 0
-    damage: 0
     cooldown: 0
     accuracy: 100
+    isDamaging: 0
+    damage: 0
     isHealingMove: 1
     healAmount: 100
     isStatChange: 0
@@ -104,10 +105,10 @@ MonoBehaviour:
     moveDesc: "Spews insane brainrot phrases at the opponent, \nCauses the opponent
       to lose his Attack by two stages."
     moveMessage: 
-    isDamaging: 0
-    damage: 0
     cooldown: 0
     accuracy: 100
+    isDamaging: 0
+    damage: 0
     isHealingMove: 0
     healAmount: 0
     isStatChange: 1
@@ -121,10 +122,10 @@ MonoBehaviour:
 
       Deals massive damage but needs to be recharged after used.'
     moveMessage: 
-    isDamaging: 1
-    damage: 150
     cooldown: 1
     accuracy: 100
+    isDamaging: 1
+    damage: 20
     isHealingMove: 0
     healAmount: 0
     isStatChange: 0
