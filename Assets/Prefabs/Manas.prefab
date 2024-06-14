@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2508539130646997021}
   - component: {fileID: 2129511669567692018}
-  - component: {fileID: 1417470281322901149}
   - component: {fileID: 7165501087731579593}
+  - component: {fileID: 1417470281322901149}
   m_Layer: 0
   m_Name: Manas
   m_TagString: Untagged
@@ -56,6 +56,18 @@ MonoBehaviour:
   defenseStage: 0
   currentHP: 95
   recvEffectiveDamage: 0
+--- !u!114 &7165501087731579593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997010990983187523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672de575eccd7824791bc2b2fa6cbf76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &1417470281322901149
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -108,15 +120,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7165501087731579593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3997010990983187523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 672de575eccd7824791bc2b2fa6cbf76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

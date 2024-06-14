@@ -20,11 +20,10 @@ public class PlayerSelectionButton : MonoBehaviour, IPointerEnterHandler, IPoint
 	// This method is called when the pointer enters the button
 	public void OnPointerEnter(PointerEventData eventData) {
 		// Show details of the character prefab when hovered over
-		// You can implement your logic here, such as displaying a tooltip or enlarging the character image
 		if (characterSelectManager != null) {
 			characterSelectManager.OnButtonHover(characterPrefab);
 		}
-		Debug.Log("Hovering over " + characterName);
+		//Debug.Log("Hovering over " + characterName);
 	}
 
 	// This method is called when the pointer exits the button
@@ -32,7 +31,7 @@ public class PlayerSelectionButton : MonoBehaviour, IPointerEnterHandler, IPoint
 		if (characterSelectManager != null) {
 			characterSelectManager.OnButtonDehover(characterPrefab);
 		}
-		Debug.Log("Exiting hover for " + characterName);
+		//Debug.Log("Exiting hover for " + characterName);
 	}
 
 	// This method is called when the button is clicked

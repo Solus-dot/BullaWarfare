@@ -59,6 +59,10 @@ public class Unit : MonoBehaviour {
 			Debug.LogError("Moveset script not found on the unit prefab.");
 			return;
 		}
+
+		if(sohom != null) {Debug.Log("Sohom is active");}
+		if(ravi != null) {Debug.Log("Ravi is active");}
+		if(manas != null) {Debug.Log("Manas is active");}
 	}
 
 	public bool TakeDamage(int dmg) {
@@ -91,17 +95,17 @@ public class Unit : MonoBehaviour {
 	}
 
 	public Move GetMove(int index) {
-		if (sohom != null) {
-			return sohom.GetMoveAt(index);
-		} else if (ravi != null) {
-			return ravi.GetMoveAt(index);
-		} else if (manas != null) {
-			return manas.GetMoveAt(index);
-		} else {
-			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
-			return null;
+        Move move = null;
+        if (sohom != null) {
+            move = sohom.GetMoveAt(index);
+        } else if (ravi != null) {
+            move = ravi.GetMoveAt(index);
 		}
-	}
+        if (move == null) {
+            Debug.LogError("No Move found at index: " + index);
+        }
+        return move;
+    }
 
 	private IEnumerator FlashRed() {
 		unitRenderer.material.color = Color.red;

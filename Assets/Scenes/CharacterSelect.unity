@@ -1771,8 +1771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Sohom
-  characterPrefab: {fileID: 6884295409158445089, guid: 307375d5c4e89d04792a133399ce09da, type: 3}
+  characterName: Manas
+  characterPrefab: {fileID: 3997010990983187523, guid: a67f28f6f8355c6409fd55b7e09497c9, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &1397037786
 MonoBehaviour:
