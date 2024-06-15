@@ -14,7 +14,7 @@
 
 // Move 4: Feminine Jaat
 // Calls upon the Jaat gang of IITK using his "Feminine Jaat" powers,
-// Deals MASSSIVE damage, but causes 50% recoil damage to the user
+// Deals MASSSIVE damage, but causes 35% of hp recoil damage to the user
 
 // Move Messages
 // Move 1: Aryavart pulls out his huge bottle of Shudh Desi Dudh and drinks it one gulp. (opp_name) is left ineffable. Aryavart's Attack and Defense go up by 1 stage!
@@ -76,7 +76,7 @@ public static class Arya
 		// Funny Valentine Move
 		new Move() {
 			moveName = "Feminine Jaat",
-			moveDesc = " Calls upon the Jaat gang of IITK using his Feminine Jaat powers,\nDeals MASSSIVE damage, but causes 50% recoil damage to the user.",
+			moveDesc = " Calls upon the Jaat gang of IITK using his Feminine Jaat powers,\nDeals MASSSIVE damage, but causes 35% recoil damage to the user.",
 			moveMessage = "Aryavart calls up his fellow Jaat homies saying \"Bhai Matter Hogaya\". In a minute the full Jaat gang of IITK appears on the battlefield, and starts beating the shit out of (opp_name). Confusion amongst the crowd causes Aryavart to take damage as well. (value) damage dealt, Aryavart receives recoil!",
 			cooldown = 1,
 			accuracy = 100,
@@ -84,6 +84,7 @@ public static class Arya
 			damage = 20,
 			isHealingMove = false,
 			isStatChange = false,
+            recoil = 0.35f
 		}
 	};
 }

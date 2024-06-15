@@ -25,6 +25,8 @@ public class Move {
 	public int selfDefenseChange;	// Amount by which the self defense stat changes (positive for increase, negative for decrease)
 	public int oppAttackChange;		// Amount by which the opponent attack stat changes (positive for increase, negative for decrease)
 	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
+
+	public float recoil;
 }
 
 public class Unit : MonoBehaviour {

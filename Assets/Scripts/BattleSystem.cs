@@ -130,40 +130,60 @@ public class BattleSystem : MonoBehaviour {
 		int randomValue = Random.Range(0, 100);
 
 		if (randomValue < hitChance) {
-			if (move.isDamaging) {
-				int damage = attacker.attack * move.damage / 20; // Calculate effective damage
-				isDead = defender.TakeDamage(damage);
+			if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
+				moveText.text = attacker.unitName + "is not healthy enough to use this move!";
+			} else {
+				if (move.isDamaging) {
+					int damage = attacker.attack * move.damage / 20; // Calculate effective damage
+					isDead = defender.TakeDamage(damage);
 
-				if (attacker == P1_Unit) {
-					P2_HUD.SetHP(defender.currentHP);
-				} else {
-					P1_HUD.SetHP(defender.currentHP);
+					if (attacker == P1_Unit) {
+						P2_HUD.SetHP(defender.currentHP);
+					} else {
+						P1_HUD.SetHP(defender.currentHP);
+					}
+
+					hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
+				} 
+
+				if (move.isHealingMove) {
+					int healAmount = move.healAmount; // Implement proper heal logic
+					attacker.Heal(healAmount);
+
+					if (attacker == P1_Unit) {
+						P1_HUD.SetHP(attacker.currentHP);
+					} else {
+						P2_HUD.SetHP(attacker.currentHP);
+					}
+				} 
+
+				if (move.isStatChange) {
+					if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
+					if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
+					if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
+					if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
+
+					P1_HUD.SetStatChange(P1_Unit);
+					P2_HUD.SetStatChange(P2_Unit);
 				}
-			} 
 
-			if (move.isHealingMove) {
-				int healAmount = move.healAmount; // Implement proper heal logic
-				attacker.Heal(healAmount);
+				moveText.text = hitMessage;
 
-				if (attacker == P1_Unit) {
-					P1_HUD.SetHP(attacker.currentHP);
-				} else {
-					P2_HUD.SetHP(attacker.currentHP);
+				if (move.recoil > 0) {
+					int recoilDamage = Mathf.CeilToInt(attacker.maxHP * move.recoil);
+					attacker.TakeDamage(recoilDamage);
+
+					if (attacker == P1_Unit) {
+						P1_HUD.SetHP(attacker.currentHP);
+					} else {
+						P2_HUD.SetHP(attacker.currentHP);
+					}
+
+					if (attacker.currentHP <= 0) {
+						isDead = true;
+					}
 				}
-			} 
-
-			if (move.isStatChange) {
-				if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
-				if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
-				if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
-				if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
-
-				P1_HUD.SetStatChange(P1_Unit);
-				P2_HUD.SetStatChange(P2_Unit);
 			}
-
-			moveText.text = hitMessage;
-
 		} else {
 			if(move.missMessage != null) {
 				moveText.text = move.missMessage.Replace("(opp_name)", defender.unitName);
