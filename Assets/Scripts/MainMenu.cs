@@ -2,36 +2,42 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour {
-    public Slider volumeSlider;     // Reference to the UI slider
-    public AudioSource audioSource; // Reference to the audio source
+public class MainMenu : MonoBehaviour
+{
+	public Slider volumeSlider;
+	public AudioSource audioSource;
 
-    void Start() {
-        if (volumeSlider != null && audioSource != null) {
-            // Set the slider's max and min values if needed
-            volumeSlider.minValue = 0f;
-            volumeSlider.maxValue = 1f;
-            // Set the slider's value to the current volume of the audio source
-            volumeSlider.value = audioSource.volume;
+	void Start()
+	{
+		if (volumeSlider != null)
+		{
+			volumeSlider.onValueChanged.AddListener(delegate { SnapSliderValue(); });
+			SnapSliderValue(); // Initialize the value to the nearest multiple of 10
+		}
+	}
 
-            // Add listener for when the slider value changes
-            volumeSlider.onValueChanged.AddListener(OnVolumeSliderValueChanged);
-        }
-    }
+	void SnapSliderValue()
+	{
+		// Snap the slider value to the nearest multiple of 10
+		float snappedValue = Mathf.Round(volumeSlider.value / 10) * 10;
+		volumeSlider.value = snappedValue;
 
-    public void OnPlayButtonClick() {
-        Debug.Log("Start Game button clicked");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+		// Update the audio source volume
+		if (audioSource != null)
+		{
+			audioSource.volume = snappedValue / 100f; // Assuming the slider range is from 0 to 100
+		}
+	}
 
-    public void OnExitButtonClick() {
-        Debug.Log("Exit button clicked");
-        Application.Quit();
-    }
+	public void OnPlayButtonClick()
+	{
+		Debug.Log("Start Game button clicked");
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+	}
 
-    void OnVolumeSliderValueChanged(float value) {
-        if (audioSource != null) {
-            audioSource.volume = value;
-        }
-    }
+	public void OnExitButtonClick()
+	{
+		Debug.Log("Exit button clicked");
+		Application.Quit();
+	}
 }
