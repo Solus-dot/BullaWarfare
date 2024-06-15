@@ -5,9 +5,7 @@ using TMPro;
 
 public enum BattleState { START, P1_TURN, P2_TURN, P1_WIN, P2_WIN }
 
-
 public class BattleSystem : MonoBehaviour {
-
 	public Transform P1_BattleStation;
 	public Transform P2_BattleStation;
 
@@ -28,7 +26,7 @@ public class BattleSystem : MonoBehaviour {
 	public Button move3Button;
 	public Button move4Button;
 
-	TMP_Text move1Button_Text; 
+	TMP_Text move1Button_Text;
 	TMP_Text move2Button_Text;
 	TMP_Text move3Button_Text;
 	TMP_Text move4Button_Text;
@@ -80,7 +78,6 @@ public class BattleSystem : MonoBehaviour {
 			move2Button_Text.text = P1_Unit.GetMove(1).moveName;
 			move3Button_Text.text = P1_Unit.GetMove(2).moveName;
 			move4Button_Text.text = P1_Unit.GetMove(3).moveName;
-
 		} else if (state == BattleState.P2_TURN) {
 			dialogueText.text = "Player 2's Turn: Choose an action.";
 			move1Button_Text.text = P2_Unit.GetMove(0).moveName;

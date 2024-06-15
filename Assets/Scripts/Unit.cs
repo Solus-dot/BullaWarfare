@@ -26,7 +26,7 @@ public class Move {
 	public int oppAttackChange;		// Amount by which the opponent attack stat changes (positive for increase, negative for decrease)
 	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
 
-	public float recoil;
+	public float recoil;			// Percentage recoil damage to self from the move (optional)
 }
 
 public class Unit : MonoBehaviour {
@@ -71,7 +71,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void Heal(int percent) {
-		currentHP += percent*maxHP;
+		currentHP += percent * maxHP;
 		if (currentHP > maxHP) {
 			currentHP = maxHP;
 		}
@@ -81,8 +81,8 @@ public class Unit : MonoBehaviour {
 		attackStage += attackChange;
 		defenseStage += defenseChange;
 
-		attack += 10*attackChange;
-		defense += 5*defenseChange;
+		attack += 10 * attackChange;
+		defense += 5 * defenseChange;
 	}
 
 	public Move GetMove(int index) {
