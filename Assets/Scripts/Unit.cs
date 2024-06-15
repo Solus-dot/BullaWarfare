@@ -9,6 +9,7 @@ public class Move {
 	public string moveName;			// Name of the move
 	public string moveDesc;			// Description of the move in character selection
 	public string moveMessage;		// Message to be printed on the dialogue when the move is used
+	public string missMessage;		// Message to be printed on the dialogue when the move missed
 
 	public float cooldown;			// Time (turns) before reuse (optional)
 	public int accuracy;			// Percentage chance of hitting (optional)
@@ -65,8 +66,8 @@ public class Unit : MonoBehaviour {
 		return false;
 	}
 
-	public void Heal(int amount) {
-		currentHP += amount;
+	public void Heal(int percent) {
+		currentHP += percent*maxHP;
 		if (currentHP > maxHP) {
 			currentHP = maxHP;
 		}

@@ -16,6 +16,13 @@
 // Uses his status as Mr Fresher to summon hordes of fangirls to attack the opponent, 
 // Deals massive damage but needs to be recharged after used.
 
+//Move Messages
+// Move 1: Sohom quickly sneaks behind (opp_name) and puts him in a chokehold. (opp_name) receives (value) damage. Defence dropped by 1
+// Move 2: (move_use) Sohom opens Zomato on his phone, Perhaps he's ordering something ? (move_eff) Sohom's order has arrived, It was mcdonel ! Sohom eats up his meal and recovers HP
+// Move 3: Erm what the sigma? Sohom has started to spew filthy brainrot words to his opponent! The opponent does not have the skibidi rizz to handle it, (opp_name) loses Attack by 2 stages.
+// Move 4: Sohom unveils his Mr Fresher sash. All the XX chromosomes around him get riled up and attack (opp_name). (opp_name) receives (value) damage. Sohom starts taking pictures with the wild females to calm them down.
+// Recharge Turn : Sohom is taking pictures with the females, he can't move !!!
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -26,6 +33,7 @@ public static class Sohom
 		new Move() {
 			moveName = "Chokehold",
 			moveDesc = "Comes up sneakily behind the opponent and chokes them for some damage, \nCauses the opponent to lose Defense.",
+			moveMessage = "Sohom quickly sneaks behind (opp_name) and puts him in a chokehold. (opp_name) receives (value) damage. Defence dropped by 1",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
@@ -43,11 +51,12 @@ public static class Sohom
 		new Move() {
 			moveName = "MCDonel",
 			moveDesc = "Orders Mcdonald's in the middle of the fight,\nHeals 30% of total HP.",
+			moveMessage = "Sohom opens Zomato on his phone, Perhaps he's ordering something? Sohom's order has arrived, It was McDonel! Sohom eats up his meal and recovers HP",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = true,
-			healAmount = 100, //100 for now, will switch to 30% later
+			healAmount = 30,
 			isStatChange = false,
 		},
 
@@ -55,6 +64,7 @@ public static class Sohom
 		new Move() { 
 			moveName = "Brainrot Spew",
 			moveDesc = "Spews insane brainrot phrases at the opponent, \nCauses the opponent to lose his Attack by two stages.",
+			moveMessage = "Erm what the sigma? Sohom has started to spew filthy brainrot words to his opponent! (opp_name) does not have the skibidi rizz to handle it, (opp_name) loses Attack by 2 stages.",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
@@ -71,6 +81,7 @@ public static class Sohom
 		new Move() {
 			moveName = "Mr. Fresher Smash",
 			moveDesc = "Uses his status as Mr. Fresher to summon hordes of fangirls to attack the opponent,\nDeals massive damage but needs to be recharged after used.",
+			moveMessage = "Sohom unveils his Mr Fresher sash. All the girls around him get riled up and attack (opp_name) dealing (value) damage. Sohom starts taking pictures with the wild females to calm them down.",
 			cooldown = 1,
 			accuracy = 100,
 			isDamaging = true,

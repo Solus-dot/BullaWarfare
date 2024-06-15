@@ -16,6 +16,12 @@
 // In a fit of rage and fury about the ownership of the cooler,
 // The user smashes the opponent into the cooler, dealing huge damage.
 
+// Move Messages
+// Move 1: Manas whips out his famed mosquito racket, and shocks (opp_name). Dealt (value) damage.
+// Move 2: Manas activates his inner silliness. Aww look at that silly little boy :3. (opp_name) thinks this will be easy, Defense dropped by 1.
+// Move 3: Manas unleashes the Bihari inside of him. Dear God! What am I even hearing? (opp_name) questions his will, Attack dropped by 1!
+// Move 4: Manas remembers the debt that (opp_name) owes him for the cooler in his room. Enraged, Manas grabs a hold of (opp_name)'s hair and slams him into the cooler! (value) damage dealt!
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -26,6 +32,7 @@ public static class Manas
 		new Move() {
 			moveName = "Mosquito Rack-hit",
 			moveDesc = "Uses his trusty mosquito racket to shock the opponent,\nDeals damage to the opponent.",
+			moveMessage = "Manas whips out his famed mosquito racket, and shocks (opp_name). Dealt (value) damage.",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
@@ -38,6 +45,7 @@ public static class Manas
 		new Move() {
 			moveName = "Silly Pookie",
 			moveDesc = "Uses his silliness to lull the opponent into a false sense of security,\nLowers Defense.",
+			moveMessage = "Manas activates his inner silliness. Aww look at that silly little boy :3. (opp_name) thinks this will be easy, Defense dropped by 1.",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
@@ -53,6 +61,7 @@ public static class Manas
 		new Move() {
 			moveName = "Toxic Rant",
 			moveDesc = "Uses a variety of various slurs and roasts to dishearten the opponent,\nLowers Attack.",
+			moveMessage = "Manas unleashes the Bihari inside of him. Dear God! What am I even hearing? (opp_name) questions his will, Attack dropped by 1!",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
@@ -68,6 +77,7 @@ public static class Manas
 		new Move() {
 			moveName = "Cooler Throw",
 			moveDesc = "In a fit of rage and fury about the ownership of the cooler,\nThe user smashes the opponent into the cooler, dealing huge damage",
+			moveMessage = " Manas remembers the debt that (opp_name) owes him for the cooler in his room. Enraged, Manas grabs a hold of (opp_name)'s hair and slams him into the cooler! (value) damage dealt!",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,

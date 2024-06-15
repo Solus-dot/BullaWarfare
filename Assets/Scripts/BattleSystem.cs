@@ -15,6 +15,7 @@ public class BattleSystem : MonoBehaviour {
 	Unit P2_Unit;
 
 	public TMP_Text dialogueText;
+	public TMP_Text moveText;
 
 	public BattleHUD P1_HUD;
 	public BattleHUD P2_HUD;
@@ -27,18 +28,22 @@ public class BattleSystem : MonoBehaviour {
 	public Button move3Button;
 	public Button move4Button;
 
-	public TMP_Text move1Button_Text;
-	public TMP_Text move2Button_Text;
-	public TMP_Text move3Button_Text;
-	public TMP_Text move4Button_Text;
+	TMP_Text move1Button_Text; 
+	TMP_Text move2Button_Text;
+	TMP_Text move3Button_Text;
+	TMP_Text move4Button_Text;
 
-	private float turnDelay = 1f; // Delay between turns
+	private float turnDelay = 3f; // Delay between turns
 
 	void Start() {
-		move1Button_Text.text = "";
-		move2Button_Text.text = "";
-		move3Button_Text.text = "";
-		move4Button_Text.text = "";
+		move1Button_Text = move1Button.GetComponentInChildren<TMP_Text>();
+		move2Button_Text = move2Button.GetComponentInChildren<TMP_Text>();
+		move3Button_Text = move3Button.GetComponentInChildren<TMP_Text>();
+		move4Button_Text = move4Button.GetComponentInChildren<TMP_Text>();
+
+		dialogueText.gameObject.SetActive(true);
+		moveText.gameObject.SetActive(false);
+		DisableActionButtons();
 
 		state = BattleState.START;
 		StartCoroutine(SetupBattle());
@@ -47,7 +52,6 @@ public class BattleSystem : MonoBehaviour {
 	IEnumerator SetupBattle() {
 		GameObject P1_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(1), P1_BattleStation);
 		P1_Unit = P1_GameObject.GetComponent<Unit>();
-
 		GameObject P2_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(2), P2_BattleStation);
 		P2_Unit = P2_GameObject.GetComponent<Unit>();
 
@@ -56,8 +60,7 @@ public class BattleSystem : MonoBehaviour {
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
 
-		yield return new WaitForSeconds(1f);
-
+		yield return new WaitForSeconds(1.5f);
 		state = BattleState.P1_TURN;
 		StartCoroutine(PlayerTurn());
 	}
@@ -68,7 +71,8 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	IEnumerator PlayerTurn() {
-		DisableActionButtons();
+		dialogueText.gameObject.SetActive(true);
+		moveText.gameObject.SetActive(false);
 
 		if (state == BattleState.P1_TURN) {
 			dialogueText.text = "Player 1's Turn: Choose an action.";
@@ -85,13 +89,14 @@ public class BattleSystem : MonoBehaviour {
 			move4Button_Text.text = P2_Unit.GetMove(3).moveName;
 		}
 
-		yield return new WaitForSeconds(turnDelay);
-
+		yield return new WaitForSeconds(0);
 		EnableActionButtons();
 	}
 
 	void EndBattle() {
 		DisableActionButtons();
+		dialogueText.gameObject.SetActive(true);
+		moveText.gameObject.SetActive(false);
 
 		if (state == BattleState.P1_WIN) {
 			dialogueText.text = P1_Unit.unitName + " (Player 1) has Won!";
@@ -102,6 +107,9 @@ public class BattleSystem : MonoBehaviour {
 
 	public void OnMoveButton(int moveIndex) {
 		if (!actionInProgress) {
+			dialogueText.gameObject.SetActive(false);
+			moveText.gameObject.SetActive(true);
+
 			if (state == BattleState.P1_TURN) {
 				StartCoroutine(HandleMove(P1_Unit, P2_Unit, moveIndex));
 			} else if (state == BattleState.P2_TURN) {
@@ -111,31 +119,37 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	IEnumerator HandleMove(Unit attacker, Unit defender, int moveIndex) {
+		DisableActionButtons();
 		actionInProgress = true;
 		Move move = attacker.GetMove(moveIndex);
+		string hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
 		bool isDead = false;
 
 		// Calculate if the move hits or misses
-    	int hitChance = attacker.baseAccuracy * move.accuracy / 100;
-    	int randomValue = Random.Range(0, 100);
-		
+		int hitChance = attacker.baseAccuracy * move.accuracy / 100;
+		int randomValue = Random.Range(0, 100);
+
 		if (randomValue < hitChance) {
 			if (move.isDamaging) {
 				int damage = attacker.attack * move.damage / 20; // Calculate effective damage
 				isDead = defender.TakeDamage(damage);
-				dialogueText.text = damage + "!!";
 
 				if (attacker == P1_Unit) {
 					P2_HUD.SetHP(defender.currentHP);
 				} else {
 					P1_HUD.SetHP(defender.currentHP);
-				}		
+				}
 			} 
 
 			if (move.isHealingMove) {
 				int healAmount = move.healAmount; // Implement proper heal logic
 				attacker.Heal(healAmount);
-				dialogueText.text = move.moveDesc;
+
+				if (attacker == P1_Unit) {
+					P1_HUD.SetHP(attacker.currentHP);
+				} else {
+					P2_HUD.SetHP(attacker.currentHP);
+				}
 			} 
 
 			if (move.isStatChange) {
@@ -147,12 +161,18 @@ public class BattleSystem : MonoBehaviour {
 				P1_HUD.SetStatChange(P1_Unit);
 				P2_HUD.SetStatChange(P2_Unit);
 			}
+
+			moveText.text = hitMessage;
+
 		} else {
-			dialogueText.text = "The move missed!";
+			if(move.missMessage != null) {
+				moveText.text = move.missMessage.Replace("(opp_name)", defender.unitName);
+			} else {
+				moveText.text = "The move missed!";
+			}
 		}
 
 		yield return new WaitForSeconds(turnDelay);
-
 		if (isDead) {
 			state = (state == BattleState.P1_TURN) ? BattleState.P1_WIN : BattleState.P2_WIN;
 			EndBattle();
@@ -160,7 +180,7 @@ public class BattleSystem : MonoBehaviour {
 			SwitchTurn();
 		}
 
-		actionInProgress = false;
+    	actionInProgress = false;
 	}
 
 	void SwitchTurn() {
@@ -169,16 +189,16 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	void DisableActionButtons() {
-		move1Button.interactable = false;
-		move2Button.interactable = false;
-		move3Button.interactable = false;
-		move4Button.interactable = false;
+		move1Button.gameObject.SetActive(false);
+		move2Button.gameObject.SetActive(false);
+		move3Button.gameObject.SetActive(false);
+		move4Button.gameObject.SetActive(false);
 	}
 
 	void EnableActionButtons() {
-		move1Button.interactable = true;
-		move2Button.interactable = true;
-		move3Button.interactable = true;
-		move4Button.interactable = true;
+		move1Button.gameObject.SetActive(true);
+		move2Button.gameObject.SetActive(true);
+		move3Button.gameObject.SetActive(true);
+		move4Button.gameObject.SetActive(true);
 	}
 }
