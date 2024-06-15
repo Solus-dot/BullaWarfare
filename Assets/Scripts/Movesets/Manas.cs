@@ -77,7 +77,7 @@ public static class Manas
 		new Move() {
 			moveName = "Cooler Throw",
 			moveDesc = "In a fit of rage and fury about the ownership of the cooler,\nThe user smashes the opponent into the cooler, dealing huge damage",
-			moveMessage = " Manas remembers the debt that (opp_name) owes him for the cooler in his room. Enraged, Manas grabs a hold of (opp_name)'s hair and slams him into the cooler! (value) damage dealt!",
+			moveMessage = "Manas remembers the debt that (opp_name) owes him for the cooler in his room. Enraged, Manas grabs a hold of (opp_name)'s hair and slams him into the cooler! (value) damage dealt!",
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,

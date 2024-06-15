@@ -41,8 +41,8 @@ public class BattleSystem : MonoBehaviour {
 		move3Button_Text = move3Button.GetComponentInChildren<TMP_Text>();
 		move4Button_Text = move4Button.GetComponentInChildren<TMP_Text>();
 
-		dialogueText.gameObject.SetActive(true);
-		moveText.gameObject.SetActive(false);
+		dialogueText.gameObject.SetActive(false);
+		moveText.gameObject.SetActive(true);
 		DisableActionButtons();
 
 		state = BattleState.START;
@@ -55,7 +55,7 @@ public class BattleSystem : MonoBehaviour {
 		GameObject P2_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(2), P2_BattleStation);
 		P2_Unit = P2_GameObject.GetComponent<Unit>();
 
-		dialogueText.text = "An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...";
+		moveText.text = "An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...";
 
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
