@@ -188,7 +188,6 @@ public class BattleSystem : MonoBehaviour {
 					defender.AttemptFlinch(move);
 				}
 
-				yield return StartCoroutine(DisplayMoveText(hitMessage));
 
 				if (move.recoil > 0) {
 					int recoilDamage = Mathf.CeilToInt(attacker.maxHP * move.recoil);
@@ -199,11 +198,9 @@ public class BattleSystem : MonoBehaviour {
 					} else {
 						P2_HUD.SetHP(attacker.currentHP);
 					}
-
-					if (attacker.currentHP <= 0) {
-						isDead = true;
-					}
 				}
+
+				yield return StartCoroutine(DisplayMoveText(hitMessage));
 			}
 		} else {
 			if (move.missMessage != null) {

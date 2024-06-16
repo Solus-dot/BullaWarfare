@@ -17,7 +17,7 @@
 // Deals huge damage but has very low PP
 
 // Move Messages
-// Move 1: Khushal dials a call to his gf. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 40% Health!
+// Move 1: Khushal dials a call to his gf. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 20% Health!
 // Move 2: Khushal you dirty dog! A towel-only Khushal has blinded (opp_name)! (opp_name)'s next move loses accuracy by 50%!
 // Move 3: Speedcubing expert Khushal solves a barrage of cubes and throws them at (opp_name). (value) damage dealt!
 // Move 4: Mclub Secy Khushal Wadhwa shows his Keyboard Skills to (opp_name) who boos him. Enraged, Khushal slams his keyboard straight into (opp_name)'s face. Ouch! (value) damage dealt!
@@ -32,7 +32,7 @@ public static class Khush
 		new Move() {
 			moveName = "Love Call",
 			moveDesc = "Dials a call to his girlfriend, and the lovey-dovey talks powers him up but also annoys the opponent.\nUser gets 1 Attack with 20% HP recovery, Opposition gets 1 Attack,",
-			moveMessage = "Khushal dials a call to his gf. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 40% Health!",
+			moveMessage = "Khushal dials a call to his gf. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 20% Health!",
             cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
