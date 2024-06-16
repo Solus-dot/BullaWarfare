@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI }
 
 [System.Serializable]
 public class Move {
@@ -61,7 +61,6 @@ public class Unit : MonoBehaviour {
 		// Calculate effective damage after defense reduction
 		recvEffectiveDamage = Mathf.Max(0, dmg - defense);
 		currentHP -= recvEffectiveDamage;
-		Debug.Log(recvEffectiveDamage);
 
 		if (unitRenderer != null) {
 			StartCoroutine(FlashRed());
@@ -112,7 +111,9 @@ public class Unit : MonoBehaviour {
 			return Arya.moves[index];
 		} else if (moveset == MovesetEnum.KHUSH) {
 			return Khush.moves[index];
-		} else{
+		} else if (moveset == MovesetEnum.ADITI) {
+			return Aditi.moves[index];
+		} else {
 			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;
 		}
