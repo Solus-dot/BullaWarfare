@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4136278435108665487}
   - component: {fileID: 4359680699597046753}
   m_Layer: 0
-  m_Name: Harshvardhan
+  m_Name: Arya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,16 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d8d7ed9646504888a5702b5d7ed33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Harshvardhan
+  unitName: Aryavart
   unitLevel: 10
-  maxHP: 90
-  attack: 20
-  defense: 18
+  maxHP: 95
+  attack: 27
+  defense: 10
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 90
-  moveset: 3
+  currentHP: 95
+  moveset: 4
   recvEffectiveDamage: 0
 --- !u!212 &4359680699597046753
 SpriteRenderer:
@@ -97,7 +97,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0128bac94fb60dd4cb7b21e25be4eb08, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 205593a8b744ff04c8ce2fb88ee63d7f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

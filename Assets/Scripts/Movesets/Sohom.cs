@@ -44,7 +44,7 @@ public static class Sohom
 			selfAttackChange = 0,
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
-			oppDefenseChange = -1
+			oppDefenseChange = -1,
 		},
 
 		// MCDonel Move

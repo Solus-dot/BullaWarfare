@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH }
 
 [System.Serializable]
 public class Move {
@@ -27,6 +27,7 @@ public class Move {
 	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
 
 	public float recoil;			// Percentage recoil damage to self from the move (optional)
+	public int flinch;			// Percentage of opponent getting flinched from the move (optional)
 }
 
 public class Unit : MonoBehaviour {
@@ -43,6 +44,8 @@ public class Unit : MonoBehaviour {
 	public MovesetEnum moveset;
 
 	public int recvEffectiveDamage; // Effective damage received
+	public bool isFlinching;
+
 	private Renderer unitRenderer;
 	private Color originalColor;
 	private float flashDuration = 0.2f; 
@@ -85,6 +88,17 @@ public class Unit : MonoBehaviour {
 		defense += 5 * defenseChange;
 	}
 
+	public void AttemptFlinch(Move move) {
+		if (Random.Range(0, 100) < move.flinch) {
+			isFlinching = true;
+			Debug.Log(unitName + " flinched!");
+		}
+	}
+
+	public void EndTurn() {
+		isFlinching = false;  // Reset flinch at the end of the turn
+	}
+
 	public Move GetMove(int index) {
 		if (moveset == MovesetEnum.SOHOM) {
 			return Sohom.moves[index];
@@ -96,7 +110,9 @@ public class Unit : MonoBehaviour {
 			return Harsh.moves[index];
 		} else if (moveset == MovesetEnum.ARYA) {
 			return Arya.moves[index];
-		} else {
+		} else if (moveset == MovesetEnum.KHUSH) {
+			return Khush.moves[index];
+		} else{
 			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;
 		}

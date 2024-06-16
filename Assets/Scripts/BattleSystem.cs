@@ -31,7 +31,7 @@ public class BattleSystem : MonoBehaviour {
 	TMP_Text move3Button_Text;
 	TMP_Text move4Button_Text;
 
-	private float turnDelay = 3f; // Delay between turns
+	private float turnDelay = 1f; // Delay between turns
 
 	void Start() {
 		move1Button_Text = move1Button.GetComponentInChildren<TMP_Text>();
@@ -40,7 +40,7 @@ public class BattleSystem : MonoBehaviour {
 		move4Button_Text = move4Button.GetComponentInChildren<TMP_Text>();
 
 		dialogueText.gameObject.SetActive(false);
-		moveText.gameObject.SetActive(true);
+		moveText.gameObject.SetActive(false);
 		DisableActionButtons();
 
 		state = BattleState.START;
@@ -53,12 +53,12 @@ public class BattleSystem : MonoBehaviour {
 		GameObject P2_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(2), P2_BattleStation);
 		P2_Unit = P2_GameObject.GetComponent<Unit>();
 
-		moveText.text = "An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...";
-
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
 
-		yield return new WaitForSeconds(1.5f);
+		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences..."));
+
+		yield return new WaitForSeconds(turnDelay);
 		state = BattleState.P1_TURN;
 		StartCoroutine(PlayerTurn());
 	}
@@ -69,16 +69,36 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	IEnumerator PlayerTurn() {
-		dialogueText.gameObject.SetActive(true);
-		moveText.gameObject.SetActive(false);
-
 		if (state == BattleState.P1_TURN) {
+			if (P1_Unit.isFlinching) {
+				yield return StartCoroutine(DisplayMoveText(P1_Unit.unitName + " flinched and couldn't move!"));
+				P1_Unit.EndTurn();
+				yield return new WaitForSeconds(turnDelay);
+				state = BattleState.P2_TURN;
+				StartCoroutine(PlayerTurn());
+				yield break;
+			}
+			dialogueText.gameObject.SetActive(true);
+			moveText.gameObject.SetActive(false);
+
 			dialogueText.text = "Player 1's Turn: Choose an action.";
 			move1Button_Text.text = P1_Unit.GetMove(0).moveName;
 			move2Button_Text.text = P1_Unit.GetMove(1).moveName;
 			move3Button_Text.text = P1_Unit.GetMove(2).moveName;
 			move4Button_Text.text = P1_Unit.GetMove(3).moveName;
+
 		} else if (state == BattleState.P2_TURN) {
+			if (P2_Unit.isFlinching) {
+				yield return StartCoroutine(DisplayMoveText(P2_Unit.unitName + " flinched and couldn't move!"));
+				P2_Unit.EndTurn();
+				yield return new WaitForSeconds(turnDelay);
+				state = BattleState.P1_TURN;
+				StartCoroutine(PlayerTurn());
+				yield break;
+			}
+			dialogueText.gameObject.SetActive(true);
+			moveText.gameObject.SetActive(false);
+
 			dialogueText.text = "Player 2's Turn: Choose an action.";
 			move1Button_Text.text = P2_Unit.GetMove(0).moveName;
 			move2Button_Text.text = P2_Unit.GetMove(1).moveName;
@@ -86,7 +106,7 @@ public class BattleSystem : MonoBehaviour {
 			move4Button_Text.text = P2_Unit.GetMove(3).moveName;
 		}
 
-		yield return new WaitForSeconds(0);
+		yield return new WaitForSeconds(0f);
 		EnableActionButtons();
 	}
 
@@ -128,7 +148,7 @@ public class BattleSystem : MonoBehaviour {
 
 		if (randomValue < hitChance) {
 			if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
-				moveText.text = attacker.unitName + "is not healthy enough to use this move!";
+				yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!"));
 			} else {
 				if (move.isDamaging) {
 					int damage = attacker.attack * move.damage / 20; // Calculate effective damage
@@ -141,7 +161,7 @@ public class BattleSystem : MonoBehaviour {
 					}
 
 					hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
-				} 
+				}
 
 				if (move.isHealingMove) {
 					int healAmount = move.healAmount; // Implement proper heal logic
@@ -152,19 +172,23 @@ public class BattleSystem : MonoBehaviour {
 					} else {
 						P2_HUD.SetHP(attacker.currentHP);
 					}
-				} 
+				}
 
 				if (move.isStatChange) {
-					if (move.selfAttackChange != 0) {attacker.TakeBuff(move.selfAttackChange, 0);}
-					if (move.selfDefenseChange != 0) {attacker.TakeBuff(0, move.selfDefenseChange);}
-					if (move.oppAttackChange != 0) {defender.TakeBuff(move.oppAttackChange, 0);}
-					if (move.oppDefenseChange != 0) {defender.TakeBuff(0, move.oppDefenseChange);}
+					if (move.selfAttackChange != 0) { attacker.TakeBuff(move.selfAttackChange, 0); }
+					if (move.selfDefenseChange != 0) { attacker.TakeBuff(0, move.selfDefenseChange); }
+					if (move.oppAttackChange != 0) { defender.TakeBuff(move.oppAttackChange, 0); }
+					if (move.oppDefenseChange != 0) { defender.TakeBuff(0, move.oppDefenseChange); }
 
 					P1_HUD.SetStatChange(P1_Unit);
 					P2_HUD.SetStatChange(P2_Unit);
 				}
 
-				moveText.text = hitMessage;
+				if (move.flinch > 0) {
+					defender.AttemptFlinch(move);
+				}
+
+				yield return StartCoroutine(DisplayMoveText(hitMessage));
 
 				if (move.recoil > 0) {
 					int recoilDamage = Mathf.CeilToInt(attacker.maxHP * move.recoil);
@@ -182,10 +206,10 @@ public class BattleSystem : MonoBehaviour {
 				}
 			}
 		} else {
-			if(move.missMessage != null) {
-				moveText.text = move.missMessage.Replace("(opp_name)", defender.unitName);
+			if (move.missMessage != null) {
+				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName)));
 			} else {
-				moveText.text = "The move missed!";
+				yield return StartCoroutine(DisplayMoveText("The move missed!"));
 			}
 		}
 
@@ -197,7 +221,17 @@ public class BattleSystem : MonoBehaviour {
 			SwitchTurn();
 		}
 
-    	actionInProgress = false;
+		actionInProgress = false;
+	}
+
+	IEnumerator DisplayMoveText(string text) {
+		moveText.gameObject.SetActive(true);
+		moveText.text = "";
+		foreach (char letter in text.ToCharArray()) {
+			moveText.text += letter;
+			yield return new WaitForSeconds(0.05f); // Adjust the speed as needed
+		}
+		yield return new WaitForSeconds(turnDelay);
 	}
 
 	void SwitchTurn() {
