@@ -77,6 +77,11 @@ public class Unit : MonoBehaviour {
 		if (currentHP > maxHP) {
 			currentHP = maxHP;
 		}
+
+		if (unitRenderer != null) {
+			StartCoroutine(FlashGreen());
+		}
+
 	}
 
 	public void TakeBuff(int attackChange, int defenseChange) {
@@ -125,6 +130,16 @@ public class Unit : MonoBehaviour {
 		unitRenderer.material.color = originalColor;
 		yield return new WaitForSeconds(flashDuration);
 		unitRenderer.material.color = Color.red;
+		yield return new WaitForSeconds(flashDuration);
+		unitRenderer.material.color = originalColor;
+	}
+
+	private IEnumerator FlashGreen() {
+		unitRenderer.material.color = Color.green;
+		yield return new WaitForSeconds(flashDuration); // Use customizable duration
+		unitRenderer.material.color = originalColor;
+		yield return new WaitForSeconds(flashDuration);
+		unitRenderer.material.color = Color.green;
 		yield return new WaitForSeconds(flashDuration);
 		unitRenderer.material.color = originalColor;
 	}
