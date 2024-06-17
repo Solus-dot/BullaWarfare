@@ -137,6 +137,8 @@ public class BattleSystem : MonoBehaviour {
 
 	IEnumerator HandleMove(Unit attacker, Unit defender, int moveIndex) {
 		DisableActionButtons();
+		InitializeMoveset();
+		
 		actionInProgress = true;
 		Move move = attacker.GetMove(moveIndex);
 		string hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
@@ -248,5 +250,16 @@ public class BattleSystem : MonoBehaviour {
 		move2Button.gameObject.SetActive(true);
 		move3Button.gameObject.SetActive(true);
 		move4Button.gameObject.SetActive(true);
+	}
+
+	void InitializeMoveset() {
+		Sohom.Initialize();
+		Ravi.Initialize();
+		Manas.Initialize();
+		Harsh.Initialize();
+		Arya.Initialize();
+		Khush.Initialize();
+		Aditi.Initialize();
+		Sarv.Initialize();
 	}
 }

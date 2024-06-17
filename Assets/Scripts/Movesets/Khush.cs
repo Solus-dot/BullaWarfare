@@ -33,13 +33,13 @@ public static class Khush
 			moveName = "Love Call",
 			moveDesc = "Dials a call to his girlfriend, and the lovey-dovey talks powers him up but also annoys the opponent.\nUser gets 1 Attack with 20% HP recovery, Opposition gets 1 Attack,",
 			moveMessage = "Khushal dials a call to his gf. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 20% Health!",
-            cooldown = 0,
+			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = true,
-            healAmount = 20,
+			healAmount = 20,
 			isStatChange = true,
-            selfAttackChange = 1,
+			selfAttackChange = 1,
 			selfDefenseChange = 0,
 			oppAttackChange = 1,
 			oppDefenseChange = 0
@@ -50,7 +50,7 @@ public static class Khush
 			moveName = "Shower Boy",
 			moveDesc = "Uses his silliness to lull the opponent into a false sense of security,\nLowers Defense.",
 			moveMessage = "Khushal you dirty dog! A towel-only Khushal has blinded (opp_name)! (opp_name)'s next move loses accuracy by 50%!",
-            cooldown = 0,
+			cooldown = 0,
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = false,
@@ -66,13 +66,13 @@ public static class Khush
 			moveName = "Speeder Cuber",
 			moveDesc = "Quickly solves his cubes and attacks the opponents using them,\nDeals low damage but has a 30% chance to flinch the opponent.",
 			moveMessage = "Speedcubing expert Khushal solves a barrage of cubes and throws them at (opp_name). (value) damage dealt!",
-            cooldown = 0,
+			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
-            damage = 20,
+			damage = 20,
 			isHealingMove = false,
 			isStatChange = false,
-            flinch = 30
+			flinch = 30
 		},
 
 		// Music Club Rage Move
@@ -80,7 +80,7 @@ public static class Khush
 			moveName = "Music Club Rage",
 			moveDesc = "Plays sharp notes on his keyboard to stun the opponent then slams the keyboard into the opponent's face,\nDeals huge damage but has very low PP",
 			moveMessage = "Mclub Secy Khushal Wadhwa shows his Keyboard Skills to (opp_name) who boos him. Enraged, Khushal slams his keyboard straight into (opp_name)'s face. Ouch! (value) damage dealt!",
-            cooldown = 0,
+			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
 			damage = 20,
@@ -88,4 +88,7 @@ public static class Khush
 			isStatChange = false,
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

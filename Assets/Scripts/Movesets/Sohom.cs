@@ -21,7 +21,7 @@
 // Move 2: (move_use) Sohom opens Zomato on his phone, Perhaps he's ordering something ? (move_eff) Sohom's order has arrived, It was mcdonel ! Sohom eats up his meal and recovers HP
 // Move 3: Erm what the sigma? Sohom has started to spew filthy brainrot words to his opponent! The opponent does not have the skibidi rizz to handle it, (opp_name) loses Attack by 2 stages.
 // Move 4: Sohom unveils his Mr Fresher sash. All the XX chromosomes around him get riled up and attack (opp_name). (opp_name) receives (value) damage. Sohom starts taking pictures with the wild females to calm them down.
-// Recharge Turn : Sohom is taking pictures with the females, he can't move !!!
+// Recharge Turn: Sohom is taking pictures with the females, he can't move !!!
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -90,4 +90,7 @@ public static class Sohom
 			isStatChange = false,
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

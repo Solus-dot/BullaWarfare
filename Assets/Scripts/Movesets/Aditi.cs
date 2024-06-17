@@ -28,11 +28,11 @@ using System.Collections.Generic;
 
 public static class Aditi
 {
-    public static List<Move> moves = new List<Move>() {
+	public static List<Move> moves = new List<Move>() {
 		// Premium Nigga Move
 		new Move() {
 			moveName = "Premium Nigga",
-            moveDesc = "Aditya uses the darkness to fade into the enemy's shadow causing the enemy to get chills.\nEnemy loses Attack by 1 stage.",
+			moveDesc = "Aditya uses the darkness to fade into the enemy's shadow causing the enemy to get chills.\nEnemy loses Attack by 1 stage.",
 			moveMessage = "Aditya uses the darkness and fades into (opp_name)'s shadow. (opp_name) gets the chills. Attack lowered by 1.",
 			cooldown = 0,
 			accuracy = 100,
@@ -59,7 +59,7 @@ public static class Aditi
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = -1,
-            flinch = 50
+			flinch = 50
 		},
 
 		// Ramehameha Move
@@ -70,9 +70,9 @@ public static class Aditi
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
-            damage = 20,
+			damage = 20,
 			isHealingMove = true,
-            healAmount = 15,
+			healAmount = 15,
 			isStatChange = false,
 		},
 
@@ -87,10 +87,13 @@ public static class Aditi
 			damage = 20,
 			isHealingMove = false,
 			isStatChange = true,
-            selfAttackChange = -1,
+			selfAttackChange = -1,
 			selfDefenseChange = -1,
 			oppAttackChange = 0,
 			oppDefenseChange = 0,
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

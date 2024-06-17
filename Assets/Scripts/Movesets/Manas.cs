@@ -86,4 +86,7 @@ public static class Manas
 			isStatChange = false,
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

@@ -31,7 +31,7 @@ public static class Harsh
 		// Too Much Radio Move
 		new Move() {
 			moveName = "Too Much Radio",
-            moveDesc = "Plays a radiohead song which makes everyone around them sad,\nOpponent loses Defense stat.",
+			moveDesc = "Plays a radiohead song which makes everyone around them sad,\nOpponent loses Defense stat.",
 			moveMessage = "Harsh turns on his Radiohead playlist, a british man sings about being sad, the mood turns gloomy (opp_name) loses Defense by 1 stage.",
 			cooldown = 0,
 			accuracy = 100,
@@ -68,7 +68,7 @@ public static class Harsh
 			cooldown = 0,
 			accuracy = 100,
 			isDamaging = true,
-            damage = 20,
+			damage = 20,
 			isHealingMove = false,
 			isStatChange = false,
 		},
@@ -90,4 +90,7 @@ public static class Harsh
 			oppDefenseChange = 0
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

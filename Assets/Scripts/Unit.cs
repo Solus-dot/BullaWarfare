@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV }
 
 [System.Serializable]
 public class Move {
@@ -28,6 +28,7 @@ public class Move {
 
 	public float recoil;			// Percentage recoil damage to self from the move (optional)
 	public int flinch;				// Percentage of opponent getting flinched from the move (optional)
+
 }
 
 public class Unit : MonoBehaviour {
@@ -118,6 +119,8 @@ public class Unit : MonoBehaviour {
 			return Khush.moves[index];
 		} else if (moveset == MovesetEnum.ADITI) {
 			return Aditi.moves[index];
+		} else if (moveset == MovesetEnum.SARV) {
+			return Sarv.moves[index];
 		} else {
 			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
 			return null;

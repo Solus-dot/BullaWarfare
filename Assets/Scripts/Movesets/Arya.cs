@@ -87,4 +87,7 @@ public static class Arya
             recoil = 0.35f
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }

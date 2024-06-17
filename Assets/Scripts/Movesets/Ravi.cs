@@ -89,4 +89,7 @@ public static class Ravi
 			isStatChange = false,
 		}
 	};
+
+	// Initialize function for any random/niche Move effect
+	public static void Initialize() {}
 }
