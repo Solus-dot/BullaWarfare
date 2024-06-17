@@ -27,7 +27,7 @@ public class Move {
 	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
 
 	public float recoil;			// Percentage recoil damage to self from the move (optional)
-	public int flinch;			// Percentage of opponent getting flinched from the move (optional)
+	public int flinch;				// Percentage of opponent getting flinched from the move (optional)
 }
 
 public class Unit : MonoBehaviour {
