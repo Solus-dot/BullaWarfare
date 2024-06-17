@@ -349,7 +349,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.54810697, g: 0.6627451, b: 0.5176471, a: 0}
+  m_BackGroundColor: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 0.19607843}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1939,7 +1939,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b4d72bb9f5baa714d850f5f39a5bf1b6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e3e8c47743747f64f818be70b6172671, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
