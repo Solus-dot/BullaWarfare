@@ -56,7 +56,7 @@ public class BattleSystem : MonoBehaviour {
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
 
-		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences..."));
+		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...", 0.07f));
 
 		yield return new WaitForSeconds(turnDelay);
 		state = BattleState.P1_TURN;
@@ -71,7 +71,7 @@ public class BattleSystem : MonoBehaviour {
 	IEnumerator PlayerTurn() {
 		if (state == BattleState.P1_TURN) {
 			if (P1_Unit.isFlinching) {
-				yield return StartCoroutine(DisplayMoveText(P1_Unit.unitName + " flinched and couldn't move!"));
+				yield return StartCoroutine(DisplayMoveText(P1_Unit.unitName + " flinched and couldn't move!", 0.05f));
 				P1_Unit.EndTurn();
 				yield return new WaitForSeconds(turnDelay);
 				state = BattleState.P2_TURN;
@@ -89,7 +89,7 @@ public class BattleSystem : MonoBehaviour {
 
 		} else if (state == BattleState.P2_TURN) {
 			if (P2_Unit.isFlinching) {
-				yield return StartCoroutine(DisplayMoveText(P2_Unit.unitName + " flinched and couldn't move!"));
+				yield return StartCoroutine(DisplayMoveText(P2_Unit.unitName + " flinched and couldn't move!", 0.05f));
 				P2_Unit.EndTurn();
 				yield return new WaitForSeconds(turnDelay);
 				state = BattleState.P1_TURN;
@@ -150,7 +150,7 @@ public class BattleSystem : MonoBehaviour {
 
 		if (randomValue < hitChance) {
 			if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
-				yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!"));
+				yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!", 0.05f));
 			} else {
 				if (move.isDamaging) {
 					int damage = attacker.attack * move.damage / 20; // Calculate effective damage
@@ -202,13 +202,13 @@ public class BattleSystem : MonoBehaviour {
 					}
 				}
 
-				yield return StartCoroutine(DisplayMoveText(hitMessage));
+				yield return StartCoroutine(DisplayMoveText(hitMessage, 0.05f));
 			}
 		} else {
 			if (move.missMessage != null) {
-				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName)));
+				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName), 0.05f));
 			} else {
-				yield return StartCoroutine(DisplayMoveText("The move missed!"));
+				yield return StartCoroutine(DisplayMoveText("The move missed!", 0.05f));
 			}
 		}
 
@@ -223,12 +223,12 @@ public class BattleSystem : MonoBehaviour {
 		actionInProgress = false;
 	}
 
-	IEnumerator DisplayMoveText(string text) {
+	IEnumerator DisplayMoveText(string text, float speed) {
 		moveText.gameObject.SetActive(true);
 		moveText.text = "";
 		foreach (char letter in text.ToCharArray()) {
 			moveText.text += letter;
-			yield return new WaitForSeconds(0.05f); // Adjust the speed as needed
+			yield return new WaitForSeconds(speed);
 		}
 		yield return new WaitForSeconds(turnDelay);
 	}
