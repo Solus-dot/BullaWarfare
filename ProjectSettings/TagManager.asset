@@ -45,12 +45,9 @@ TagManager:
   - name: Background
     uniqueID: 3933428713
     locked: 0
-  - name: Textboxes
+  - name: UIBoxes
     uniqueID: 2346189939
     locked: 0
-  - name: Buttons
+  - name: SubBoxes
     uniqueID: 3880483723
-    locked: 0
-  - name: HP_Bar
-    uniqueID: 4190183623
     locked: 0
