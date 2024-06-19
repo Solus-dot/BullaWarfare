@@ -50,76 +50,14 @@ MonoBehaviour:
   maxHP: 88
   attack: 21
   defense: 16
+  baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
   currentHP: 88
   moveset: 1
   recvEffectiveDamage: 0
-  SohomX:
-  - moveName: Chokehold
-    moveDesc: "Comes up sneakily behind the opponent and chokes them for some damage,
-      \nCauses the opponent to lose Defense."
-    moveMessage: 
-    isDamaging: 1
-    damage: 20
-    cooldown: 0
-    accuracy: 100
-    isHealingMove: 0
-    healAmount: 0
-    isStatChange: 1
-    selfAttackChange: 0
-    selfDefenseChange: 0
-    oppAttackChange: 0
-    oppDefenseChange: -1
-  - moveName: MCDonel
-    moveDesc: 'Orders Mcdonald''s in the middle of the fight,
-
-      Heals 30% of
-      total HP.'
-    moveMessage: 
-    isDamaging: 0
-    damage: 0
-    cooldown: 0
-    accuracy: 100
-    isHealingMove: 1
-    healAmount: 100
-    isStatChange: 0
-    selfAttackChange: 0
-    selfDefenseChange: 0
-    oppAttackChange: 0
-    oppDefenseChange: 0
-  - moveName: Brainrot Spew
-    moveDesc: "Spews insane brainrot phrases at the opponent, \nCauses the opponent
-      to lose his Attack by two stages."
-    moveMessage: 
-    isDamaging: 0
-    damage: 0
-    cooldown: 0
-    accuracy: 100
-    isHealingMove: 0
-    healAmount: 0
-    isStatChange: 1
-    selfAttackChange: 0
-    selfDefenseChange: 0
-    oppAttackChange: -2
-    oppDefenseChange: 0
-  - moveName: Mr. Fresher Smash
-    moveDesc: 'Uses his status as Mr. Fresher to summon hordes of fangirls to attack
-      the opponent,
-
-      Deals massive damage but needs to be recharged after used.'
-    moveMessage: 
-    isDamaging: 1
-    damage: 20
-    cooldown: 1
-    accuracy: 100
-    isHealingMove: 0
-    healAmount: 0
-    isStatChange: 0
-    selfAttackChange: 0
-    selfDefenseChange: 0
-    oppAttackChange: 0
-    oppDefenseChange: 0
+  isFlinching: 0
+  isOnCooldown: 0
 --- !u!212 &1592791585807594370
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -158,8 +96,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 390912351
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ec0928d0bfa296f43a5b28e68db9f68f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

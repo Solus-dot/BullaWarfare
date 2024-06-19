@@ -11,7 +11,7 @@ public class Move {
 	public string moveMessage;		// Message to be printed on the dialogue when the move is used
 	public string missMessage;		// Message to be printed on the dialogue when the move missed
 
-	public float cooldown;			// Time (turns) before reuse (optional)
+	public bool isCooldown;			// Flag indicating if move causes cooldown
 	public int accuracy;			// Percentage chance of hitting (optional)
 
 	public bool isDamaging;			// Flag indicating if the move deals damage
@@ -43,9 +43,11 @@ public class Unit : MonoBehaviour {
 	public int defenseStage = 0;
 	public int currentHP;
 	public MovesetEnum moveset;
+	public string cooldownMessage;
 
 	public int recvEffectiveDamage; // Effective damage received
 	public bool isFlinching;
+	public bool isOnCooldown;
 
 	private Renderer unitRenderer;
 	private Color originalColor;
@@ -101,7 +103,8 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void EndTurn() {
-		isFlinching = false;  // Reset flinch at the end of the turn
+		isFlinching = false;	// Reset flinch at the end of the turn
+		isOnCooldown = false;	// Reset cooldown at the end of the turn
 	}
 
 	public Move GetMove(int index) {
@@ -122,10 +125,11 @@ public class Unit : MonoBehaviour {
 		} else if (moveset == MovesetEnum.SARV) {
 			return Sarv.moves[index];
 		} else {
-			Debug.LogError("Moveset script is not assigned. This error from Unit.GetMove");
+			Debug.LogError("Unknown Moveset");
 			return null;
 		}
 	}
+
 
 	private IEnumerator FlashRed() {
 		unitRenderer.material.color = Color.red;

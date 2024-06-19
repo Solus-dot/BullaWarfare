@@ -48,6 +48,9 @@ TagManager:
   - name: UIBoxes
     uniqueID: 2346189939
     locked: 0
+  - name: Characters
+    uniqueID: 390912351
+    locked: 0
   - name: SubBoxes
     uniqueID: 3880483723
     locked: 0

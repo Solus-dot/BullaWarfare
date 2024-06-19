@@ -78,6 +78,16 @@ public class BattleSystem : MonoBehaviour {
 				StartCoroutine(PlayerTurn());
 				yield break;
 			}
+
+			if (P1_Unit.isOnCooldown) {
+				yield return StartCoroutine(DisplayMoveText(P1_Unit.cooldownMessage, 0.05f));
+				P1_Unit.EndTurn();
+				yield return new WaitForSeconds(turnDelay);
+				state = BattleState.P2_TURN;
+				StartCoroutine(PlayerTurn());
+				yield break;
+			}
+
 			dialogueText.gameObject.SetActive(true);
 			moveText.gameObject.SetActive(false);
 
@@ -96,6 +106,16 @@ public class BattleSystem : MonoBehaviour {
 				StartCoroutine(PlayerTurn());
 				yield break;
 			}
+
+			if (P2_Unit.isOnCooldown) {
+				yield return StartCoroutine(DisplayMoveText(P2_Unit.cooldownMessage, 0.05f));
+				P2_Unit.EndTurn();
+				yield return new WaitForSeconds(turnDelay);
+				state = BattleState.P1_TURN;
+				StartCoroutine(PlayerTurn());
+				yield break;
+			}
+
 			dialogueText.gameObject.SetActive(true);
 			moveText.gameObject.SetActive(false);
 
@@ -166,7 +186,7 @@ public class BattleSystem : MonoBehaviour {
 				}
 
 				if (move.isHealingMove) {
-					int healAmount = move.healAmount; // Implement proper heal logic
+					int healAmount = move.healAmount * attacker.maxHP/100; // Implement proper heal logic (heal% * attacker)
 					attacker.Heal(healAmount);
 
 					if (attacker == P1_Unit) {
@@ -202,8 +222,13 @@ public class BattleSystem : MonoBehaviour {
 					}
 				}
 
+				if (move.isCooldown == true) {
+					attacker.isOnCooldown = true;
+				}
+
 				yield return StartCoroutine(DisplayMoveText(hitMessage, 0.05f));
 			}
+
 		} else {
 			if (move.missMessage != null) {
 				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName), 0.05f));
