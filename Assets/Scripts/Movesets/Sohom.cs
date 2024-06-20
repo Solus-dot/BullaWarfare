@@ -2,7 +2,7 @@
 
 // Move 1: Chokehold
 // Comes sneakily behind the opponent and chokes them for some damage, 
-// Causes opponent to lose Defense stat.
+// Causes opponent to lose DEF stat.
 
 // Move 2: MCDonel
 // Orders Mcdonald's in the middle of the fight, 
@@ -10,7 +10,7 @@
 
 // Move 3: Brainrot Spew
 // Spews insane brainrot phrases at the opponent, 
-// causes the opponent to lose his Attack by two stages.
+// causes the opponent to lose his ATK by two stages.
 
 // Move 4: Mr Fresher Smash
 // Uses his status as Mr Fresher to summon hordes of fangirls to attack the opponent, 

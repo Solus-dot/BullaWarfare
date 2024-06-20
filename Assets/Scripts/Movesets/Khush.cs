@@ -2,7 +2,7 @@
 
 // Move 1: Love Call
 // Dials a call to his GF, and the lovey-dovey talks powers him up but also annoys the opponent.
-// User gets 1 Attack with 20% HP recovery, Opposition gets 1 Attack,
+// User gets 1 ATK with 20% HP recovery, Opposition gets 1 ATK,
 
 // Move 2 : Shower Boy
 // Comes out of the shower only wearing a towel and embarrasses the opponent. 

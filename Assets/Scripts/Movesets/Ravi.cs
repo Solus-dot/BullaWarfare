@@ -2,11 +2,11 @@
 
 // Move 1: Bhangra 
 // Dances in front of the opponent like a true chad,
-// Boosts Attack by one stage.
+// Boosts ATK by one stage.
 
 // Move 2: Equity Promise
 // Promises some %share of his future package to the opponent 
-// In exchange for Opponent losing his Attack stat by 2 stages. Can only be used once per opponent.
+// In exchange for Opponent losing his ATK stat by 2 stages. Can only be used once per opponent.
 
 // Move 3: Alt F4 IRL
 // Uses an illegal shortcut arriving from the depths of /dev/null,

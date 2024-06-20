@@ -2,11 +2,11 @@
 
 // Move 1: Shudh Dudh
 // Pulls out his 2 Litre bottle of pure buffallo milk and drinks it one gulp, 
-// Attack and Defense up by 1 stage.
+// ATK and DEF up by 1 stage.
 
 // Move 2: Puppy Eyes 
 // Says "Aisa karega mere saath" in a very sweet voice,
-// Lowers Attack of opponent by one stage.
+// Lowers ATK of opponent by one stage.
 
 // Move 3: Baddieminton
 // Straightforward move where he uses his badminton racket to attack the opponent,

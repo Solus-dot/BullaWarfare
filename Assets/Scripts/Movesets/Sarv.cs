@@ -2,7 +2,7 @@
 
 // Move 1: Domi Mommy
 // As the dom mommy of the group, Sarvesh holds absolute authority over the opponent.
-// Asks the opponent to lower their Attack and Defense by 1 and the opponent gladly accepts.
+// Asks the opponent to lower their ATK and DEF by 1 and the opponent gladly accepts.
 
 // Move 2: Veteran Climber
 // Sarvesh uses his veteran climbing abilities and takes the high ground and rests,
@@ -14,7 +14,7 @@
 
 // Move 4: Churan Heatwave
 // Sarvesh ingests his special Churan passed onto him by his ancestors and releases a massive heatwave which damages the opponent.
-// Deals good damage and has a 50% chance to lower enemy's Defense.
+// Deals good damage and has a 50% chance to lower enemy's DEF.
 
 // Move Messages
 // Move 1: The absolute authority mommy has appeared on the battlefield. (opp_name) shudders. Sarvesh asks (opp_name) to lower his attack and defense and he gladly complies. (opp_name) loses Attack and Defense by 1 stage!

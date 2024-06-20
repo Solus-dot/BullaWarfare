@@ -6,11 +6,11 @@
 
 // Move 2 : Silly Pookie
 // Uses his silliness to lull the opponent into a false sense of security, 
-// Lowers Defense.
+// Lowers DEF of opponent by one stage.
 
 // Move 3: Toxic Rant
 // Uses a variety of various slurs and roasts to dishearten the opponent,
-// Lowers Attack. If used after Silly Pookie, lowers both Attack and Defense.
+// Lowers ATK. If used after Silly Pookie, lowers both ATK and DEF.
 
 // Move 4: Cooler Throw
 // In a fit of rage and fury about the ownership of the cooler,

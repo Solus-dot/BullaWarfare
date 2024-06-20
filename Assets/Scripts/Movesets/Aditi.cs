@@ -2,19 +2,19 @@
 
 // Move 1: Premium Nigga
 // Aditya uses the darkness to fade into the enemy's shadow causing the enemy to get chills.
-// Enemy loses Attack by 1 stage.
+// Enemy loses ATK by 1 stage.
 
 // Move 2 : Sakht Commando
 // Aditya takes off his shorts and goes Mushkil waqt Commando Sakt, the opponent is repelled by this.
-// Enemy loses Defense by 1 stage and 50% to flinch them.
+// Enemy loses DEF by 1 stage and 50% to flinch them.
 
 // Move 3 : Ramehameha
 // Aditya uses his belief in Shree Ram and deals damage with a Ram powered Kamehameha.
-// Deals moderate damage, double damage to muslims and heals for 15% HP.
+// Deals moderate damage and heals for 15% HP.
 
 // Move 4 : GKC BLAST
 // Aditya uses his position as the GKC and uses all his brainpower to attack the opponent in a massive blast.
-// Causes huge damage, but GKC loses both Attack and Defense.
+// Causes huge damage, but GKC loses both ATK and DEF.
 
 // Move Messages
 

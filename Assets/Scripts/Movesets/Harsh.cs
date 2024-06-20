@@ -2,11 +2,11 @@
 
 // Move 1: Too Much Radio
 // Plays a radiohead song which makes everyone around them sad,
-// Opponent loses Defense stat.
+// Opponent loses DEF stat.
 
 // Move 2: Literally Me
 // Boasts about being Ryan Gosling, angering the opponents,
-// Opponent's Defense drops 2 stages while Attack goes up 1 stage.
+// Opponent's DEF drops 2 stages while ATK goes up 1 stage.
 
 // Move 3: QC Ka Choda
 // Hurts the opponents by spitting random facts to the opponent,
@@ -14,7 +14,7 @@
 
 // Move 4: Funny Valentine
 // Makes an incredibly funny and self-depricating joke that they hurt themselves,
-// Deals good damage but reduces the Defense stat of the user.
+// Deals good damage but reduces the DEF stat of the user.
 
 // Move Messages
 // Move 1: Harsh turns on his Radiohead playlist, a british man sings about being sad, the mood turns gloomy (opp_name) loses Defense by 1 stage.
