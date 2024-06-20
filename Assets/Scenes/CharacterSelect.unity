@@ -376,7 +376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Aditya
   characterPrefab: {fileID: 6884295409158445089, guid: 48fed0b48c1f8084182ef896d8541f95, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &156660204
@@ -509,7 +508,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 0.09803922}
+  m_BackGroundColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 0.39215687}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -617,7 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Sohom
   characterPrefab: {fileID: 6884295409158445089, guid: 307375d5c4e89d04792a133399ce09da, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &354725567
@@ -1193,8 +1191,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1305,7 +1303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Khushal
   characterPrefab: {fileID: 6884295409158445089, guid: 264ba7494f5216649b5c7fc45dfc5fa4, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &593656930
@@ -1965,7 +1962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Sarvesh
   characterPrefab: {fileID: 6884295409158445089, guid: 99e7ac25c84548943a6cf3bd27d3d4a8, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &836782608
@@ -2189,7 +2185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Harshvardhan
   characterPrefab: {fileID: 6884295409158445089, guid: db2bf498a4ad5f946a4cf6c3c5a3bd27, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &924811393
@@ -2628,7 +2623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Manas
   characterPrefab: {fileID: 6884295409158445089, guid: 6a5da43b085023346814465f523363f2, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &1259047704
@@ -3011,8 +3005,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3408,7 +3402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Ravi
   characterPrefab: {fileID: 4808498191648398044, guid: 11eb8a938c7ad5e4b9ec67541f8843ab, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &1560232578
@@ -3736,7 +3729,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa5bc4ab3fcf540a20320b2ce617dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Aryavart
   characterPrefab: {fileID: 6884295409158445089, guid: ec7675106dc5f074dbd37b597235968b, type: 3}
   characterSelectManager: {fileID: 1571579882}
 --- !u!114 &1701981153
@@ -4430,8 +4422,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

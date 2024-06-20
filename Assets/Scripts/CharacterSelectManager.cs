@@ -37,6 +37,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	private GameObject selectedCharacterPlayer1;
 	private GameObject selectedCharacterPlayer2;
 
+
 	// The game objects that show up when confirming/selected
 	private GameObject confirmedCharacterPlayer1;
 	private GameObject confirmedCharacterPlayer2;
@@ -49,6 +50,10 @@ public class CharacterSelectManager : MonoBehaviour {
 	// Move indexes for cycling through moves
 	private int p1MoveIndex = 0;
 	private int p2MoveIndex = 0;
+
+	// Last clicked characters
+	private GameObject lastClickedCharacterPlayer1;
+	private GameObject lastClickedCharacterPlayer2;
 
 	private void Awake() {
 		if (Instance == null) {
@@ -84,56 +89,65 @@ public class CharacterSelectManager : MonoBehaviour {
 		}
 	}
 
-	public void OnButtonHover(GameObject characterPrefab) {
-		GameObject prefab = LoadCharacterPrefab(characterPrefab);
-
-		if (selectedCharacterPlayer1 == null && confirmedCharacterPlayer1 == null) {
-			selectedCharacterPlayer1 = Instantiate(prefab, player1DetailsPanel.transform);
-			player1DetailsPanel.SetActive(true);
-			ShowStats(prefab, P1Name, P1Stats);
-			ShowMoveInfo(prefab, P1MoveName, P1MoveDesc, p1MoveIndex);
-		} else if (selectedCharacterPlayer2 == null && confirmedCharacterPlayer2 == null) {
-			selectedCharacterPlayer2 = Instantiate(prefab, player2DetailsPanel.transform);
-			player2DetailsPanel.SetActive(true);
-			ShowStats(prefab, P2Name, P2Stats);
-			ShowMoveInfo(prefab, P2MoveName, P2MoveDesc, p2MoveIndex);
+	public void SelectCharacter(GameObject characterPrefab) {
+		if (!p1Picked && confirmedCharacterPlayer1 == null) {
+			HandlePlayer1Selection(characterPrefab);
+		} else if (!p2Picked && confirmedCharacterPlayer2 == null) {
+			HandlePlayer2Selection(characterPrefab);
 		}
 	}
 
-	public void OnButtonDehover(GameObject characterPrefab) {
-		Unit unit = characterPrefab.GetComponent<Unit>();
-		if (selectedCharacterPlayer1 != null && !p1Picked && selectedCharacterPlayer1.GetComponent<Unit>().unitName == unit.unitName) {
-			player1DetailsPanel.SetActive(false);
+	private void HandlePlayer1Selection(GameObject characterPrefab) {
+		if (selectedCharacterPlayer1 == null || lastClickedCharacterPlayer1 != characterPrefab) {
+			// First click or different character
+			if (selectedCharacterPlayer1 != null) {
+				Destroy(selectedCharacterPlayer1);
+			}
+			selectedCharacterPlayer1 = Instantiate(characterPrefab, player1DetailsPanel.transform);
+			player1DetailsPanel.SetActive(true);
+			ShowStats(selectedCharacterPlayer1, P1Name, P1Stats);
+			ShowMoveInfo(selectedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
+
+			lastClickedCharacterPlayer1 = characterPrefab;
+		} else {
+			// Second click on the same character
+			confirmedCharacterPlayer1 = Instantiate(characterPrefab, player1DetailsPanel.transform);
+			selectedCharacterPrefabs[1] = characterPrefab;
+			p1Picked = true;
+			P1Name.color = Color.cyan;
+
 			Destroy(selectedCharacterPlayer1);
 			selectedCharacterPlayer1 = null;
-		} else if (selectedCharacterPlayer2 != null && !p2Picked && selectedCharacterPlayer2.GetComponent<Unit>().unitName == unit.unitName) {
-			player2DetailsPanel.SetActive(false);
-			Destroy(selectedCharacterPlayer2);
-			selectedCharacterPlayer2 = null;
+			lastClickedCharacterPlayer1 = null;
+
+			titleText.text = "Player 2: Pick your Character!";
 		}
 	}
 
-	public void SelectCharacter(string characterName, GameObject characterPrefab) {
-		GameObject prefab = LoadCharacterPrefab(characterPrefab);
-
-		if (confirmedCharacterPlayer1 == null) {
-			confirmedCharacterPlayer1 = Instantiate(prefab, player1DetailsPanel.transform);
-
-			player1DetailsPanel.SetActive(true);
-			selectedCharacterPrefabs[1] = prefab;
-			p1Picked = true;
-
-			titleText.text = "Player 2: Pick your Character!";
-			Debug.Log("Player 1 clicked on " + characterName);
-		} else if (confirmedCharacterPlayer2 == null) {
-			confirmedCharacterPlayer2 = Instantiate(prefab, player2DetailsPanel.transform);
-
+	private void HandlePlayer2Selection(GameObject characterPrefab) {
+		if (selectedCharacterPlayer2 == null || lastClickedCharacterPlayer2 != characterPrefab) {
+			// First click or different character
+			if (selectedCharacterPlayer2 != null) {
+				Destroy(selectedCharacterPlayer2);
+			}
+			selectedCharacterPlayer2 = Instantiate(characterPrefab, player2DetailsPanel.transform);
 			player2DetailsPanel.SetActive(true);
-			selectedCharacterPrefabs[2] = prefab;
+			ShowStats(selectedCharacterPlayer2, P2Name, P2Stats);
+			ShowMoveInfo(selectedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
+
+			lastClickedCharacterPlayer2 = characterPrefab;
+		} else {
+			// Second click on the same character
+			confirmedCharacterPlayer2 = Instantiate(characterPrefab, player2DetailsPanel.transform);
+			selectedCharacterPrefabs[2] = characterPrefab;
 			p2Picked = true;
+			P2Name.color = Color.red;
+
+			Destroy(selectedCharacterPlayer2);
+			selectedCharacterPlayer2 = null;
+			lastClickedCharacterPlayer2 = null;
 
 			titleText.text = "Press Space to confirm your selections!";
-			Debug.Log("Player 2 clicked on " + characterName);
 		}
 	}
 
@@ -148,13 +162,14 @@ public class CharacterSelectManager : MonoBehaviour {
 	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText) {
 		Unit unit = prefab.GetComponent<Unit>();
 		NameText.text = unit.unitName;
-		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
+		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;    
 	}
 
 	void ShowMoveInfo(GameObject prefab, TMP_Text MoveNameText, TMP_Text MoveDescText, int MoveIndex) {
 		Unit unit = prefab.GetComponent<Unit>();
-		MoveNameText.text = unit.GetMove(MoveIndex).moveName;
-		MoveDescText.text = unit.GetMove(MoveIndex).moveDesc;
+		Move move = unit.GetMove(MoveIndex);
+		MoveNameText.text = move.moveName;
+		MoveDescText.text = move.moveDesc;
 	}
 
 	void HideStats(TMP_Text StatsText) {
@@ -194,21 +209,33 @@ public class CharacterSelectManager : MonoBehaviour {
 		p1MoveIndex = 0;
 		p2MoveIndex = 0;
 
+		// Reset the last clicked characters
+		lastClickedCharacterPlayer1 = null;
+		lastClickedCharacterPlayer2 = null;
+
 		// Reset the UI elements
 		titleText.text = "Player 1: Pick your Character!";
+		P1Name.color = Color.white;
+		P2Name.color = Color.white;
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
 	}
 
 	void CycleMove(int direction, int playerIndex) {
-		if (playerIndex == 1 && selectedCharacterPlayer1 != null) {
-			Unit unit = selectedCharacterPlayer1.GetComponent<Unit>();
+		if (playerIndex == 1) {
 			p1MoveIndex = (p1MoveIndex + direction + 4) % 4;
-			ShowMoveInfo(selectedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
-		} else if (playerIndex == 2 && selectedCharacterPlayer2 != null) {
-			Unit unit = selectedCharacterPlayer2.GetComponent<Unit>();
+			if (selectedCharacterPlayer1 != null) {
+				ShowMoveInfo(selectedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
+			} else if (confirmedCharacterPlayer1 != null) {
+				ShowMoveInfo(confirmedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
+			}
+		} else if (playerIndex == 2) {
 			p2MoveIndex = (p2MoveIndex + direction + 4) % 4;
-			ShowMoveInfo(selectedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
+			if (selectedCharacterPlayer2 != null) {
+				ShowMoveInfo(selectedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
+			} else if (confirmedCharacterPlayer2 != null) {
+				ShowMoveInfo(confirmedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
+			}
 		}
 	}
 
