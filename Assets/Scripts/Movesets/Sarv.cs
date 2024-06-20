@@ -2,7 +2,7 @@
 
 // Move 1: Domi Mommy
 // As the dom mommy of the group, Sarvesh holds absolute authority over the opponent.
-// Asks the opponent to lower both their Attack and Defence by 1 and the opponent gladly accepts.
+// Asks the opponent to lower their Attack and Defense by 1 and the opponent gladly accepts.
 
 // Move 2: Veteran Climber
 // Sarvesh uses his veteran climbing abilities and takes the high ground and rests,
@@ -32,7 +32,7 @@ public static class Sarv
 		// Domi Mommy Move
 		new Move() {
 			moveName = "Domi Mommy",
-			moveDesc = "As the dom mommy of the group, Sarvesh holds absolute authority over the opponent.\nAsks the opponent to lower both their Attack and Defence by 1 and the opponent gladly accepts.",
+			moveDesc = "As the dom mommy of the group, Sarvesh holds absolute authority over the opponent.\nAsks the opponent to lower their Attack and Defense by 1 and the opponent gladly accepts.",
 			moveMessage = "The absolute authority mommy has appeared on the battlefield. (opp_name) shudders. Sarvesh asks (opp_name) to lower his attack and defense and he gladly complies. (opp_name) loses Attack and Defense by 1 stage!",
 			isCooldown = false,
 			accuracy = 100,

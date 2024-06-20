@@ -12,16 +12,26 @@ public class CharacterSelectManager : MonoBehaviour {
 	public GameObject player2DetailsPanel;
 
 	// Names of the characters hovered on
-	public TMP_Text Player1Name;
-	public TMP_Text Player2Name;
+	public TMP_Text P1Name;
+	public TMP_Text P2Name;
 
 	// Stats of the characters hovered on
-	public TMP_Text Player1Stats;
-	public TMP_Text Player2Stats;
+	public TMP_Text P1Stats;
+	public TMP_Text P2Stats;
 
 	// Moves of the characters hovered on
-	public TMP_Text Player1Moves;
-	public TMP_Text Player2Moves;
+	public TMP_Text P1MoveName;
+	public TMP_Text P2MoveName;
+
+	// Descs of the characters hovered on
+	public TMP_Text P1MoveDesc;
+	public TMP_Text P2MoveDesc;
+
+	// Move switch Buttons
+	public Button P1Left;
+	public Button P1Right;
+	public Button P2Left;
+	public Button P2Right;
 
 	// The game objects that show up when hovering/selecting
 	private GameObject selectedCharacterPlayer1;
@@ -35,6 +45,10 @@ public class CharacterSelectManager : MonoBehaviour {
 	private bool p2Picked;
 
 	private Dictionary<int, GameObject> selectedCharacterPrefabs = new Dictionary<int, GameObject>();
+
+	// Move indexes for cycling through moves
+	private int p1MoveIndex = 0;
+	private int p2MoveIndex = 0;
 
 	private void Awake() {
 		if (Instance == null) {
@@ -51,6 +65,11 @@ public class CharacterSelectManager : MonoBehaviour {
 		titleText.text = "Player 1: Pick your Character!";
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
+
+		P1Left.onClick.AddListener(() => CycleMove(-1, 1));
+		P1Right.onClick.AddListener(() => CycleMove(1, 1));
+		P2Left.onClick.AddListener(() => CycleMove(-1, 2));
+		P2Right.onClick.AddListener(() => CycleMove(1, 2));
 	}
 
 	void Update() {
@@ -71,11 +90,13 @@ public class CharacterSelectManager : MonoBehaviour {
 		if (selectedCharacterPlayer1 == null && confirmedCharacterPlayer1 == null) {
 			selectedCharacterPlayer1 = Instantiate(prefab, player1DetailsPanel.transform);
 			player1DetailsPanel.SetActive(true);
-			ShowStats(prefab, Player1Name, Player1Stats, Player1Moves);
+			ShowStats(prefab, P1Name, P1Stats);
+			ShowMoveInfo(prefab, P1MoveName, P1MoveDesc, p1MoveIndex);
 		} else if (selectedCharacterPlayer2 == null && confirmedCharacterPlayer2 == null) {
 			selectedCharacterPlayer2 = Instantiate(prefab, player2DetailsPanel.transform);
 			player2DetailsPanel.SetActive(true);
-			ShowStats(prefab, Player2Name, Player2Stats, Player2Moves);
+			ShowStats(prefab, P2Name, P2Stats);
+			ShowMoveInfo(prefab, P2MoveName, P2MoveDesc, p2MoveIndex);
 		}
 	}
 
@@ -124,11 +145,16 @@ public class CharacterSelectManager : MonoBehaviour {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 
-	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText, TMP_Text MovesText) {
+	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText) {
 		Unit unit = prefab.GetComponent<Unit>();
 		NameText.text = unit.unitName;
 		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
-		MovesText.text = unit.GetMove(0).moveName + "\n" + unit.GetMove(1).moveName + "\n" + unit.GetMove(2).moveName + "\n" + unit.GetMove(3).moveName;
+	}
+
+	void ShowMoveInfo(GameObject prefab, TMP_Text MoveNameText, TMP_Text MoveDescText, int MoveIndex) {
+		Unit unit = prefab.GetComponent<Unit>();
+		MoveNameText.text = unit.GetMove(MoveIndex).moveName;
+		MoveDescText.text = unit.GetMove(MoveIndex).moveDesc;
 	}
 
 	void HideStats(TMP_Text StatsText) {
@@ -164,10 +190,26 @@ public class CharacterSelectManager : MonoBehaviour {
 		p1Picked = false;
 		p2Picked = false;
 
+		// Reset the move indexes
+		p1MoveIndex = 0;
+		p2MoveIndex = 0;
+
 		// Reset the UI elements
 		titleText.text = "Player 1: Pick your Character!";
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
+	}
+
+	void CycleMove(int direction, int playerIndex) {
+		if (playerIndex == 1 && selectedCharacterPlayer1 != null) {
+			Unit unit = selectedCharacterPlayer1.GetComponent<Unit>();
+			p1MoveIndex = (p1MoveIndex + direction + 4) % 4;
+			ShowMoveInfo(selectedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
+		} else if (playerIndex == 2 && selectedCharacterPlayer2 != null) {
+			Unit unit = selectedCharacterPlayer2.GetComponent<Unit>();
+			p2MoveIndex = (p2MoveIndex + direction + 4) % 4;
+			ShowMoveInfo(selectedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
+		}
 	}
 
 	public GameObject GetSelectedCharacterPrefab(int playerIndex) {
