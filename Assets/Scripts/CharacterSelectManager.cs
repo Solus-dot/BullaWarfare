@@ -4,6 +4,8 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
+public enum CharacterSelectionState { Default, P1Selected, P2Selected, P1P2Selected }
+
 public class CharacterSelectManager : MonoBehaviour {
 	public static CharacterSelectManager Instance;
 
@@ -37,7 +39,6 @@ public class CharacterSelectManager : MonoBehaviour {
 	private GameObject selectedCharacterPlayer1;
 	private GameObject selectedCharacterPlayer2;
 
-
 	// The game objects that show up when confirming/selected
 	private GameObject confirmedCharacterPlayer1;
 	private GameObject confirmedCharacterPlayer2;
@@ -54,6 +55,9 @@ public class CharacterSelectManager : MonoBehaviour {
 	// Last clicked characters
 	private GameObject lastClickedCharacterPlayer1;
 	private GameObject lastClickedCharacterPlayer2;
+
+	// List of player selection buttons
+	private List<PlayerSelectionButton> playerButtons = new List<PlayerSelectionButton>();
 
 	private void Awake() {
 		if (Instance == null) {
@@ -75,6 +79,9 @@ public class CharacterSelectManager : MonoBehaviour {
 		P1Right.onClick.AddListener(() => CycleMove(1, 1));
 		P2Left.onClick.AddListener(() => CycleMove(-1, 2));
 		P2Right.onClick.AddListener(() => CycleMove(1, 2));
+
+		// Find all player selection buttons
+		playerButtons.AddRange(FindObjectsOfType<PlayerSelectionButton>());
 	}
 
 	void Update() {
@@ -120,6 +127,7 @@ public class CharacterSelectManager : MonoBehaviour {
 			selectedCharacterPlayer1 = null;
 			lastClickedCharacterPlayer1 = null;
 
+			SetButtonFrame(characterPrefab, CharacterSelectionState.P1Selected);
 			titleText.text = "Player 2: Pick your Character!";
 		}
 	}
@@ -146,13 +154,22 @@ public class CharacterSelectManager : MonoBehaviour {
 			Destroy(selectedCharacterPlayer2);
 			selectedCharacterPlayer2 = null;
 			lastClickedCharacterPlayer2 = null;
-
+			if (selectedCharacterPrefabs[1] == selectedCharacterPrefabs[2]) {
+				SetButtonFrame(characterPrefab, CharacterSelectionState.P1P2Selected);
+			} else {
+				SetButtonFrame(characterPrefab, CharacterSelectionState.P2Selected);
+			}	
 			titleText.text = "Press Space to confirm your selections!";
 		}
 	}
 
-	private GameObject LoadCharacterPrefab(GameObject characterPrefab) {
-		return characterPrefab;
+	void SetButtonFrame(GameObject characterPrefab, CharacterSelectionState state) {
+		foreach (var button in playerButtons) {
+			if (button.characterPrefab == characterPrefab) {
+				button.SetFrameImage(state);
+				break;
+			}
+		}
 	}
 
 	void LoadNextScene() {
@@ -162,7 +179,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText) {
 		Unit unit = prefab.GetComponent<Unit>();
 		NameText.text = unit.unitName;
-		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;    
+		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
 	}
 
 	void ShowMoveInfo(GameObject prefab, TMP_Text MoveNameText, TMP_Text MoveDescText, int MoveIndex) {
@@ -170,10 +187,6 @@ public class CharacterSelectManager : MonoBehaviour {
 		Move move = unit.GetMove(MoveIndex);
 		MoveNameText.text = move.moveName;
 		MoveDescText.text = move.moveDesc;
-	}
-
-	void HideStats(TMP_Text StatsText) {
-		StatsText.text = "";
 	}
 
 	void ResetCharacterSelection() {
@@ -215,27 +228,24 @@ public class CharacterSelectManager : MonoBehaviour {
 
 		// Reset the UI elements
 		titleText.text = "Player 1: Pick your Character!";
-		P1Name.color = Color.white;
-		P2Name.color = Color.white;
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
+
+		// Reset button frames
+		foreach (var button in playerButtons) {
+			button.SetFrameImage(CharacterSelectionState.Default);
+		}
 	}
 
 	void CycleMove(int direction, int playerIndex) {
-		if (playerIndex == 1) {
+		if (playerIndex == 1 && (selectedCharacterPlayer1 != null || confirmedCharacterPlayer1 != null)) {
+			Unit unit = (selectedCharacterPlayer1 != null ? selectedCharacterPlayer1 : confirmedCharacterPlayer1).GetComponent<Unit>();
 			p1MoveIndex = (p1MoveIndex + direction + 4) % 4;
-			if (selectedCharacterPlayer1 != null) {
-				ShowMoveInfo(selectedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
-			} else if (confirmedCharacterPlayer1 != null) {
-				ShowMoveInfo(confirmedCharacterPlayer1, P1MoveName, P1MoveDesc, p1MoveIndex);
-			}
-		} else if (playerIndex == 2) {
+			ShowMoveInfo((selectedCharacterPlayer1 != null ? selectedCharacterPlayer1 : confirmedCharacterPlayer1), P1MoveName, P1MoveDesc, p1MoveIndex);
+		} else if (playerIndex == 2 && (selectedCharacterPlayer2 != null || confirmedCharacterPlayer2 != null)) {
+			Unit unit = (selectedCharacterPlayer2 != null ? selectedCharacterPlayer2 : confirmedCharacterPlayer2).GetComponent<Unit>();
 			p2MoveIndex = (p2MoveIndex + direction + 4) % 4;
-			if (selectedCharacterPlayer2 != null) {
-				ShowMoveInfo(selectedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
-			} else if (confirmedCharacterPlayer2 != null) {
-				ShowMoveInfo(confirmedCharacterPlayer2, P2MoveName, P2MoveDesc, p2MoveIndex);
-			}
+			ShowMoveInfo((selectedCharacterPlayer2 != null ? selectedCharacterPlayer2 : confirmedCharacterPlayer2), P2MoveName, P2MoveDesc, p2MoveIndex);
 		}
 	}
 
