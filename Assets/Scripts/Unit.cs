@@ -62,7 +62,7 @@ public class Unit : MonoBehaviour {
 
 	public bool TakeDamage(int dmg) {
 		// Calculate effective damage after defense reduction
-		recvEffectiveDamage = Mathf.Max(0, dmg - defense);
+		recvEffectiveDamage = Mathf.Max(0, Mathf.FloorToInt(dmg / GetStatMultiplier(defenseStage)));
 		currentHP -= recvEffectiveDamage;
 
 		if (unitRenderer != null) {
@@ -84,15 +84,15 @@ public class Unit : MonoBehaviour {
 		if (unitRenderer != null) {
 			StartCoroutine(FlashGreen());
 		}
-
 	}
 
 	public void TakeBuff(int attackChange, int defenseChange) {
-		attackStage += attackChange;
-		defenseStage += defenseChange;
+		attackStage = Mathf.Clamp(attackStage + attackChange, -6, 6);
+		defenseStage = Mathf.Clamp(defenseStage + defenseChange, -6, 6);
 
-		attack += 10 * attackChange;
-		defense += 5 * defenseChange;
+		// Recalculate attack and defense based on the new stages
+		attack = Mathf.FloorToInt(attack * GetStatMultiplier(attackStage));
+		defense = Mathf.FloorToInt(defense * GetStatMultiplier(defenseStage));
 	}
 
 	public void AttemptFlinch(Move move) {
@@ -130,6 +130,24 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
+	private float GetStatMultiplier(int stage) {
+		switch (stage) {
+			case -6: return 0.25f;
+			case -5: return 0.28f;
+			case -4: return 0.33f;
+			case -3: return 0.40f;
+			case -2: return 0.50f;
+			case -1: return 0.66f;
+			case 0: return 1f;
+			case 1: return 1.5f;
+			case 2: return 2f;
+			case 3: return 2.5f;
+			case 4: return 3f;
+			case 5: return 3.5f;
+			case 6: return 4f;
+			default: return 1f;
+		}
+	}
 
 	private IEnumerator FlashRed() {
 		unitRenderer.material.color = Color.red;

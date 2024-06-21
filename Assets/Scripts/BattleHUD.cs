@@ -45,10 +45,10 @@
 			AtkIcon.gameObject.SetActive(true);
 			if (unit.attackStage > 0) {
 				AtkIcon.sprite = AttackUp;
-				buffText.text += "\t" + unit.attackStage;
+				buffText.text += "+" + unit.attackStage;
 			} else if (unit.attackStage < 0) {
 				AtkIcon.sprite = AttackDown;
-				buffText.text += "\t" + unit.attackStage;
+				buffText.text += unit.attackStage;
 			}
 		}
 
@@ -56,10 +56,10 @@
 			DefIcon.gameObject.SetActive(true);
 			if (unit.defenseStage > 0) {
 				DefIcon.sprite = DefenseUp;
-				buffText.text += "\n\t" + unit.defenseStage;
+				buffText.text += "\n\n+" + unit.defenseStage;
 			} else if (unit.defenseStage < 0) {
 				DefIcon.sprite = DefenseDown;
-				buffText.text += "\n\t" + unit.defenseStage;
+				buffText.text += "\n\n" + unit.defenseStage;
 			}
 		}
 	}
@@ -74,7 +74,7 @@
 		float startHP = hpSlider.value;
 		float endHP = newHP;
 		float duration = 0.7f;			// Duration of the sliding effect
-		int steps = 4;					// Number of steps for the sliding effect
+		int steps = 5;					// Number of steps for the sliding effect
 
 		float stepAmount = (endHP - startHP) / steps;
 
