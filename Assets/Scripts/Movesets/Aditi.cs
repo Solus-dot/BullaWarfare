@@ -72,7 +72,7 @@ public static class Aditi
 			isDamaging = true,
 			damage = 20,
 			isHealingMove = true,
-			healAmount = 15,
+			selfHealAmount = 15,
 			isStatChange = false,
 		},
 

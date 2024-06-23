@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV, DAKSH }
 
 [System.Serializable]
 public class Move {
@@ -18,7 +18,8 @@ public class Move {
 	public int damage;				// Base damage dealt by the move
 
 	public bool isHealingMove;		// Flag indicating if the move heals (optional)
-	public int healAmount;			// Amount of health healed (if isHealingMove is true)
+	public int selfHealAmount;		// Amount of health healed by self (if isHealingMove is true)
+	public int oppHealAmount;		// Amount of health healed by opponent
 
 	public bool isStatChange;		// Flag indicating if the move changes stats
 	public int selfAttackChange;	// Amount by which the self attack stat changes (positive for increase, negative for decrease)
@@ -121,6 +122,8 @@ public class Unit : MonoBehaviour {
 			return Aditi.moves[index];
 		} else if (moveset == MovesetEnum.SARV) {
 			return Sarv.moves[index];
+		} else if (moveset == MovesetEnum.DAKSH) {
+			return Daksh.moves[index];
 		} else {
 			Debug.LogError("Unknown Moveset");
 			return null;

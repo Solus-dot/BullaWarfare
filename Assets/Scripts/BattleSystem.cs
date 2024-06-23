@@ -168,75 +168,85 @@ public class BattleSystem : MonoBehaviour {
 		int hitChance = attacker.baseAccuracy * move.accuracy / 100;
 		int randomHit = Random.Range(0, 100);
 
-		if (randomHit < hitChance) {
-			if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
-				yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!", 0.05f));
-			} else {
-				if (move.isDamaging) {
-					int baseDamage = move.damage * (attacker.attack/defender.defense); // Calculate effective damage (with Defender Defense)
-					int damage = baseDamage * Random.Range(85,100)/100; // Add a random damage factor
-					Debug.Log(damage);
-					isDead = defender.TakeDamage(damage);
+		// Check for recoil condition before executing the move
+		if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
+			yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!", 0.05f));
+			yield return new WaitForSeconds(turnDelay);
+			SwitchTurn();
+			actionInProgress = false;
+			yield break;
+		}
 
-					if (attacker == P1_Unit) {
-						P2_HUD.SetHP(defender.currentHP);
-					} else {
-						P1_HUD.SetHP(defender.currentHP);
-					}
+		bool moveHits = randomHit < hitChance;
 
-					hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
+		if (moveHits) {
+			if (move.isDamaging) {
+				int baseDamage = move.damage * (attacker.attack / defender.defense); // Calculate effective damage (with Defender Defense)
+				int damage = baseDamage * Random.Range(85, 100) / 100; // Add a random damage factor
+				Debug.Log(damage);
+				isDead = defender.TakeDamage(damage);
+
+				if (attacker == P1_Unit) {
+					P2_HUD.SetHP(defender.currentHP);
+				} else {
+					P1_HUD.SetHP(defender.currentHP);
 				}
 
-				if (move.isHealingMove) {
-					int healAmount = move.healAmount * attacker.maxHP/100; // Implement proper heal logic (heal% * attacker)
-					attacker.Heal(healAmount);
-
-					if (attacker == P1_Unit) {
-						P1_HUD.SetHP(attacker.currentHP);
-					} else {
-						P2_HUD.SetHP(attacker.currentHP);
-					}
-				}
-
-				if (move.isStatChange) {
-					if (move.selfAttackChange != 0) { attacker.TakeBuff(move.selfAttackChange, 0); }
-					if (move.selfDefenseChange != 0) { attacker.TakeBuff(0, move.selfDefenseChange); }
-					if (move.oppAttackChange != 0) { defender.TakeBuff(move.oppAttackChange, 0); }
-					if (move.oppDefenseChange != 0) { defender.TakeBuff(0, move.oppDefenseChange); }
-
-					P1_HUD.SetStatChange(P1_Unit);
-					P2_HUD.SetStatChange(P2_Unit);
-				}
-
-				if (move.flinch > 0) {
-					defender.AttemptFlinch(move);
-				}
-
-
-				if (move.recoil > 0) {
-					int recoilDamage = Mathf.CeilToInt(attacker.maxHP * move.recoil);
-					attacker.TakeDamage(recoilDamage);
-
-					if (attacker == P1_Unit) {
-						P1_HUD.SetHP(attacker.currentHP);
-					} else {
-						P2_HUD.SetHP(attacker.currentHP);
-					}
-				}
-
-				if (move.isCooldown == true) {
-					attacker.isOnCooldown = true;
-				}
-
-				yield return StartCoroutine(DisplayMoveText(hitMessage, 0.05f));
+				hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 			}
 
+			if (move.isHealingMove) {
+				int atkHealAmount = move.selfHealAmount * attacker.maxHP / 100; // Implement proper heal logic (heal% * attacker)
+				int defHealAmount = move.oppHealAmount * defender.maxHP / 100;
+				attacker.Heal(atkHealAmount);
+				defender.Heal(defHealAmount);
+
+				if (attacker == P1_Unit) {
+					P1_HUD.SetHP(attacker.currentHP);
+					P2_HUD.SetHP(defender.currentHP);
+				} else {
+					P2_HUD.SetHP(attacker.currentHP);
+					P1_HUD.SetHP(defender.currentHP);
+				}
+			}
+
+			if (move.isStatChange) {
+				if (move.selfAttackChange != 0) { attacker.TakeBuff(move.selfAttackChange, 0); }
+				if (move.selfDefenseChange != 0) { attacker.TakeBuff(0, move.selfDefenseChange); }
+				if (move.oppAttackChange != 0) { defender.TakeBuff(move.oppAttackChange, 0); }
+				if (move.oppDefenseChange != 0) { defender.TakeBuff(0, move.oppDefenseChange); }
+
+				P1_HUD.SetStatChange(P1_Unit);
+				P2_HUD.SetStatChange(P2_Unit);
+			}
+
+			if (move.flinch > 0) {
+				defender.AttemptFlinch(move);
+			}
+
+			yield return StartCoroutine(DisplayMoveText(hitMessage, 0.05f));
 		} else {
 			if (move.missMessage != null) {
 				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName), 0.05f));
 			} else {
 				yield return StartCoroutine(DisplayMoveText("The move missed!", 0.05f));
 			}
+		}
+
+		// Recoil handling after the move
+		if (move.recoil > 0) {
+			int recoilDamage = Mathf.CeilToInt(attacker.maxHP * move.recoil);
+			attacker.TakeDamage(recoilDamage);
+
+			if (attacker == P1_Unit) {
+				P1_HUD.SetHP(attacker.currentHP);
+			} else {
+				P2_HUD.SetHP(attacker.currentHP);
+			}
+		}
+
+		if (move.isCooldown == true) {
+			attacker.isOnCooldown = true;
 		}
 
 		yield return new WaitForSeconds(turnDelay);
@@ -249,6 +259,7 @@ public class BattleSystem : MonoBehaviour {
 
 		actionInProgress = false;
 	}
+
 
 	IEnumerator DisplayMoveText(string text, float speed) {
 		moveText.gameObject.SetActive(true);
@@ -288,5 +299,6 @@ public class BattleSystem : MonoBehaviour {
 		Khush.Initialize();
 		Aditi.Initialize();
 		Sarv.Initialize();
+		Daksh.Initialize();
 	}
 }

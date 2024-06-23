@@ -54,7 +54,7 @@ public static class Sarv
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = true,
-			healAmount = 75,
+			selfHealAmount = 75,
 			isStatChange = false,
 		},
 

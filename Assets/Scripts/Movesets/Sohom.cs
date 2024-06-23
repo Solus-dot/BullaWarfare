@@ -39,7 +39,6 @@ public static class Sohom
 			isDamaging = true,
 			damage = 20,
 			isHealingMove = false,
-			healAmount = 0,
 			isStatChange = true,
 			selfAttackChange = 0,
 			selfDefenseChange = 0,
@@ -56,7 +55,7 @@ public static class Sohom
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = true,
-			healAmount = 30,
+			selfHealAmount = 30,
 			isStatChange = false,
 		},
 

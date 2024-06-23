@@ -37,7 +37,7 @@ public static class Khush
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = true,
-			healAmount = 20,
+			selfHealAmount = 20,
 			isStatChange = true,
 			selfAttackChange = 1,
 			selfDefenseChange = 0,
