@@ -203,8 +203,8 @@ public class BattleSystem : MonoBehaviour {
 			if (move.isHealingMove) {
 				int atkHealAmount = move.selfHealAmount * attacker.maxHP / 100; // Implement proper heal logic (heal% * attacker)
 				int defHealAmount = move.oppHealAmount * defender.maxHP / 100;
-				attacker.Heal(atkHealAmount);
-				defender.Heal(defHealAmount);
+				if(atkHealAmount != 0) attacker.Heal(atkHealAmount);
+				if(defHealAmount != 0) defender.Heal(defHealAmount);
 
 				if (attacker == P1_Unit) {
 					P1_HUD.SetHP(attacker.currentHP);

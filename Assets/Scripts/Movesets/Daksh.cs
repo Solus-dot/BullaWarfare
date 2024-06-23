@@ -56,7 +56,11 @@ public static class Daksh
 			isDamaging = false,
 			isHealingMove = true,
 			oppHealAmount = 15,
-			isStatChange = false,
+			isStatChange = true,
+			selfAttackChange = 0,
+			selfDefenseChange = 0,
+			oppAttackChange = 0,
+			oppDefenseChange = -2
 		},
 
 		// Dunk on'em Haters Move
