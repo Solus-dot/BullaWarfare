@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Sarvesh
   unitLevel: 10
-  maxHP: 92
-  attack: 23
-  defense: 10
+  maxHP: 450
+  attack: 310
+  defense: 270
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 92
+  currentHP: 450
   moveset: 7
   cooldownMessage: "Sarvesh is getting off the high ground, he can't attack\_this\_turn!"
   isFlinching: 0

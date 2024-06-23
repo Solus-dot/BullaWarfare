@@ -161,7 +161,7 @@ public class BattleSystem : MonoBehaviour {
 		
 		actionInProgress = true;
 		Move move = attacker.GetMove(moveIndex);
-		string hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName);
+		string Message = move.moveMessage.Replace("(opp_name)", defender.unitName);
 		bool isDead = false;
 
 		// Calculate if the move hits or misses
@@ -183,7 +183,14 @@ public class BattleSystem : MonoBehaviour {
 			if (move.isDamaging) {
 				int baseDamage = move.damage * (attacker.attack / defender.defense); // Calculate effective damage (with Defender Defense)
 				int damage = baseDamage * Random.Range(85, 100) / 100; // Add a random damage factor
-				Debug.Log(damage);
+				Message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
+
+				if(Random.Range(1,100) <= 6) {
+					damage *= 2;	//Add critical hit chance (double damage)
+					Message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
+					Message += " It was a crit hit! It dealt double damage!";
+				}
+				
 				isDead = defender.TakeDamage(damage);
 
 				if (attacker == P1_Unit) {
@@ -191,8 +198,6 @@ public class BattleSystem : MonoBehaviour {
 				} else {
 					P1_HUD.SetHP(defender.currentHP);
 				}
-
-				hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 			}
 
 			if (move.isHealingMove) {
@@ -211,10 +216,8 @@ public class BattleSystem : MonoBehaviour {
 			}
 
 			if (move.isStatChange) {
-				if (move.selfAttackChange != 0) { attacker.TakeBuff(move.selfAttackChange, 0); }
-				if (move.selfDefenseChange != 0) { attacker.TakeBuff(0, move.selfDefenseChange); }
-				if (move.oppAttackChange != 0) { defender.TakeBuff(move.oppAttackChange, 0); }
-				if (move.oppDefenseChange != 0) { defender.TakeBuff(0, move.oppDefenseChange); }
+				attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
+				defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
 
 				P1_HUD.SetStatChange(P1_Unit);
 				P2_HUD.SetStatChange(P2_Unit);
@@ -224,12 +227,12 @@ public class BattleSystem : MonoBehaviour {
 				defender.AttemptFlinch(move);
 			}
 
-			yield return StartCoroutine(DisplayMoveText(hitMessage, 0.05f));
+			
 		} else {
 			if (move.missMessage != null) {
-				yield return StartCoroutine(DisplayMoveText(move.missMessage.Replace("(opp_name)", defender.unitName), 0.05f));
+				Message = move.missMessage.Replace("(opp_name)", defender.unitName);
 			} else {
-				yield return StartCoroutine(DisplayMoveText("The move missed!", 0.05f));
+				Message = "The move missed!";
 			}
 		}
 
@@ -249,14 +252,15 @@ public class BattleSystem : MonoBehaviour {
 			attacker.isOnCooldown = true;
 		}
 
+		yield return StartCoroutine(DisplayMoveText(Message, 0.05f));
 		yield return new WaitForSeconds(turnDelay);
+
 		if (isDead) {
 			state = (state == BattleState.P1_TURN) ? BattleState.P1_WIN : BattleState.P2_WIN;
 			EndBattle();
 		} else {
 			SwitchTurn();
 		}
-
 		actionInProgress = false;
 	}
 

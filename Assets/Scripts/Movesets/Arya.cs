@@ -20,7 +20,7 @@
 // Move 1: Aryavart pulls out his huge bottle of Shudh Desi Dudh and drinks it one gulp. (opp_name) is left ineffable. Aryavart's Attack and Defense go up by 1 stage!
 // Move 2: (opp_name) says a bad thing to Aryavart, Aryavart responds by "Aisa krega mere saath" and (opp_name) instantly feels regret. Attack dropped by 1 stage.
 // Move 3: Fresher's Inferno Champion Aryavart pulls out his badminton rackets and hits (opp_name) in the face. (value) damage dealt!
-// Move 4: Arya calls up his fellow Jaats saying "Matter Hogaya". The full Jaat gang of IITK appears on the battlefield, and beats the shit out of (opp_name). Confusion causes Aryavart to take damage as well. (value) damage dealt, Aryavart receives recoil!
+// Move 4: Arya calls up his Jaats saying "Matter Hogaya". The Jaat Gang of IITK appears on the battlefield, and beats the shit out of (opp_name). (value) damage dealt, Arya receives recoil due to the fray!
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -77,7 +77,7 @@ public static class Arya
 		new Move() {
 			moveName = "Feminine Jaat",
 			moveDesc = " Calls upon the Jaat gang of IITK using his Feminine Jaat powers,\nDeals MASSSIVE damage, but causes 35% recoil damage to the user.",
-			moveMessage = "Arya calls up his fellow Jaats saying \"Matter Hogaya\". The full Jaat gang of IITK appears on the battlefield, and beats the shit out of (opp_name). Confusion causes Aryavart to take damage as well. (value) damage dealt, Aryavart receives recoil!",
+			moveMessage = "Arya calls up his Jaats saying \"Matter Hogaya\". The Jaat Gang of IITK appears on the battlefield, and beats the shit out of (opp_name). (value) damage dealt, Arya receives recoil due to the fray!",
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,

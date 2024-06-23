@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Aditya
   unitLevel: 10
-  maxHP: 89
-  attack: 20
-  defense: 16
+  maxHP: 470
+  attack: 270
+  defense: 290
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 89
+  currentHP: 470
   moveset: 6
   cooldownMessage: 
   isFlinching: 0

@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Aryavart
   unitLevel: 10
-  maxHP: 95
-  attack: 27
-  defense: 10
+  maxHP: 500
+  attack: 280
+  defense: 250
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 95
+  currentHP: 500
   moveset: 4
   cooldownMessage: 
   isFlinching: 0

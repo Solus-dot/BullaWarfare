@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Ravi
   unitLevel: 10
-  maxHP: 88
-  attack: 21
-  defense: 16
+  maxHP: 505
+  attack: 270
+  defense: 255
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 88
+  currentHP: 505
   moveset: 1
   cooldownMessage: 
   isFlinching: 0

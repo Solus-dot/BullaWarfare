@@ -69,7 +69,7 @@ public static class Khush
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 50,
 			isHealingMove = false,
 			isStatChange = false,
 			flinch = 30
@@ -83,7 +83,7 @@ public static class Khush
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 95,
 			isHealingMove = false,
 			isStatChange = false,
 		}

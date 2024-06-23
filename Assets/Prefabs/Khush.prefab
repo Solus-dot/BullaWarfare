@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Khushal
   unitLevel: 10
-  maxHP: 85
-  attack: 20
-  defense: 15
+  maxHP: 470
+  attack: 275
+  defense: 285
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 85
+  currentHP: 470
   moveset: 5
   cooldownMessage: 
   isFlinching: 0

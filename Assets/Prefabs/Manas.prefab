@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Manas
   unitLevel: 10
-  maxHP: 95
-  attack: 18
-  defense: 15
+  maxHP: 480
+  attack: 295
+  defense: 255
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 95
+  currentHP: 480
   moveset: 2
   cooldownMessage: 
   isFlinching: 0

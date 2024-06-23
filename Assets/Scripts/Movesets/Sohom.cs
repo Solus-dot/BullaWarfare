@@ -37,7 +37,7 @@ public static class Sohom
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 60,
 			isHealingMove = false,
 			isStatChange = true,
 			selfAttackChange = 0,
@@ -84,7 +84,7 @@ public static class Sohom
 			isCooldown = true,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 135,
 			isHealingMove = false,
 			isStatChange = false,
 		}
