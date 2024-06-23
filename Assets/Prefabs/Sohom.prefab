@@ -47,16 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Sohom
   unitLevel: 10
-  maxHP: 92
+  maxHP: 95
   attack: 22
   defense: 15
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 92
+  currentHP: 95
   moveset: 0
   cooldownMessage: "Sohom is taking pictures with the females, he\_can't\_move!!!"
-  recvEffectiveDamage: 0
   isFlinching: 0
   isOnCooldown: 0
 --- !u!212 &4359680699597046753

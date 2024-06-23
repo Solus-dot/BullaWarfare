@@ -55,7 +55,7 @@ MonoBehaviour:
   defenseStage: 0
   currentHP: 89
   moveset: 6
-  recvEffectiveDamage: 0
+  cooldownMessage: 
   isFlinching: 0
   isOnCooldown: 0
 --- !u!212 &4359680699597046753

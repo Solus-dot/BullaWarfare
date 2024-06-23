@@ -45,7 +45,6 @@ public class Unit : MonoBehaviour {
 	public MovesetEnum moveset;
 	public string cooldownMessage;
 
-	public int recvEffectiveDamage; // Effective damage received
 	public bool isFlinching;
 	public bool isOnCooldown;
 
@@ -60,10 +59,8 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public bool TakeDamage(int dmg) {
-		// Calculate effective damage after defense reduction
-		recvEffectiveDamage = Mathf.Max(0, Mathf.FloorToInt(dmg / GetStatMultiplier(defenseStage)));
-		currentHP -= recvEffectiveDamage;
+	public bool TakeDamage(int damage) {
+		currentHP -= damage;
 
 		if (unitRenderer != null) {
 			StartCoroutine(FlashRed());

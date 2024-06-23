@@ -56,7 +56,6 @@ MonoBehaviour:
   currentHP: 92
   moveset: 7
   cooldownMessage: "Sarvesh is getting off the high ground, he can't attack\_this\_turn!"
-  recvEffectiveDamage: 0
   isFlinching: 0
   isOnCooldown: 0
 --- !u!212 &4359680699597046753

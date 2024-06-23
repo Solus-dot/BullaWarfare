@@ -132,13 +132,13 @@ public class BattleSystem : MonoBehaviour {
 
 	void EndBattle() {
 		DisableActionButtons();
-		dialogueText.gameObject.SetActive(true);
-		moveText.gameObject.SetActive(false);
+		dialogueText.gameObject.SetActive(false);
+		moveText.gameObject.SetActive(true);
 
 		if (state == BattleState.P1_WIN) {
-			dialogueText.text = P1_Unit.unitName + " (Player 1) has Won!";
+			StartCoroutine(DisplayMoveText(P1_Unit.unitName + " (Player 1) has Won!", 0.1f)); 
 		} else if (state == BattleState.P2_WIN) {
-			dialogueText.text = P2_Unit.unitName + " (Player 2) has won!";
+			StartCoroutine(DisplayMoveText(P2_Unit.unitName + " (Player 2) has Won!", 0.1f)); 
 		}
 	}
 
@@ -161,19 +161,21 @@ public class BattleSystem : MonoBehaviour {
 		
 		actionInProgress = true;
 		Move move = attacker.GetMove(moveIndex);
-		string hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
+		string hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName);
 		bool isDead = false;
 
 		// Calculate if the move hits or misses
 		int hitChance = attacker.baseAccuracy * move.accuracy / 100;
-		int randomValue = Random.Range(0, 100);
+		int randomHit = Random.Range(0, 100);
 
-		if (randomValue < hitChance) {
+		if (randomHit < hitChance) {
 			if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
 				yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!", 0.05f));
 			} else {
 				if (move.isDamaging) {
-					int damage = attacker.attack * move.damage / 20; // Calculate effective damage
+					int baseDamage = move.damage * (attacker.attack/defender.defense); // Calculate effective damage (with Defender Defense)
+					int damage = baseDamage * Random.Range(85,100)/100; // Add a random damage factor
+					Debug.Log(damage);
 					isDead = defender.TakeDamage(damage);
 
 					if (attacker == P1_Unit) {
@@ -182,7 +184,7 @@ public class BattleSystem : MonoBehaviour {
 						P1_HUD.SetHP(defender.currentHP);
 					}
 
-					hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", defender.recvEffectiveDamage.ToString());
+					hitMessage = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 				}
 
 				if (move.isHealingMove) {
