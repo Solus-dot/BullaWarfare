@@ -66,7 +66,7 @@ public static class Sarv
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 60,
 			isHealingMove = false,
 			isStatChange = false,
 		},
@@ -79,7 +79,7 @@ public static class Sarv
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 90,
 			isHealingMove = false,
 			isStatChange = true,
 			oppDefenseChange = 0, // Initialize Defense change to 0

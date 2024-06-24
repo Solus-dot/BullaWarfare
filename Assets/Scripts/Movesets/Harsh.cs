@@ -68,7 +68,7 @@ public static class Harsh
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 40,
+			damage = 70,
 			isHealingMove = false,
 			isStatChange = false,
 		},

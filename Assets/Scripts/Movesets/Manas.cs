@@ -36,7 +36,7 @@ public static class Manas
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 50,
 			isHealingMove = false,
 			isStatChange = false,
 		},
@@ -81,7 +81,7 @@ public static class Manas
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 95,
 			isHealingMove = false,
 			isStatChange = false,
 		}

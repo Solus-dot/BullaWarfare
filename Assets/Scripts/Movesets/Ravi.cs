@@ -70,7 +70,7 @@ public static class Ravi
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 60,
 			isHealingMove = false,
 			isStatChange = false,
 		},
@@ -84,7 +84,7 @@ public static class Ravi
 			isCooldown = false,
 			accuracy = 50,
 			isDamaging = true,
-			damage = 20,
+			damage = 150,
 			isHealingMove = false,
 			isStatChange = false,
 		}

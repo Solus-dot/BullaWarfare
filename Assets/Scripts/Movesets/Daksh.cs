@@ -71,7 +71,7 @@ public static class Daksh
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 20,
+			damage = 60,
 			isHealingMove = false,
 			isStatChange = false,
 		},
@@ -84,7 +84,7 @@ public static class Daksh
 			missMessage = "Ghaziabad's very own whips out his family heirloom, a fucking gun and shoots towards (opp_name)! And the bullet misses (opp_name) completely! Perhaps Daksh should invest in shooting lessons. No damage dealt, Daksh takes recoil!",
 			accuracy = 75,
 			isDamaging = true,
-			damage = 20,
+			damage = 150,
 			isHealingMove = false,
 			isStatChange = false,
 			recoil = 0.2f
