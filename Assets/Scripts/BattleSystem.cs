@@ -181,8 +181,11 @@ public class BattleSystem : MonoBehaviour {
 
 		if (moveHits) {
 			if (move.isDamaging) {
-				int baseDamage = move.damage * (attacker.attack / defender.defense); // Calculate effective damage (with Defender Defense)
-				int damage = baseDamage * Random.Range(85, 100) / 100; // Add a random damage factor
+				int damage = (move.damage * attacker.attack) / defender.defense; // Calculate effective damage (with Defender Defense)
+				//int damage = baseDamage * Random.Range(85, 100) / 100; // Add a random damage factor
+				Debug.Log("(" + move.damage + " * " +  attacker.attack + ") / " + defender.defense + " = " + damage);
+
+
 				Message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 
 				if(Random.Range(1,100) <= 6) {
@@ -201,10 +204,13 @@ public class BattleSystem : MonoBehaviour {
 			}
 
 			if (move.isHealingMove) {
-				int atkHealAmount = move.selfHealAmount * attacker.maxHP / 100; // Implement proper heal logic (heal% * attacker)
-				int defHealAmount = move.oppHealAmount * defender.maxHP / 100;
+				int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100); // Implement proper heal logic (heal% * attacker)
+				int defHealAmount = (move.oppHealAmount * defender.maxHP / 100);
 				if(atkHealAmount != 0) attacker.Heal(atkHealAmount);
 				if(defHealAmount != 0) defender.Heal(defHealAmount);
+
+				Debug.Log(atkHealAmount);
+				Debug.Log(defHealAmount);
 
 				if (attacker == P1_Unit) {
 					P1_HUD.SetHP(attacker.currentHP);

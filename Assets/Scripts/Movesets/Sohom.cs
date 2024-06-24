@@ -9,8 +9,8 @@
 // Heals 30% of total HP.
 
 // Move 3: Brainrot Spew
-// Spews insane brainrot phrases at the opponent, 
-// causes the opponent to lose his ATK by two stages.
+// Spews insane brainrot phrases at the opponent giving them brain damaged, 
+// Causes the opponent to lose his ATK by 1 stage and 30% flinch chance.
 
 // Move 4: Mr Fresher Smash
 // Uses his status as Mr Fresher to summon hordes of fangirls to attack the opponent, 
@@ -32,7 +32,7 @@ public static class Sohom
 		// Chokehold Move
 		new Move() {
 			moveName = "Chokehold",
-			moveDesc = "Comes up sneakily behind the opponent and chokes them for some damage, \nCauses the opponent to lose Defense.",
+			moveDesc = "Comes up sneakily behind the opponent and chokes them for some damage, Causes the opponent to lose DEF.",
 			moveMessage = "Sohom quickly sneaks behind (opp_name) and puts him in a chokehold. (opp_name) receives (value) damage. Defense dropped by 1",
 			isCooldown = false,
 			accuracy = 100,
@@ -49,7 +49,7 @@ public static class Sohom
 		// MCDonel Move
 		new Move() {
 			moveName = "MCDonel",
-			moveDesc = "Orders Mcdonald's in the middle of the fight,\nHeals 30% of total HP.",
+			moveDesc = "Orders Mcdonald's in the middle of the fight, Heals 30% of total HP.",
 			moveMessage = "Sohom opens Zomato on his phone, Perhaps he's ordering something? Sohom's order has arrived, It was McDonel! Sohom eats up his meal and recovers HP",
 			isCooldown = false,
 			accuracy = 100,
@@ -62,7 +62,7 @@ public static class Sohom
 		// Brainrot Spew Move
 		new Move() { 
 			moveName = "Brainrot Spew",
-			moveDesc = "Spews insane brainrot phrases at the opponent, \nCauses the opponent to lose his Attack by two stages.",
+			moveDesc = "Spews insane brainrot phrases at the opponent, Causes the opponent to lose his ATK by 1 stage and 30% flinch chance.",
 			moveMessage = "Erm what the sigma? Sohom has started to spew filthy brainrot words to his opponent! (opp_name) does not have the skibidi rizz to handle it, (opp_name) loses Attack by 2 stages.",
 			isCooldown = false,
 			accuracy = 100,
@@ -79,7 +79,7 @@ public static class Sohom
 		// Mr Fresher Smash Move
 		new Move() {
 			moveName = "Mr. Fresher Smash",
-			moveDesc = "Uses his status as Mr. Fresher to summon hordes of fangirls to attack the opponent,\nDeals massive damage but needs to be recharged after used.",
+			moveDesc = "Uses his status as Mr. Fresher to summon hordes of fangirls to attack the opponent, Deals massive damage but needs to be recharged after used.",
 			moveMessage = "Sohom unveils his Mr Fresher sash. All the girls around him get riled up and attack (opp_name) dealing (value) damage. Sohom starts taking pictures with the wild females to calm them down.",
 			isCooldown = true,
 			accuracy = 100,

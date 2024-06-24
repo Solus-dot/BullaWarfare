@@ -55,7 +55,8 @@ MonoBehaviour:
   defenseStage: 0
   currentHP: 480
   moveset: 2
-  cooldownMessage: 
+  cooldownMessage: "Manas has exhausted himself with the lethal spew of insults he
+    threw so furiously. He can't move\_this\_turn!"
   isFlinching: 0
   isOnCooldown: 0
 --- !u!212 &4359680699597046753

@@ -14,7 +14,7 @@
 
 // Move 4: Funny Valentine
 // Makes an incredibly funny and self-depricating joke that they hurt themselves,
-// Deals good damage but reduces the DEF stat of the user.
+// Deals good damage but reduces the DEF stat of himself.
 
 // Move Messages
 // Move 1: Harsh turns on his Radiohead playlist, a british man sings about being sad, the mood turns gloomy (opp_name) loses Defense by 1 stage.
@@ -31,7 +31,7 @@ public static class Harsh
 		// Too Much Radio Move
 		new Move() {
 			moveName = "Too Much Radio",
-			moveDesc = "Plays a radiohead song which makes everyone around them sad,\nOpponent loses Defense stat.",
+			moveDesc = "Plays a radiohead song which makes everyone around them sad, Opponent loses DEF stat.",
 			moveMessage = "Harsh turns on his Radiohead playlist, a british man sings about being sad, the mood turns gloomy (opp_name) loses Defense by 1 stage.",
 			isCooldown = false,
 			accuracy = 100,
@@ -47,7 +47,7 @@ public static class Harsh
 		// Literally Me Move
 		new Move() {
 			moveName = "Literally Me",
-			moveDesc = "Boasts about being Ryan Gosling, angering the opponents,\nOpponent's Defense drops 2 stages while Attack goes up 1 stage.",
+			moveDesc = "Boasts about being Ryan Gosling, angering the opponents, Opponent's DEF drops 2 stages while ATK goes up 1 stage.",
 			moveMessage = "Harsh puts on his scorpion jacket, he has done it, he is Ryan Gosling! (opp_name) gets annoyed by Harsh's delusion and loses his guard. Defense dropped by 2, Attack upped by 1!!",
 			isCooldown = false,
 			accuracy = 100,
@@ -63,7 +63,7 @@ public static class Harsh
 		// QC Ka Choda Move
 		new Move() { 
 			moveName = "QC Ka Choda",
-			moveDesc = "Hurts the opponents by spitting random facts to the opponent,\nDeals decent damage to opponent.",
+			moveDesc = "Hurts the opponents by spitting random facts to the opponent, Deals decent damage to opponent.",
 			moveMessage = "Harsh spits a random fact about Kanye. (opp_name) is damaged by the useless trivia, (value) damage dealt.",
 			isCooldown = false,
 			accuracy = 100,
@@ -76,7 +76,7 @@ public static class Harsh
 		// Funny Valentine Move
 		new Move() {
 			moveName = "Funny Valentine",
-			moveDesc = "Makes an incredibly funny and self-depricating joke that they hurt themselves,\nDeals good damage but reduces the Defense stat of the user.",
+			moveDesc = "Makes an incredibly funny and self-depricating joke that they hurt themselves, Deals good damage but reduces the DEF stat of himself.",
 			moveMessage = "cracks a joke about having no game, (opp_name) laughs so hard that it starts to hurt badly, (value) damage dealt. A hint of loneliness can be seen in HVA's eyes! True comedy is done only by the saddest people. Harsh's Defense drops by 1 stage.",
 			isCooldown = false,
 			accuracy = 100,

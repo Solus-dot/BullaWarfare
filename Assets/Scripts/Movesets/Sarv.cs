@@ -32,7 +32,7 @@ public static class Sarv
 		// Domi Mommy Move
 		new Move() {
 			moveName = "Domi Mommy",
-			moveDesc = "As the dom mommy of the group, Sarvesh holds absolute authority over the opponent.\nAsks the opponent to lower their Attack and Defense by 1 and the opponent gladly accepts.",
+			moveDesc = "As the dom mommy of the group, Sarvesh holds absolute authority over the opponent. Asks the opponent to lower their ATK and DEF by 1 and the opponent gladly accepts.",
 			moveMessage = "The absolute authority mommy has appeared on the battlefield. (opp_name) shudders. Sarvesh asks (opp_name) to lower his attack and defense and he gladly complies. (opp_name) loses Attack and Defense by 1 stage!",
 			isCooldown = false,
 			accuracy = 100,
@@ -48,7 +48,7 @@ public static class Sarv
 		// Veteran Climber Move
 		new Move() {
 			moveName = "Veteran Climber",
-			moveDesc = "Sarvesh uses his veteran climbing abilities and takes the high ground and rests,\nSarvesh recovers 75% of total HP but is unable to attack the next turn.",
+			moveDesc = "Sarvesh uses his veteran climbing abilities and takes the high ground and rests, Sarvesh recovers 75% of total HP but is unable to attack the next turn.",
 			moveMessage = "Sarvesh spots an unclaimed high land and quickly rushes to it and climbs it, (opp_name) watches in silence as Sarvesh takes a rest. 75% HP recovered, Sarvesh can't attack next turn!!",
 			isCooldown = true,
 			accuracy = 100,
@@ -61,7 +61,7 @@ public static class Sarv
 		// WOOOOOW Move
 		new Move() { 
 			moveName = "WOOOOOW",
-			moveDesc = "Sarvesh gathers up air in his chest and with full volume screams WOOOOOOW into the opponent's ear.\nDeals damage, 20% flinch chance.",
+			moveDesc = "Sarvesh gathers up air in his chest and with full volume screams WOOOOOOW into the opponent's ear. Deals damage, 20% flinch chance.",
 			moveMessage = "Sarvesh takes a huge breath and starts preparing a massive shout. (opp_name) raises his guard. Suddenly Sarvesh shouts WOOOOW with full power and deafens (opp_name). (value) damage dealt.",
 			isCooldown = false,
 			accuracy = 100,
@@ -69,12 +69,13 @@ public static class Sarv
 			damage = 60,
 			isHealingMove = false,
 			isStatChange = false,
+			flinch = 20
 		},
 
 		// Churan Heatwave Move
 		new Move() {
 			moveName = "Churan Heatwave",
-			moveDesc = "Sarvesh ingests his special Churan passed onto him by his ancestors and releases a massive heatwave which damages the opponent.\nDeals good damage and has a 50% chance to lower enemy's Defense.",
+			moveDesc = "Sarvesh ingests his special Churan passed onto him by his ancestors and releases a massive heatwave which damages the opponent. Deals good damage and has a 50% chance to lower enemy's DEF.",
 			moveMessage = "Sarvesh ingests the special Churan bestowed to him by his ancestors. He feels the heat inside him bubbling up and in a moment, the heat releases in a huge blast! (opp_name) takes (value) damage!!",
 			isCooldown = false,
 			accuracy = 100,
