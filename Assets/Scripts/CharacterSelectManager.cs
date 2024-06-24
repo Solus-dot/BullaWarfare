@@ -230,6 +230,8 @@ public class CharacterSelectManager : MonoBehaviour {
 		titleText.text = "Player 1: Pick your Character!";
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
+		P1Name.color = Color.black;
+		P2Name.color = Color.black;
 
 		// Reset button frames
 		foreach (var button in playerButtons) {
