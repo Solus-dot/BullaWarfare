@@ -132,19 +132,19 @@ public class Unit : MonoBehaviour {
 
 	private float GetStatMultiplier(int stage) {
 		switch (stage) {
-			case -6: return 0.25f;
-			case -5: return 0.28f;
-			case -4: return 0.33f;
-			case -3: return 0.40f;
-			case -2: return 0.50f;
-			case -1: return 0.66f;
+			case -6: return 0.4f;
+			case -5: return 0.5f;
+			case -4: return 0.6f;
+			case -3: return 0.7f;
+			case -2: return 0.8f;
+			case -1: return 0.9f;
 			case 0: return 1f;
-			case 1: return 1.5f;
-			case 2: return 2f;
-			case 3: return 2.5f;
-			case 4: return 3f;
-			case 5: return 3.5f;
-			case 6: return 4f;
+			case 1: return 1.1f;
+			case 2: return 1.2f;
+			case 3: return 1.3f;
+			case 4: return 1.4f;
+			case 5: return 1.5f;
+			case 6: return 1.6f;
 			default: return 1f;
 		}
 	}

@@ -87,7 +87,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			if (confirmedCharacterPlayer1 != null && confirmedCharacterPlayer2 != null) {
-				LoadNextScene();
+				SceneManager.LoadScene(2);
 			}
 		}
 
@@ -170,10 +170,6 @@ public class CharacterSelectManager : MonoBehaviour {
 				break;
 			}
 		}
-	}
-
-	void LoadNextScene() {
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 
 	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText) {

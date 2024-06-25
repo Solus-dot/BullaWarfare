@@ -81,7 +81,7 @@ public static class Arya
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 200,
+			damage = 170,
 			isHealingMove = false,
 			isStatChange = false,
             recoil = 0.35f
