@@ -10,7 +10,7 @@
 
 // Move 3: Brainrot Spew
 // Spews insane brainrot phrases at the opponent giving them brain damaged, 
-// Causes the opponent to lose his ATK by 1 stage and 30% flinch chance.
+// Causes the opponent to lose his ATK by 1 stage and 40% flinch chance.
 
 // Move 4: Mr Fresher Smash
 // Uses his status as Mr Fresher to summon hordes of fangirls to attack the opponent, 
@@ -62,7 +62,7 @@ public static class Sohom
 		// Brainrot Spew Move
 		new Move() { 
 			moveName = "Brainrot Spew",
-			moveDesc = "Spews insane brainrot phrases at the opponent, Causes the opponent to lose his ATK by 1 stage and 30% flinch chance.",
+			moveDesc = "Spews insane brainrot phrases at the opponent, Causes the opponent to lose his ATK by 1 stage and 40% flinch chance.",
 			moveMessage = "Erm what the sigma? Sohom has started to spew filthy brainrot words to his opponent! (opp_name) does not have the skibidi rizz to handle it, (opp_name) loses Attack by 2 stages.",
 			isCooldown = false,
 			accuracy = 100,
@@ -71,8 +71,9 @@ public static class Sohom
 			isStatChange = true,
 			selfAttackChange = 0,
 			selfDefenseChange = 0,
-			oppAttackChange = -2,
-			oppDefenseChange = 0
+			oppAttackChange = -1,
+			oppDefenseChange = 0,
+			flinch = 40
 
 		},
 

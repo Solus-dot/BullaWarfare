@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV, DAKSH }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV, DAKSH, AARAV }
 
 [System.Serializable]
 public class Move {
@@ -124,6 +124,8 @@ public class Unit : MonoBehaviour {
 			return Sarv.moves[index];
 		} else if (moveset == MovesetEnum.DAKSH) {
 			return Daksh.moves[index];
+		} else if (moveset == MovesetEnum.AARAV) {
+			return Aarav.moves[index];
 		} else {
 			Debug.LogError("Unknown Moveset");
 			return null;
