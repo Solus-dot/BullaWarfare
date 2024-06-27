@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV, DAKSH, AARAV }
+public enum MovesetEnum { SOHOM, RAVI, MANAS, HARSH, ARYA, KHUSH, ADITI, SARV, DAKSH, AARAV, HIMA, VRUSH, SHUBH, MRMAN, SINHA }
 
 [System.Serializable]
 public class Move {
@@ -106,29 +106,19 @@ public class Unit : MonoBehaviour {
 	}
 
 	public Move GetMove(int index) {
-		if (moveset == MovesetEnum.SOHOM) {
-			return Sohom.moves[index];
-		} else if (moveset == MovesetEnum.RAVI) {
-			return Ravi.moves[index];
-		} else if (moveset == MovesetEnum.MANAS) {
-			return Manas.moves[index];
-		} else if (moveset == MovesetEnum.HARSH) {
-			return Harsh.moves[index];
-		} else if (moveset == MovesetEnum.ARYA) {
-			return Arya.moves[index];
-		} else if (moveset == MovesetEnum.KHUSH) {
-			return Khush.moves[index];
-		} else if (moveset == MovesetEnum.ADITI) {
-			return Aditi.moves[index];
-		} else if (moveset == MovesetEnum.SARV) {
-			return Sarv.moves[index];
-		} else if (moveset == MovesetEnum.DAKSH) {
-			return Daksh.moves[index];
-		} else if (moveset == MovesetEnum.AARAV) {
-			return Aarav.moves[index];
-		} else {
-			Debug.LogError("Unknown Moveset");
-			return null;
+		switch (moveset) {
+			case MovesetEnum.SOHOM: return Sohom.moves[index];
+			case MovesetEnum.RAVI: return Ravi.moves[index];
+			case MovesetEnum.MANAS: return Manas.moves[index];
+			case MovesetEnum.HARSH: return Harsh.moves[index];
+			case MovesetEnum.ARYA: return Arya.moves[index];
+			case MovesetEnum.KHUSH: return Khush.moves[index];
+			case MovesetEnum.ADITI: return Aditi.moves[index];
+			case MovesetEnum.SARV: return Sarv.moves[index];
+			case MovesetEnum.DAKSH: return Daksh.moves[index];
+			case MovesetEnum.AARAV: return Aarav.moves[index];
+			case  MovesetEnum.HIMA: return Hima.moves[index];
+			default: return null;
 		}
 	}
 

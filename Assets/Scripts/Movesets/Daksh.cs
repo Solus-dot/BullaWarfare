@@ -20,7 +20,7 @@
 // Move 1: Mogger Daksh starts mewing and flexes on (opp_name). BYE BYE! Its so over for (opp_name). Attack dropped by 1!
 // Move 2: The sweet and savory smell of Daksh's Laddus have enveloped the arena. (opp_name) gladly takes the Laddus offered by Daksh and heavily loses his guard! (opp_name) recovers HP, Defense dropped by 2!
 // Move 3: Daksh Pratap Jordan whips out his basketball and dribbles his way to (opp_name). (opp_name) looks ready to block him but is left surprised when Daksh just straight up dunks the ball into his head! (value) damage dealt.
-// Move 4: Ghaziabad's very own whips out his family heirloom, a fucking gun and shoots towards (opp_name)!
+// Move 4: Ghaziabad's very own whips out his family heirloom: a fucking gun and shoots towards (opp_name)!
 // (If Hits) The bullet hits (opp_name) straight in the chest! Yikes, that's gotta hurt, (value) damage dealt. Daksh also takes recoil damage from the gun. 
 // (If Miss) And the bullet misses (opp_name) completely! Perhaps Daksh should invest in shooting lessons. No damage dealt, Daksh takes recoil!
 
@@ -80,8 +80,8 @@ public static class Daksh
 		new Move() {
 			moveName = "Ghazia Glock",
 			moveDesc = "Daksh whips out a gun and shoots the opponent straight up, But he hasn't taken shooting lessons. Only 75% accurate and 20% recoil but deals Massive Damage.",
-			moveMessage = "Ghaziabad's very own whips out his family heirloom, a fucking gun and shoots towards (opp_name)! The bullet hits (opp_name) straight in the chest! Yikes, that's gotta hurt, (value) damage dealt. Daksh also takes recoil damage from the gun.",
-			missMessage = "Ghaziabad's very own whips out his family heirloom, a fucking gun and shoots towards (opp_name)! And the bullet misses (opp_name) completely! Perhaps Daksh should invest in shooting lessons. No damage dealt, Daksh takes recoil!",
+			moveMessage = "Ghaziabad's very own whips out his family heirloom: a fucking gun and shoots towards (opp_name)! The bullet hits (opp_name) straight in the chest! Yikes, that's gotta hurt, (value) damage dealt. Daksh also takes recoil damage from the gun.",
+			missMessage = "Ghaziabad's very own whips out his family heirloom: a fucking gun and shoots towards (opp_name)! And the bullet misses (opp_name) completely! Perhaps Daksh should invest in shooting lessons. No damage dealt, Daksh takes recoil!",
 			accuracy = 75,
 			isDamaging = true,
 			damage = 150,

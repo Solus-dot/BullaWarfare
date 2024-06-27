@@ -331,5 +331,6 @@ public class BattleSystem : MonoBehaviour {
 		Sarv.Initialize();
 		Daksh.Initialize();
 		Aarav.Initialize();
+		Hima.Initialize();
 	}
 }

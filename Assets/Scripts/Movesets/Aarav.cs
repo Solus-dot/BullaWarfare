@@ -32,7 +32,7 @@ public static class Aarav
 		new Move() {
 			moveName = "The Pegged One",
 			moveDesc = "Aarav acts submissive towards the opponent. The opponent is charmed by the submissiveness, but Aarav's ego also takes a hit. Opponent loses ATK by 2 Stages, Aarav loses DEF by 1.",
-			moveMessage = " Aarav gets down on all fours and acts as submissive and breedable as he could. Never dropping the pegging allegations. (opp_name) loses Attack by 2, Aarav loses defence by 1 because of the lost ego.",
+			moveMessage = "Aarav gets down on all fours and acts as submissive and breedable as he could. Never dropping the pegging allegations. (opp_name) loses Attack by 2, Aarav loses defence by 1 because of the lost ego.",
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = false,
@@ -63,8 +63,8 @@ public static class Aarav
 		// TT Spin Move
 		new Move() { 
 			moveName = "TT Spin",
-			moveDesc = "Aarav calculates the golden ratio and applies the perfect spin on a TT ball and hits the opponent with it. Deals moderate damage, 30% chance to flinch the opponent. ",
-			moveMessage = " Aarav imagines the Fibonacci sequence, he has visualised the golden ratio and can now apply it on his TT Serve. He hits (opp_name) with this spinning ball and deals damage. (value) damage dealt!",
+			moveDesc = "Aarav calculates the golden ratio and applies the perfect spin on a TT ball and hits the opponent with it. Deals moderate damage, 30% chance to flinch the opponent.",
+			moveMessage = "Aarav imagines the Fibonacci sequence, he has visualised the golden ratio and can now apply it on his TT Serve. He hits (opp_name) with this spinning ball and deals damage. (value) damage dealt!",
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
