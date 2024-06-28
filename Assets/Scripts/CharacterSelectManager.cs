@@ -175,7 +175,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	void ShowStats(GameObject prefab, TMP_Text NameText, TMP_Text StatsText) {
 		Unit unit = prefab.GetComponent<Unit>();
 		NameText.text = unit.unitName;
-		StatsText.text = "Level:\t" + unit.unitLevel + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
+		StatsText.text = "Title" + "\nHP:\t" + unit.currentHP + "\nAttack:\t" + unit.attack + "\nDefense:\t" + unit.defense;
 	}
 
 	void ShowMoveInfo(GameObject prefab, TMP_Text MoveNameText, TMP_Text MoveDescText, int MoveIndex) {

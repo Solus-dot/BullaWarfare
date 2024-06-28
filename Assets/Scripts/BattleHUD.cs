@@ -5,12 +5,14 @@
 
 	public class BattleHUD : MonoBehaviour
 	{
-	public TMP_Text nameText;			// Reference to the text displaying unit's name
-	public TMP_Text levelText;			// Reference to the text displaying unit's level
-	public TMP_Text buffText;			// Reference to the text displaying unit's current buff/debuff status
+	public TMP_Text nameText;
+
+	public TMP_Text atkText;
+	public TMP_Text defText;
 
 	public SpriteRenderer AtkIcon;		// Reference to the icon used for attack stages
 	public SpriteRenderer DefIcon;		// Reference to the icon used for defense stages
+	public SpriteRenderer CDIcon;		// Reference to the icon used for turn cooldown
 
 	public Sprite AttackUp;
 	public Sprite AttackDown;
@@ -23,11 +25,11 @@
 	public void SetHUD(Unit unit)
 	{
 		nameText.text = unit.unitName;				// Update the name text with unit's name
-		levelText.text = "Lvl " + unit.unitLevel;	// Update the level text with unit's level
-
 		AtkIcon.gameObject.SetActive(false);
 		DefIcon.gameObject.SetActive(false);
-		buffText.text = "";							// Leave blank at the start
+		CDIcon.gameObject.SetActive(false);
+
+		atkText.text = ""; defText.text = "";						// Leave blank at the start
 
 		hpSlider.maxValue = unit.maxHP;				// Set max value of HP slider to unit's max HP
 		hpSlider.value = unit.currentHP;			// Set current value of HP slider to unit's current HP
@@ -37,7 +39,7 @@
 	}
 
 	public void SetStatChange(Unit unit) {
-		buffText.text = "";
+		atkText.text = ""; defText.text = "";
 		AtkIcon.gameObject.SetActive(false);
 		DefIcon.gameObject.SetActive(false);
 		
@@ -45,10 +47,10 @@
 			AtkIcon.gameObject.SetActive(true);
 			if (unit.attackStage > 0) {
 				AtkIcon.sprite = AttackUp;
-				buffText.text += "+" + unit.attackStage;
+				atkText.text += "+" + unit.attackStage;
 			} else if (unit.attackStage < 0) {
 				AtkIcon.sprite = AttackDown;
-				buffText.text += unit.attackStage;
+				atkText.text += unit.attackStage;
 			}
 		}
 
@@ -56,10 +58,10 @@
 			DefIcon.gameObject.SetActive(true);
 			if (unit.defenseStage > 0) {
 				DefIcon.sprite = DefenseUp;
-				buffText.text += "\n\n+" + unit.defenseStage;
+				defText.text += "+" + unit.defenseStage;
 			} else if (unit.defenseStage < 0) {
 				DefIcon.sprite = DefenseDown;
-				buffText.text += "\n\n" + unit.defenseStage;
+				defText.text += unit.defenseStage;
 			}
 		}
 	}
@@ -96,4 +98,12 @@
 		float fillAmount = hpSlider.value / hpSlider.maxValue;  // Calculate HP percentage
 		hpSlider.fillRect.GetComponent<Image>().color = hpGradient.Evaluate(fillAmount);  // Apply gradient color based on HP percentage
 	}
+
+	public void CooldownOn() {
+		CDIcon.gameObject.SetActive(true);
 	}
+
+	public void CooldownOff() {
+		CDIcon.gameObject.SetActive(false);
+	}
+}

@@ -34,7 +34,6 @@ public class Move {
 
 public class Unit : MonoBehaviour {
 	public string unitName;
-	public int unitLevel;
 	public int maxHP;
 	public int attack;
 	public int defense;

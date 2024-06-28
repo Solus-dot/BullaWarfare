@@ -32,7 +32,15 @@ public class BattleSystem : MonoBehaviour {
 	TMP_Text move3Button_Text;
 	TMP_Text move4Button_Text;
 
-	private float turnDelay = 1f; // Delay between turns
+	SpriteRenderer P1_SpriteRenderer;
+    SpriteRenderer P2_SpriteRenderer;
+
+	private Color originalColor;			// Battle Station Original Color
+	private float turnDelay = 1f;			// Delay between turns
+
+	float Offset = 1f;						// Y offset from battlestation
+	public float bobbingInterval = 0.8f;	// Interval for the bobbing effect
+	public float bobbingDistance = 0.1f;	// Max distance for the bobbing effect
 
 	public void Start() {
 		StopAllCoroutines();
@@ -40,6 +48,11 @@ public class BattleSystem : MonoBehaviour {
 		move2Button_Text = move2Button.GetComponentInChildren<TMP_Text>();
 		move3Button_Text = move3Button.GetComponentInChildren<TMP_Text>();
 		move4Button_Text = move4Button.GetComponentInChildren<TMP_Text>();
+
+		P1_SpriteRenderer = P1_BattleStation.GetComponent<SpriteRenderer>();
+		P2_SpriteRenderer = P2_BattleStation.GetComponent<SpriteRenderer>();
+
+		originalColor = Color.white;
 
 		dialogueText.gameObject.SetActive(false);
 		moveText.gameObject.SetActive(false);
@@ -69,11 +82,17 @@ public class BattleSystem : MonoBehaviour {
 	IEnumerator SetupBattle() {
 		GameObject P1_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(1), P1_BattleStation);
 		P1_Unit = P1_GameObject.GetComponent<Unit>();
+		StartCoroutine(BobbingEffect(P1_GameObject.transform, P1_BattleStation.position + new Vector3(0, Offset, 0)));
+		
 		GameObject P2_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(2), P2_BattleStation);
 		P2_Unit = P2_GameObject.GetComponent<Unit>();
+		StartCoroutine(BobbingEffect(P2_GameObject.transform, P2_BattleStation.position + new Vector3(0, Offset, 0)));
 
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
+
+		P1_SpriteRenderer.color = originalColor;
+		P2_SpriteRenderer.color = originalColor;
 
 		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...", 0.05f));
 
@@ -83,7 +102,6 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform) {
-		float Offset = 1f; // Y offset from battlestation
 		return Instantiate(prefab, parentTransform.position + new Vector3(0, Offset, 0), parentTransform.rotation, parentTransform);
 	}
 
@@ -101,6 +119,7 @@ public class BattleSystem : MonoBehaviour {
 			if (P1_Unit.isOnCooldown) {
 				yield return StartCoroutine(DisplayMoveText(P1_Unit.cooldownMessage, 0.05f));
 				P1_Unit.EndTurn();
+				P1_HUD.CooldownOff();
 				yield return new WaitForSeconds(turnDelay);
 				state = BattleState.P2_TURN;
 				StartCoroutine(PlayerTurn());
@@ -109,6 +128,8 @@ public class BattleSystem : MonoBehaviour {
 
 			dialogueText.gameObject.SetActive(true);
 			moveText.gameObject.SetActive(false);
+			P1_SpriteRenderer.color = Color.yellow;
+			P2_SpriteRenderer.color = originalColor; 
 
 			dialogueText.text = "Player 1's Turn: Choose an action.";
 			move1Button_Text.text = P1_Unit.GetMove(0).moveName;
@@ -129,6 +150,7 @@ public class BattleSystem : MonoBehaviour {
 			if (P2_Unit.isOnCooldown) {
 				yield return StartCoroutine(DisplayMoveText(P2_Unit.cooldownMessage, 0.05f));
 				P2_Unit.EndTurn();
+				P2_HUD.CooldownOff();
 				yield return new WaitForSeconds(turnDelay);
 				state = BattleState.P1_TURN;
 				StartCoroutine(PlayerTurn());
@@ -137,6 +159,8 @@ public class BattleSystem : MonoBehaviour {
 
 			dialogueText.gameObject.SetActive(true);
 			moveText.gameObject.SetActive(false);
+			P2_SpriteRenderer.color = Color.yellow;
+			P1_SpriteRenderer.color = originalColor;
 
 			dialogueText.text = "Player 2's Turn: Choose an action.";
 			move1Button_Text.text = P2_Unit.GetMove(0).moveName;
@@ -276,6 +300,12 @@ public class BattleSystem : MonoBehaviour {
 
 		if (move.isCooldown == true) {
 			attacker.isOnCooldown = true;
+			
+			if (attacker == P1_Unit) {
+				P1_HUD.CooldownOn();
+			} else {
+				P2_HUD.CooldownOn();
+			}
 		}
 
 		yield return StartCoroutine(DisplayMoveText(Message, 0.05f));
@@ -290,7 +320,6 @@ public class BattleSystem : MonoBehaviour {
 		actionInProgress = false;
 	}
 
-
 	IEnumerator DisplayMoveText(string text, float delay) {
 		moveText.gameObject.SetActive(true);
 		moveText.text = "";
@@ -299,6 +328,19 @@ public class BattleSystem : MonoBehaviour {
 			yield return new WaitForSeconds(delay);
 		}
 		yield return new WaitForSeconds(turnDelay);
+	}
+
+	IEnumerator BobbingEffect(Transform battleStation, Vector3 originalPosition) {
+		while (true) {
+			float randomX = Random.Range(-bobbingDistance, bobbingDistance);
+			float randomY = Random.Range(-bobbingDistance, bobbingDistance);
+			float randomZ = Random.Range(-bobbingDistance, bobbingDistance);
+			Vector3 randomOffset = new Vector3(randomX, randomY, randomZ);
+
+			battleStation.position = originalPosition + randomOffset;
+
+			yield return new WaitForSeconds(bobbingInterval);
+		}
 	}
 
 	void SwitchTurn() {
