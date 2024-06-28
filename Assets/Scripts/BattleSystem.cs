@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+using BattleSystemCoroutines;
+
 public enum BattleState { START, P1_TURN, P2_TURN, P1_WIN, P2_WIN }
 
 public class BattleSystem : MonoBehaviour {
@@ -38,9 +40,9 @@ public class BattleSystem : MonoBehaviour {
 	private Color originalColor;			// Battle Station Original Color
 	private float turnDelay = 1f;			// Delay between turns
 
-	float Offset = 1f;						// Y offset from battlestation
-	public float bobbingInterval = 0.8f;	// Interval for the bobbing effect
-	public float bobbingDistance = 0.1f;	// Max distance for the bobbing effect
+	Vector3 Offset;			// Position of Character with respect to Station
+	float bobbingInterval = 0.8f;	// Interval for the bobbing effect
+	float bobbingDistance = 0.1f;	// Max distance for the bobbing effect
 
 	public void Start() {
 		StopAllCoroutines();
@@ -53,6 +55,7 @@ public class BattleSystem : MonoBehaviour {
 		P2_SpriteRenderer = P2_BattleStation.GetComponent<SpriteRenderer>();
 
 		originalColor = Color.white;
+		Offset = new Vector3(0, 1f, 0);
 
 		dialogueText.gameObject.SetActive(false);
 		moveText.gameObject.SetActive(false);
@@ -80,14 +83,31 @@ public class BattleSystem : MonoBehaviour {
 	}
 
 	IEnumerator SetupBattle() {
+		Vector3 P1_StartPosition = new Vector3(-10, P1_BattleStation.position.y, P1_BattleStation.position.z);
+		Vector3 P2_StartPosition = new Vector3(10, P2_BattleStation.position.y, P2_BattleStation.position.z);
+		Vector3 P1_TargetPosition = P1_BattleStation.position;
+		Vector3 P2_TargetPosition = P2_BattleStation.position;
+
+		P1_BattleStation.position = P1_StartPosition;
+		P2_BattleStation.position = P2_StartPosition;
+
+		// Set up Player 1
 		GameObject P1_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(1), P1_BattleStation);
 		P1_Unit = P1_GameObject.GetComponent<Unit>();
-		StartCoroutine(BobbingEffect(P1_GameObject.transform, P1_BattleStation.position + new Vector3(0, Offset, 0)));
 		
+		
+		// Set up Player 2
 		GameObject P2_GameObject = InstantiatePrefab(CharacterSelectManager.Instance.GetSelectedCharacterPrefab(2), P2_BattleStation);
 		P2_Unit = P2_GameObject.GetComponent<Unit>();
-		StartCoroutine(BobbingEffect(P2_GameObject.transform, P2_BattleStation.position + new Vector3(0, Offset, 0)));
+		
 
+		StartCoroutine(MoveToBattlePosition(P1_BattleStation, P1_GameObject.transform, P1_TargetPosition, 0.25f, 0.2f));
+		StartCoroutine(MoveToBattlePosition(P2_BattleStation, P2_GameObject.transform, P2_TargetPosition, 0.25f, 0.2f));
+
+		Debug.Log(P1_BattleStation.position);
+		Debug.Log(P2_BattleStation.position);
+
+		// Set up the character HUDs
 		P1_HUD.SetHUD(P1_Unit);
 		P2_HUD.SetHUD(P2_Unit);
 
@@ -95,14 +115,17 @@ public class BattleSystem : MonoBehaviour {
 		P2_SpriteRenderer.color = originalColor;
 
 		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...", 0.05f));
-
 		yield return new WaitForSeconds(turnDelay);
+
+		StartCoroutine(BobbingEffect(P1_GameObject.transform, P1_BattleStation.position + Offset));
+		StartCoroutine(BobbingEffect(P2_GameObject.transform, P2_BattleStation.position + Offset));
+
 		state = BattleState.P1_TURN;
 		StartCoroutine(PlayerTurn());
 	}
 
 	GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform) {
-		return Instantiate(prefab, parentTransform.position + new Vector3(0, Offset, 0), parentTransform.rotation, parentTransform);
+		return Instantiate(prefab, parentTransform.position + Offset, parentTransform.rotation, parentTransform);
 	}
 
 	IEnumerator PlayerTurn() {
@@ -341,6 +364,16 @@ public class BattleSystem : MonoBehaviour {
 
 			yield return new WaitForSeconds(bobbingInterval);
 		}
+	}
+
+	IEnumerator MoveToBattlePosition(Transform battleStation, Transform characterPrefab, Vector3 targetPosition, float stepSize, float stepDelay) {
+		while (Vector3.Distance(battleStation.position, targetPosition) > stepSize) {
+			battleStation.position = Vector3.MoveTowards(battleStation.position, targetPosition, stepSize);
+			characterPrefab.position = Vector3.MoveTowards(battleStation.position + Offset, targetPosition, stepSize);
+			yield return new WaitForSeconds(stepDelay);
+		}
+		battleStation.position = targetPosition;  // Ensure final position is exact
+		characterPrefab.position = targetPosition + Offset;
 	}
 
 	void SwitchTurn() {
