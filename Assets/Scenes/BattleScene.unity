@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 17839595}
   - component: {fileID: 17839594}
   m_Layer: 0
-  m_Name: P2_BattleStation
+  m_Name: P2BattleStation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -938,8 +938,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace5d3b76e8bbd94d8faa070310b062d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  P1_BattleStation: {fileID: 1775179220}
-  P2_BattleStation: {fileID: 17839595}
+  P1BattleStation: {fileID: 1775179220}
+  P2BattleStation: {fileID: 17839595}
   dialogueText: {fileID: 1443851464}
   moveText: {fileID: 854373053}
   P1_HUD: {fileID: 1463783922}
@@ -4654,7 +4654,7 @@ GameObject:
   - component: {fileID: 1775179220}
   - component: {fileID: 1775179219}
   m_Layer: 0
-  m_Name: P1_BattleStation
+  m_Name: P1BattleStation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

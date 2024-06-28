@@ -41,7 +41,11 @@ public class Unit : MonoBehaviour {
 
 	public int attackStage = 0;
 	public int defenseStage = 0;
+	
 	public int currentHP;
+	public int currentAtk;
+	public int currentDef;
+
 	public MovesetEnum moveset;
 	public string cooldownMessage;
 
@@ -53,6 +57,10 @@ public class Unit : MonoBehaviour {
 	private float flashDuration = 0.2f; 
 
 	void Start() {
+		currentHP = maxHP;
+		currentAtk = attack;
+		currentDef = defense;
+
 		unitRenderer = GetComponent<SpriteRenderer>();
 		if (unitRenderer != null) {
 			originalColor = unitRenderer.material.color;
@@ -88,8 +96,8 @@ public class Unit : MonoBehaviour {
 		defenseStage = Mathf.Clamp(defenseStage + defenseChange, -6, 6);
 
 		// Recalculate attack and defense based on the new stages
-		attack = Mathf.FloorToInt(attack * GetStatMultiplier(attackStage));
-		defense = Mathf.FloorToInt(defense * GetStatMultiplier(defenseStage));
+		currentAtk = Mathf.FloorToInt(attack * GetStatMultiplier(attackStage));
+		currentDef = Mathf.FloorToInt(defense * GetStatMultiplier(defenseStage));
 	}
 
 	public void AttemptFlinch(Move move) {
