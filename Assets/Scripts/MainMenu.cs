@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
 	public Slider volumeSlider;
-	public AudioSource audioSource;
 
 	void Start()
 	{
@@ -23,9 +22,9 @@ public class MainMenu : MonoBehaviour
 		volumeSlider.value = snappedValue;
 
 		// Update the audio source volume
-		if (audioSource != null)
+		if (AudioManager.Instance != null)
 		{
-			audioSource.volume = snappedValue / 100f; // Assuming the slider range is from 0 to 100
+			AudioManager.Instance.SetVolume(snappedValue / 100f); // Assuming the slider range is from 0 to 100
 		}
 	}
 
