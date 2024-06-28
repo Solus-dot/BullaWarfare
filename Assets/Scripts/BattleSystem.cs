@@ -71,18 +71,13 @@ public class BattleSystem : MonoBehaviour {
 
 	void Update() {
 		if (state == BattleState.P1_WIN || state == BattleState.P2_WIN) {
-			//  Press 'R' to Restart the Match, 'X' for Character Select and 'Z' for Main Menu.
 			if (Input.GetKeyDown(KeyCode.Z)) {
 				SceneManager.LoadScene(0);
-			}
-
-			if (Input.GetKeyDown(KeyCode.R)) {
+			} else if (Input.GetKeyDown(KeyCode.R)) {
 				Start();
-			}
-
-			if (Input.GetKeyDown(KeyCode.X)) {
+			} else if (Input.GetKeyDown(KeyCode.X)) {
 				SceneManager.LoadScene(1);
-			} 
+			}
 		}
 	}
 
@@ -128,76 +123,63 @@ public class BattleSystem : MonoBehaviour {
 		StartCoroutine(PlayerTurn());
 	}
 
-	GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform) {
+	private GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform) {
 		return Instantiate(prefab, parentTransform.position + Offset, parentTransform.rotation, parentTransform);
 	}
 
 	IEnumerator PlayerTurn() {
 		if (state == BattleState.P1_TURN) {
-			if (P1_Unit.isFlinching) {
-				yield return StartCoroutine(DisplayMoveText(P1_Unit.unitName + " flinched and couldn't move!", 0.05f));
-				P1_Unit.EndTurn();
-				yield return new WaitForSeconds(turnDelay);
-				state = BattleState.P2_TURN;
-				StartCoroutine(PlayerTurn());
-				yield break;
-			}
-
-			if (P1_Unit.isOnCooldown) {
-				yield return StartCoroutine(DisplayMoveText(P1_Unit.cooldownMessage, 0.05f));
-				P1_Unit.EndTurn();
-				P1_HUD.CooldownOff();
-				yield return new WaitForSeconds(turnDelay);
-				state = BattleState.P2_TURN;
-				StartCoroutine(PlayerTurn());
-				yield break;
-			}
-
-			dialogueText.gameObject.SetActive(true);
-			moveText.gameObject.SetActive(false);
-			P1_SpriteRenderer.color = Color.yellow;
-			P2_SpriteRenderer.color = originalColor; 
-
-			dialogueText.text = "Player 1's Turn: Choose an action.";
-			move1Button_Text.text = P1_Unit.GetMove(0).moveName;
-			move2Button_Text.text = P1_Unit.GetMove(1).moveName;
-			move3Button_Text.text = P1_Unit.GetMove(2).moveName;
-			move4Button_Text.text = P1_Unit.GetMove(3).moveName;
-
+			yield return HandlePlayerTurn(P1_Unit, P2_Unit, P1_HUD, P2_HUD, "Player 1's Turn: Choose an action.", Color.yellow);
 		} else if (state == BattleState.P2_TURN) {
-			if (P2_Unit.isFlinching) {
-				yield return StartCoroutine(DisplayMoveText(P2_Unit.unitName + " flinched and couldn't move!", 0.05f));
-				P2_Unit.EndTurn();
-				yield return new WaitForSeconds(turnDelay);
-				state = BattleState.P1_TURN;
-				StartCoroutine(PlayerTurn());
-				yield break;
-			}
+			yield return HandlePlayerTurn(P2_Unit, P1_Unit, P2_HUD, P1_HUD, "Player 2's Turn: Choose an action.", Color.yellow);
+		}
+	}
 
-			if (P2_Unit.isOnCooldown) {
-				yield return StartCoroutine(DisplayMoveText(P2_Unit.cooldownMessage, 0.05f));
-				P2_Unit.EndTurn();
-				P2_HUD.CooldownOff();
-				yield return new WaitForSeconds(turnDelay);
-				state = BattleState.P1_TURN;
-				StartCoroutine(PlayerTurn());
-				yield break;
-			}
-
-			dialogueText.gameObject.SetActive(true);
-			moveText.gameObject.SetActive(false);
-			P2_SpriteRenderer.color = Color.yellow;
-			P1_SpriteRenderer.color = originalColor;
-
-			dialogueText.text = "Player 2's Turn: Choose an action.";
-			move1Button_Text.text = P2_Unit.GetMove(0).moveName;
-			move2Button_Text.text = P2_Unit.GetMove(1).moveName;
-			move3Button_Text.text = P2_Unit.GetMove(2).moveName;
-			move4Button_Text.text = P2_Unit.GetMove(3).moveName;
+	private IEnumerator HandlePlayerTurn(Unit currentPlayer, Unit opponent, BattleHUD currentPlayerHUD, BattleHUD opponentHUD, string dialogue, Color highlightColor) {
+		if (currentPlayer.isFlinching) {
+			yield return DisplayFlinchMessage(currentPlayer);
+			yield break;
 		}
 
-		yield return new WaitForSeconds(0f);
+		if (currentPlayer.isOnCooldown) {
+			yield return DisplayCooldownMessage(currentPlayer, currentPlayerHUD);
+			yield break;
+		}
+
+		PrepareForPlayerTurn(dialogue, highlightColor);
+		SetMoveButtonText(currentPlayer);
 		EnableActionButtons();
+	}
+
+	private IEnumerator DisplayFlinchMessage(Unit player) {
+		yield return StartCoroutine(DisplayMoveText($"{player.unitName} flinched and couldn't move!", 0.05f));
+		player.EndTurn();
+		yield return new WaitForSeconds(turnDelay);
+		SwitchTurn();
+	}
+
+	private IEnumerator DisplayCooldownMessage(Unit player, BattleHUD playerHUD) {
+		yield return StartCoroutine(DisplayMoveText(player.cooldownMessage, 0.05f));
+		player.EndTurn();
+		playerHUD.CooldownOff();
+		yield return new WaitForSeconds(turnDelay);
+		SwitchTurn();
+	}
+
+	private void PrepareForPlayerTurn(string dialogue, Color highlightColor) {
+		dialogueText.gameObject.SetActive(true);
+		moveText.gameObject.SetActive(false);
+
+		dialogueText.text = dialogue;
+		P1_SpriteRenderer.color = (state == BattleState.P1_TURN) ? highlightColor : originalColor;
+		P2_SpriteRenderer.color = (state == BattleState.P2_TURN) ? highlightColor : originalColor;
+	}
+
+	private void SetMoveButtonText(Unit player) {
+		move1Button_Text.text = player.GetMove(0).moveName;
+		move2Button_Text.text = player.GetMove(1).moveName;
+		move3Button_Text.text = player.GetMove(2).moveName;
+		move4Button_Text.text = player.GetMove(3).moveName;
 	}
 
 	void EndBattle() {
@@ -205,11 +187,11 @@ public class BattleSystem : MonoBehaviour {
 		dialogueText.gameObject.SetActive(false);
 		moveText.gameObject.SetActive(true);
 
-		if (state == BattleState.P1_WIN) {
-			StartCoroutine(DisplayMoveText(P1_Unit.unitName + " (Player 1) has Won!\nPress 'R' to Restart the Match, 'X' for Character Select and 'Z' for Main Menu.", 0.05f)); 
-		} else if (state == BattleState.P2_WIN) {
-			StartCoroutine(DisplayMoveText(P2_Unit.unitName + " (Player 2) has Won!\nPress 'R' to Restart the Match, 'X' for Character Select and 'Z' for Main Menu.", 0.05f)); 
-		}
+		string message = state == BattleState.P1_WIN
+			? $"{P1_Unit.unitName} (Player 1) has Won!\nPress 'R' to Restart the Match, 'X' for Character Select and 'Z' for Main Menu."
+			: $"{P2_Unit.unitName} (Player 2) has Won!\nPress 'R' to Restart the Match, 'X' for Character Select and 'Z' for Main Menu.";
+
+		StartCoroutine(DisplayMoveText(message, 0.05f));
 	}
 
 	public void OnMoveButton(int moveIndex) {
@@ -231,7 +213,7 @@ public class BattleSystem : MonoBehaviour {
 		
 		actionInProgress = true;
 		Move move = attacker.GetMove(moveIndex);
-		string Message = move.moveMessage.Replace("(opp_name)", defender.unitName);
+		string message = move.moveMessage.Replace("(opp_name)", defender.unitName);
 		bool isDead = false;
 
 		// Calculate if the move hits or misses
@@ -240,7 +222,7 @@ public class BattleSystem : MonoBehaviour {
 
 		// Check for recoil condition before executing the move
 		if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
-			yield return StartCoroutine(DisplayMoveText(attacker.unitName + " is not healthy enough to use this move!", 0.05f));
+			yield return StartCoroutine(DisplayMoveText($"{attacker.unitName} is not healthy enough to use this move!", 0.05f));
 			yield return new WaitForSeconds(turnDelay);
 			SwitchTurn();
 			actionInProgress = false;
@@ -252,17 +234,14 @@ public class BattleSystem : MonoBehaviour {
 		if (moveHits) {
 			if (move.isDamaging) {
 				int damage = (move.damage * attacker.currentAtk) / defender.currentDef; // Calculate effective damage (with Defender Defense)
-				//int damage = baseDamage * Random.Range(85, 100) / 100; // Add a random damage factor
-				Debug.Log("(" + move.damage + " * " +  attacker.currentAtk + ") / " + defender.currentDef + " = " + damage);
+				Debug.Log($"({move.damage} * {attacker.attack}) / {defender.defense} = {damage}");
 
+				message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 
-				Message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
-
-				if(Random.Range(1,100) <= 1) {
-					damage *= 2;	//Add critical hit chance (double damage)
+				if (Random.Range(1, 100) <= 1) {
+					damage *= 2; 	// Critical hit chance (double damage)
 					Debug.Log("Critical Hit (x2 Damage)");
-					Message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
-					Message += " It was a crit hit! It dealt double damage!";
+					message += " It was a crit hit! It dealt double damage!";
 				}
 				
 				isDead = defender.TakeDamage(damage);
@@ -275,13 +254,13 @@ public class BattleSystem : MonoBehaviour {
 			}
 
 			if (move.isHealingMove) {
-				int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100); // Implement proper heal logic (heal% * attacker)
+				int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100); // Proper heal logic (heal% * attacker)
 				int defHealAmount = (move.oppHealAmount * defender.maxHP / 100);
-				if(atkHealAmount != 0) attacker.Heal(atkHealAmount);
-				if(defHealAmount != 0) defender.Heal(defHealAmount);
+				if (atkHealAmount != 0) attacker.Heal(atkHealAmount);
+				if (defHealAmount != 0) defender.Heal(defHealAmount);
 
-				Debug.Log("Attacker Heal Amount: " + atkHealAmount);
-				Debug.Log("Defender Heal Amount" + defHealAmount);
+				Debug.Log($"Attacker Heal Amount: {atkHealAmount}");
+				Debug.Log($"Defender Heal Amount: {defHealAmount}");
 
 				if (attacker == P1_Unit) {
 					P1_HUD.SetHP(attacker.currentHP);
@@ -303,14 +282,9 @@ public class BattleSystem : MonoBehaviour {
 			if (move.flinch > 0) {
 				defender.AttemptFlinch(move);
 			}
-
 			
 		} else {
-			if (move.missMessage != null) {
-				Message = move.missMessage.Replace("(opp_name)", defender.unitName);
-			} else {
-				Message = "The move missed!";
-			}
+			message = move.missMessage != null ? move.missMessage.Replace("(opp_name)", defender.unitName) : "The move missed!";
 		}
 
 		// Recoil handling after the move
@@ -325,7 +299,7 @@ public class BattleSystem : MonoBehaviour {
 			}
 		}
 
-		if (move.isCooldown == true) {
+		if (move.isCooldown) {
 			attacker.isOnCooldown = true;
 			
 			if (attacker == P1_Unit) {
@@ -335,7 +309,7 @@ public class BattleSystem : MonoBehaviour {
 			}
 		}
 
-		yield return StartCoroutine(DisplayMoveText(Message, 0.05f));
+		yield return StartCoroutine(DisplayMoveText(message, 0.05f));
 		yield return new WaitForSeconds(turnDelay);
 
 		if (isDead) {
@@ -346,6 +320,7 @@ public class BattleSystem : MonoBehaviour {
 		}
 		actionInProgress = false;
 	}
+
 
 	IEnumerator DisplayMoveText(string text, float delay) {
 		moveText.gameObject.SetActive(true);
