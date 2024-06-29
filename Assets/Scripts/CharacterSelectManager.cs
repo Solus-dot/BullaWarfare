@@ -10,6 +10,9 @@ public class CharacterSelectManager : MonoBehaviour {
 	public static CharacterSelectManager Instance;
 
 	public TMP_Text titleText;
+	public GameObject CharacterSelectParent;
+	public GameObject BackgroundSelectParent;
+
 	public GameObject player1DetailsPanel;
 	public GameObject player2DetailsPanel;
 
@@ -35,6 +38,16 @@ public class CharacterSelectManager : MonoBehaviour {
 	public Button P2Left;
 	public Button P2Right;
 
+	// Background selection UI
+	public SpriteRenderer BGSpriteRenderer;
+	public TMP_Text BGName;
+	public Button BGLeftButton;
+	public Button BGRightButton;
+	public Button ConfirmBGButton;
+
+	public Sprite[] Backgrounds; // Array of background sprites
+	public string[] BackgroundNames; // Array of background names
+
 	// The game objects that show up when hovering/selecting
 	private GameObject selectedCharacterPlayer1;
 	private GameObject selectedCharacterPlayer2;
@@ -59,6 +72,9 @@ public class CharacterSelectManager : MonoBehaviour {
 	// List of player selection buttons
 	private List<PlayerSelectionButton> playerButtons = new List<PlayerSelectionButton>();
 
+	// Background selection variables
+	public int currentBackgroundIndex = 0;
+
 	private void Awake() {
 		if (Instance == null) {
 			Instance = this;
@@ -68,6 +84,9 @@ public class CharacterSelectManager : MonoBehaviour {
 	}
 
 	void Start() {
+		CharacterSelectParent.SetActive(true);
+		BackgroundSelectParent.SetActive(false);
+
 		p1Picked = false;
 		p2Picked = false;
 
@@ -82,12 +101,22 @@ public class CharacterSelectManager : MonoBehaviour {
 
 		// Find all player selection buttons
 		playerButtons.AddRange(FindObjectsOfType<PlayerSelectionButton>());
+
+		// Background selection listeners
+		BGLeftButton.onClick.AddListener(OnLeftButtonClick);
+		BGRightButton.onClick.AddListener(OnRightButtonClick);
+		ConfirmBGButton.onClick.AddListener(OnConfirmBGButtonClick);
+
+		// Initialize the background selection UI
+		UpdateBackgroundUI();
 	}
 
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			if (confirmedCharacterPlayer1 != null && confirmedCharacterPlayer2 != null) {
-				SceneManager.LoadScene(2);
+				CharacterSelectParent.SetActive(false);
+				BackgroundSelectParent.SetActive(true);
+				titleText.text = "Select a Background";
 			}
 		}
 
@@ -158,7 +187,7 @@ public class CharacterSelectManager : MonoBehaviour {
 				SetButtonFrame(characterPrefab, CharacterSelectionState.P1P2Selected);
 			} else {
 				SetButtonFrame(characterPrefab, CharacterSelectionState.P2Selected);
-			}	
+			}    
 			titleText.text = "Press Space to confirm your selections!";
 		}
 	}
@@ -186,6 +215,9 @@ public class CharacterSelectManager : MonoBehaviour {
 	}
 
 	void ResetCharacterSelection() {
+		CharacterSelectParent.SetActive(true);
+		BackgroundSelectParent.SetActive(false);
+		
 		// Destroy the selected character game objects
 		if (selectedCharacterPlayer1 != null) {
 			Destroy(selectedCharacterPlayer1);
@@ -245,6 +277,28 @@ public class CharacterSelectManager : MonoBehaviour {
 			p2MoveIndex = (p2MoveIndex + direction + 4) % 4;
 			ShowMoveInfo((selectedCharacterPlayer2 != null ? selectedCharacterPlayer2 : confirmedCharacterPlayer2), P2MoveName, P2MoveDesc, p2MoveIndex);
 		}
+	}
+
+	void OnLeftButtonClick() {
+		currentBackgroundIndex = (currentBackgroundIndex - 1 + Backgrounds.Length) % Backgrounds.Length;
+		UpdateBackgroundUI();
+	}
+
+	void OnRightButtonClick() {
+		currentBackgroundIndex = (currentBackgroundIndex + 1) % Backgrounds.Length;
+		UpdateBackgroundUI();
+	}
+
+	void OnConfirmBGButtonClick() {
+		// Save the selected background index to use in the next scene
+		PlayerPrefs.SetInt("SelectedBackgroundIndex", currentBackgroundIndex);
+		// Load the next scene
+		SceneManager.LoadScene(2);
+	}
+
+	void UpdateBackgroundUI() {
+		BGSpriteRenderer.sprite = Backgrounds[currentBackgroundIndex];
+		BGName.text = BackgroundNames[currentBackgroundIndex];
 	}
 
 	public GameObject GetSelectedCharacterPrefab(int playerIndex) {
