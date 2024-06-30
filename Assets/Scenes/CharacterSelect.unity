@@ -4622,6 +4622,7 @@ MonoBehaviour:
   - The Corvid
   - Bibliotheca
   - eXPerience
+  currentBackgroundIndex: 0
 --- !u!1 &1631547690
 GameObject:
   m_ObjectHideFlags: 0
@@ -6168,6 +6169,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 311872478}
+  - {fileID: 2034488808}
   - {fileID: 1571579881}
   - {fileID: 774335747}
-  - {fileID: 2034488808}
