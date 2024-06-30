@@ -348,7 +348,7 @@ public class BattleSystem : MonoBehaviour {
 	IEnumerator MoveToBattlePosition(Transform battleStation, Transform characterPrefab, Vector3 targetPosition, float stepSize, float stepDelay) {
 		while (Vector3.Distance(battleStation.position, targetPosition) > stepSize) {
 			battleStation.position = Vector3.MoveTowards(battleStation.position, targetPosition, stepSize);
-			characterPrefab.position = Vector3.MoveTowards(battleStation.position + Offset, targetPosition, stepSize);
+			characterPrefab.position = Vector3.MoveTowards(battleStation.position + Offset, targetPosition + Offset, stepSize);
 			yield return new WaitForSeconds(stepDelay);
 		}
 		battleStation.position = targetPosition;  // Ensure final position is exact
