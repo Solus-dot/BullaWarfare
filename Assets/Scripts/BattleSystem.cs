@@ -76,7 +76,7 @@ public class BattleSystem : MonoBehaviour {
 			} else if (Input.GetKeyDown(KeyCode.R)) {
 				Start();
 			} else if (Input.GetKeyDown(KeyCode.X)) {
-				SceneManager.LoadScene(1);
+				SceneManager.LoadScene(2);
 			}
 		}
 	}

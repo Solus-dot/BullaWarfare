@@ -42,7 +42,7 @@ public class AudioManager : MonoBehaviour
             case 0: // Main Menu Scene
                 ChangeMusic(mainMenuMusic);
                 break;
-            case 1: // Character Select Scene
+            case 2: // Character Select Scene
                 ChangeMusic(characterSelectMusic);
                 break;
             // Add more cases as needed for other scenes with corresponding build indices

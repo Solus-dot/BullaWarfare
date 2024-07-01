@@ -293,7 +293,7 @@ public class CharacterSelectManager : MonoBehaviour {
 		// Save the selected background index to use in the next scene
 		PlayerPrefs.SetInt("SelectedBackgroundIndex", currentBackgroundIndex);
 		// Load the next scene
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene(3);
 	}
 
 	void UpdateBackgroundUI() {
