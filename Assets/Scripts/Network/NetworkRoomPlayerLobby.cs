@@ -33,11 +33,17 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour {
 
 	public override void OnStartAuthority() {
 		CmdSetDisplayName(PlayerNameInput.DisplayName);
+
 		lobbyUI.SetActive(true);
 	}
 
 	public override void OnStartClient() {
 		Room.RoomPlayers.Add(this);
+		UpdateDisplay();
+	}
+
+	public override void OnStopClient() {
+		Room.RoomPlayers.Remove(this);
 		UpdateDisplay();
 	}
 
@@ -56,23 +62,26 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour {
 		}
 
 		for (int i = 0; i < playerNameTexts.Length; i++) {
-			if (i < Room.RoomPlayers.Count) {
-				playerNameTexts[i].text = Room.RoomPlayers[i].DisplayName;
-				playerReadyTexts[i].text = Room.RoomPlayers[i].IsReady ? 
-					"<color=green>Ready</color>" : 
-					"<color=red>Not Ready</color>";
-			} else {
-				playerNameTexts[i].text = "Waiting for player...";
-				playerReadyTexts[i].text = string.Empty;
-			}
+			playerNameTexts[i].text = "Waiting For Player...";
+			playerReadyTexts[i].text = string.Empty;
+		}
+
+		for (int i = 0; i < Room.RoomPlayers.Count; i++) {
+			playerNameTexts[i].text = Room.RoomPlayers[i].DisplayName;
+			playerReadyTexts[i].text = Room.RoomPlayers[i].IsReady ?
+				"<color=green>Ready</color>" :
+				"<color=red>Not Ready</color>";
 		}
 	}
-
 
 	public void HandleReadyToStart(bool readyToStart) {
 		if (!isLeader) { return; }
 		startGameButton.interactable = readyToStart;
 	}
+
+	public void tesst() {
+		Debug.Log("Button pressed");
+	} 
 
 	[Command]
 	private void CmdSetDisplayName(string displayName) {
@@ -88,7 +97,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour {
 	[Command]
 	public void CmdStartGame() {
 		if (Room.RoomPlayers[0].connectionToClient != connectionToClient) { return ;}
-
+		
 		// Start Game
 	}
 }
