@@ -13,6 +13,8 @@ public class CharacterSelectManager : MonoBehaviour {
 	public GameObject CharacterSelectParent;
 	public GameObject BackgroundSelectParent;
 
+	[Header("Character Select", order = 0)]
+	[Header("PlayerPanel", order = 1)]
 	public GameObject player1DetailsPanel;
 	public GameObject player2DetailsPanel;
 
@@ -24,6 +26,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	public TMP_Text P1Stats;
 	public TMP_Text P2Stats;
 
+	[Header("Move Details", order = 1)]
 	// Moves of the characters hovered on
 	public TMP_Text P1MoveName;
 	public TMP_Text P2MoveName;
@@ -38,6 +41,7 @@ public class CharacterSelectManager : MonoBehaviour {
 	public Button P2Left;
 	public Button P2Right;
 
+	[Header("Background Select", order = 0)]
 	// Background selection UI
 	public SpriteRenderer BGSpriteRenderer;
 	public TMP_Text BGName;

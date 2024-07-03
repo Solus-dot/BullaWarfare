@@ -6,7 +6,7 @@
 
 // Move 2 : Shower Boy
 // Comes out of the shower only wearing a towel and embarrasses the opponent. 
-// Causes the opponent to get flashed and has a 50% chance to flinch him.
+// Causes the opponent to get flashed and has a 75% chance to flinch him.
 
 // Move 3: Speeder Cuber
 // Quickly solves his cubes and attacks the opponents using them,
@@ -55,7 +55,7 @@ public static class Khush
 			isDamaging = false,
 			isHealingMove = false,
 			isStatChange = false,
-			flinch = 50
+			flinch = 75
 		},
 
 		// Speeder Cuber Move

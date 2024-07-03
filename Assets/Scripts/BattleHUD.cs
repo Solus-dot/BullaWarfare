@@ -3,13 +3,14 @@
 	using UnityEngine.UI;
 	using TMPro;
 
-	public class BattleHUD : MonoBehaviour
-	{
-	public TMP_Text nameText;
+	public class BattleHUD : MonoBehaviour {
 
+	[Header("HUD Text")]
+	public TMP_Text nameText;
 	public TMP_Text atkText;
 	public TMP_Text defText;
 
+	[Header("HUD Icons")]
 	public SpriteRenderer AtkIcon;		// Reference to the icon used for attack stages
 	public SpriteRenderer DefIcon;		// Reference to the icon used for defense stages
 	public SpriteRenderer CDIcon;		// Reference to the icon used for turn cooldown
@@ -19,11 +20,11 @@
 	public Sprite DefenseUp;
 	public Sprite DefenseDown;
 
+	[Header("HP Bar")]
 	public Slider hpSlider;				// Reference to the slider representing unit's HP
 	public Gradient hpGradient;			// Gradient for HP bar color
 
-	public void SetHUD(Unit unit)
-	{
+	public void SetHUD(Unit unit) {
 		nameText.text = unit.unitName;				// Update the name text with unit's name
 		AtkIcon.gameObject.SetActive(false);
 		DefIcon.gameObject.SetActive(false);
@@ -66,13 +67,11 @@
 		}
 	}
 
-	public void SetHP(int hp)
-	{
+	public void SetHP(int hp) {
 		StartCoroutine(SlideHP(hp));	// Start coroutine to animate HP slider
 	}
 
-	IEnumerator SlideHP(int newHP)
-	{
+	IEnumerator SlideHP(int newHP) {
 		float startHP = hpSlider.value;
 		float endHP = newHP;
 		float duration = 0.7f;			// Duration of the sliding effect
@@ -81,8 +80,7 @@
 		float stepAmount = (endHP - startHP) / steps;
 
 		// Animate HP slider over multiple steps
-		for (int i = 0; i < steps; i++)
-		{
+		for (int i = 0; i < steps; i++) {
 			hpSlider.value += stepAmount;  // Increment HP slider value
 			UpdateHPColor();               // Update HP bar color
 			yield return new WaitForSeconds(duration / steps);  // Wait for the next step
@@ -93,8 +91,7 @@
 		UpdateHPColor();
 	}
 
-	void UpdateHPColor()
-	{
+	void UpdateHPColor() {
 		float fillAmount = hpSlider.value / hpSlider.maxValue;  // Calculate HP percentage
 		hpSlider.fillRect.GetComponent<Image>().color = hpGradient.Evaluate(fillAmount);  // Apply gradient color based on HP percentage
 	}
