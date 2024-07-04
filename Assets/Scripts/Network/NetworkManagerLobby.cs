@@ -16,7 +16,7 @@ public class NetworkManagerLobby : NetworkManager {
 	public event Action OnClientConnected;
 	public event Action OnClientDisconnected;
 
-	public List<NetworkRoomPlayerLobby> RoomPlayers { get; } =  new List<NetworkRoomPlayerLobby>();
+	public List<NetworkRoomPlayerLobby> RoomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
 
 	public override void OnStartServer() {
 		spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
@@ -59,8 +59,17 @@ public class NetworkManagerLobby : NetworkManager {
 			roomPlayerInstance.IsLeader = isLeader;
 
 			NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
+
+			// Only add to RoomPlayers if not already present
+			if (RoomPlayers.Contains(roomPlayerInstance)) {
+				RoomPlayers.Add(roomPlayerInstance);
+			}
+
+			NotifyPlayersOfReadyState(); // Update ready state
+			Debug.Log($"Player added to RoomPlayers list. Total players: {RoomPlayers.Count}");
 		}
 	}
+
 
 	public override void OnServerDisconnect(NetworkConnectionToClient conn) {
 		if (conn.identity != null) {
