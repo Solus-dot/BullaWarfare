@@ -944,7 +944,6 @@ MonoBehaviour:
   moveText: {fileID: 854373053}
   P1_HUD: {fileID: 1463783922}
   P2_HUD: {fileID: 203167428}
-  state: 0
   move1Button: {fileID: 1801943954}
   move2Button: {fileID: 813530610}
   move3Button: {fileID: 1311924454}
