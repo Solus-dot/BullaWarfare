@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4136278435108665487}
   - component: {fileID: 4359680699597046753}
   m_Layer: 0
-  m_Name: Himanshu
+  m_Name: Vrushabh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,17 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d8d7ed9646504888a5702b5d7ed33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Himanshu
-  maxHP: 460
-  attack: 300
-  defense: 270
+  unitName: Vrushabh
+  maxHP: 475
+  attack: 290
+  defense: 265
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 460
+  currentHP: 475
   currentAtk: 0
   currentDef: 0
-  moveset: 10
+  moveset: 11
   cooldownMessage: 
   isFlinching: 0
   isOnCooldown: 0
@@ -100,7 +100,7 @@ SpriteRenderer:
   m_SortingLayerID: 390912351
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 69203a58b881827469172e5654486f2c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c4fd8055ccadcf24e8e10245dfab4fdb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

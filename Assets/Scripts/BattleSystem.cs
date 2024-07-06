@@ -75,11 +75,11 @@ public class BattleSystem : MonoBehaviour {
 	void Update() {
 		if (state == BattleState.P1_WIN || state == BattleState.P2_WIN) {
 			if (Input.GetKeyDown(KeyCode.Z)) {
-				SceneManager.LoadScene(0);
+				SceneManager.LoadScene("MainMenuScene");
 			} else if (Input.GetKeyDown(KeyCode.R)) {
 				Start();
 			} else if (Input.GetKeyDown(KeyCode.X)) {
-				SceneManager.LoadScene(2);
+				SceneManager.LoadScene("CharacterSelect");
 			}
 		}
 	}

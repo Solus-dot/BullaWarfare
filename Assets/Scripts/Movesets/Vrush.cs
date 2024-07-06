@@ -74,9 +74,9 @@ public static class Vrush
 			isStatChange = false
 		},
 
-		// Churan Heatwave Move
+		// Proper All Rounder Move
 		new Move() {
-			moveName = " Proper All Rounder",
+			moveName = "Proper All Rounder",
 			moveDesc = "Vrushabh uses his superior prowess in every sport and combines them to attack the opponent with a random sport equipment. Deals good damage, has a 50% chance for a random effect (-1 ATK or -1 DEF or Flinch) but also has a 25% chance to just fail completely.",
 			moveMessage = "Sporty Boy Vrushabh D Undri channels up his skills in various sports inside him. Suddenly he summons a... Basketball and slams it onto the opponent. (value) damage dealt!",
 			missMessage = "Sporty Boy Vrushabh D Undri channels up his skills in various sports inside him. Suddenly he summons a... Kabaddi Mat! Vrushabh starts muttering Kabaddi and gets a sliver of touch on (opp_name). Good news for him is that he gets a point!!!, Bad news is that a touch doesn't really hurt (opp_name), 0 damage dealt",

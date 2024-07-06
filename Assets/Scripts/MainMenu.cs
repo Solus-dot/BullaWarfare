@@ -29,12 +29,12 @@ public class MainMenu : MonoBehaviour {
 
 	public void OnPlayButtonClick() {
 		Debug.Log("Start Game button clicked");
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene("CharacterSelect");
 	}
 
 	public void OnLobbyButtonClick() {
 		Debug.Log("Lobby Button clicked");
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene("LobbyScene");
 	}
 
 	public void OnExitButtonClick() {

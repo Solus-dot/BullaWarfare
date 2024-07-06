@@ -124,7 +124,8 @@ public class Unit : MonoBehaviour {
 			case MovesetEnum.SARV: return Sarv.moves[index];
 			case MovesetEnum.DAKSH: return Daksh.moves[index];
 			case MovesetEnum.AARAV: return Aarav.moves[index];
-			case  MovesetEnum.HIMA: return Hima.moves[index];
+			case MovesetEnum.HIMA: return Hima.moves[index];
+			case MovesetEnum.VRUSH: return Vrush.moves[index];
 			default: return null;
 		}
 	}
