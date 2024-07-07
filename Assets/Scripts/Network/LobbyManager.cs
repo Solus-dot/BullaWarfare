@@ -21,6 +21,7 @@ public class LobbyManager : MonoBehaviour {
 	[Header("Create Room Panel")]
 	[SerializeField] private GameObject createRoomPanel;
 	[SerializeField] private TMP_InputField roomNameInputField;
+	[SerializeField] private Toggle isPrivateToggle;
 	[SerializeField] private Button createRoomButton;
 
 	[Header("Room Panel")]
@@ -29,7 +30,13 @@ public class LobbyManager : MonoBehaviour {
 	[SerializeField] private TMP_Text roomCode;
 	[SerializeField] private GameObject playerInfoContent;
 	[SerializeField] private GameObject playerInfoPrefab;
+	[SerializeField] private Button startGameButton;
 	[SerializeField] private Button leaveRoomButton;
+
+	[Header("Join Room With Code")]
+	[SerializeField] private GameObject joinRoomPanel;
+	[SerializeField] private TMP_InputField roomCodeInputField;
+	[SerializeField] private Button joinRoomButton;
 
 	private Lobby currentLobby;
 	private float lastRoomUpdateTime = 0f;
@@ -54,6 +61,7 @@ public class LobbyManager : MonoBehaviour {
 
 		createRoomButton.onClick.AddListener(CreateLobby);
 		getLobbiesListButton.onClick.AddListener(ListPublicLobbies);
+		joinRoomButton.onClick.AddListener(JoinLobbyWithCode);
 		leaveRoomButton.onClick.AddListener(LeaveRoom);
 	}
 
@@ -67,7 +75,11 @@ public class LobbyManager : MonoBehaviour {
 			string lobbyName = roomNameInputField.text;
 
 			CreateLobbyOptions options = new CreateLobbyOptions {
-				Player = GetPlayer()
+				IsPrivate = isPrivateToggle.isOn,
+				Player = GetPlayer(),
+				Data = new Dictionary<string, DataObject> {
+					{"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "false")}
+				}
 			};
 			int maxPlayers = 2;
 			currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
@@ -81,6 +93,7 @@ public class LobbyManager : MonoBehaviour {
 
 	private void EnterRoom() {
 		mainPanel.SetActive(false);
+		joinRoomPanel.SetActive(false);
 		createRoomPanel.SetActive(false);
 		roomPanel.SetActive(true);
 
@@ -97,13 +110,34 @@ public class LobbyManager : MonoBehaviour {
 				lastRoomUpdateTime = Time.time; // Update the last update time
 
 				try {
-					currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-					VisualizeRoomDetails();
+					if (IsInLobby()) {
+						currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
+						VisualizeRoomDetails();
+
+						// Check if the game has started
+						if (IsGameStarted()) {
+							EnterGame();
+						}
+					}
 				} catch (LobbyServiceException e) {
 					Debug.Log(e);
+					if (currentLobby.IsPrivate && (e.Reason == LobbyExceptionReason.LobbyNotFound || e.Reason == LobbyExceptionReason.Forbidden)) {
+						currentLobby = null;
+						ExitRoom();
+					}
 				}
 			}
 		}
+	}
+
+	private bool IsInLobby() {
+		foreach (Unity.Services.Lobbies.Models.Player player in currentLobby.Players) {
+			if (player.Id == playerId) {
+				return true;
+			}
+		}
+		currentLobby = null;
+		return false;
 	}
 
 	private void VisualizeRoomDetails() {
@@ -111,9 +145,33 @@ public class LobbyManager : MonoBehaviour {
 			Destroy(playerInfoContent.transform.GetChild(i).gameObject);
 		}
 
-		foreach (Unity.Services.Lobbies.Models.Player player in currentLobby.Players) {
-			GameObject newPlayerInfo = Instantiate(playerInfoPrefab, playerInfoContent.transform);
-			newPlayerInfo.GetComponentInChildren<TMP_Text>().text = player.Data["PlayerName"].Value;
+		if (IsInLobby()) {
+			foreach (Unity.Services.Lobbies.Models.Player player in currentLobby.Players) {
+				GameObject newPlayerInfo = Instantiate(playerInfoPrefab, playerInfoContent.transform);
+				newPlayerInfo.GetComponentInChildren<TMP_Text>().text = player.Data["PlayerName"].Value;
+				if (IsHost() && player.Id != playerId) {
+					Button KickButton = newPlayerInfo.GetComponentInChildren<Button>(true);
+					KickButton.onClick.AddListener(() => KickPlayer(player.Id));
+					KickButton.gameObject.SetActive(true);
+				}
+			}
+
+			if (IsHost()) {
+				startGameButton.onClick.AddListener(StartGame);
+				startGameButton.gameObject.SetActive(true);
+			} else {
+				if (IsGameStarted()) {
+					startGameButton.onClick.AddListener(EnterGame);
+					startGameButton.gameObject.SetActive(true);
+					startGameButton.GetComponentInChildren<TMP_Text>().text = "Enter Game";
+				} else {
+					startGameButton.onClick.RemoveAllListeners();
+					startGameButton.gameObject.SetActive(false);
+				}
+			}
+
+		} else {
+			ExitRoom();
 		}
 	}
 
@@ -151,6 +209,21 @@ public class LobbyManager : MonoBehaviour {
 			};
 
 			currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
+			EnterRoom();
+			Debug.Log("Players in room: " + currentLobby.Players.Count);
+		} catch (LobbyServiceException e) {
+			Debug.Log(e);
+		}
+	}
+
+	private async void JoinLobbyWithCode() {
+		string lobbyCode = roomCodeInputField.text;
+		try {
+			JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions {
+				Player = GetPlayer()
+			};
+
+			currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
 			EnterRoom();
 			Debug.Log("Players in room: " + currentLobby.Players.Count);
 		} catch (LobbyServiceException e) {
@@ -197,9 +270,54 @@ public class LobbyManager : MonoBehaviour {
 		}
 	}
 
+	private async void KickPlayer(string _playerId) {
+		try {
+			await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, _playerId);
+		} catch (LobbyServiceException e) {
+			Debug.Log(e);
+		}
+	}
+
 	private void ExitRoom() {
 		mainPanel.SetActive(true);
 		createRoomPanel.SetActive(false);
+		joinRoomPanel.SetActive(false);
 		roomPanel.SetActive(false);
+	}
+
+	private async void StartGame() {
+		if (currentLobby != null && IsHost()) {
+			try {
+				UpdateLobbyOptions updateOptions = new UpdateLobbyOptions {
+					Data = new Dictionary<string, DataObject> {
+						{"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "true")}
+					}
+				};
+
+				currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
+				// Let other players know to transition to the game
+				EnterGame();
+
+			} catch (LobbyServiceException e) {
+				Debug.Log(e);
+			}
+		}
+	}
+
+	private bool IsGameStarted() {
+		if (currentLobby != null) {
+			if (currentLobby.Data.ContainsKey("IsGameStarted") && currentLobby.Data["IsGameStarted"].Value == "true") {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void EnterGame() {
+		// Transition all players to the game scene
+		Debug.Log("Entering game...");
+		// Load your game scene here
+		UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
 	}
 }
