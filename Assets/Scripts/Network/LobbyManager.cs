@@ -280,6 +280,7 @@ public class LobbyManager : MonoBehaviour {
 
 	private void ExitRoom() {
 		mainPanel.SetActive(true);
+		joinRoomPanel.SetActive(false);
 		createRoomPanel.SetActive(false);
 		joinRoomPanel.SetActive(false);
 		roomPanel.SetActive(false);
