@@ -174,8 +174,10 @@ public class LobbyManager : MonoBehaviour {
 			}
 
 			if (IsHost()) {
-				startGameButton.onClick.AddListener(StartGame);
-				startGameButton.gameObject.SetActive(true);
+				if(currentLobby.AvailableSlots == 0) {
+					startGameButton.onClick.AddListener(StartGame);
+					startGameButton.gameObject.SetActive(true);
+				}
 
 				deleteLobbyButton.onClick.AddListener(DeleteLobby);
 				deleteLobbyButton.gameObject.SetActive(true);
@@ -190,8 +192,6 @@ public class LobbyManager : MonoBehaviour {
 			ExitRoom();
 		}
 	}
-
-
 
 	private async void ListPublicLobbies() {
 		try {
@@ -301,8 +301,12 @@ public class LobbyManager : MonoBehaviour {
 
 	private async void LeaveRoom() {
 		try {
-			await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
-			ExitRoom();
+			if (currentLobby.AvailableSlots == 1) {
+				DeleteLobby();
+			} else {
+				await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+				ExitRoom();
+			}
 		} catch (LobbyServiceException e) {
 			Debug.Log(e);
 		}
@@ -317,9 +321,7 @@ public class LobbyManager : MonoBehaviour {
 					}
 				};
 
-				currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
-				await Task.Delay(500);
-
+				await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
 				await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
 				currentLobby = null;
 				Debug.Log("Lobby deleted successfully.");
@@ -329,6 +331,7 @@ public class LobbyManager : MonoBehaviour {
 			}
 		}
 	}
+
 
 
 	private async void KickPlayer(string _playerId) {
@@ -372,7 +375,6 @@ public class LobbyManager : MonoBehaviour {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -384,7 +386,6 @@ public class LobbyManager : MonoBehaviour {
 		}
 		return false;
 	}
-
 
 	private void EnterGame() {
 		// Transition all players to the game scene
