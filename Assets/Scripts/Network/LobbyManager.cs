@@ -75,32 +75,37 @@ public class LobbyManager : MonoBehaviour {
 	private async void CreateLobby() {
 		try {
 			string lobbyName = roomNameInputField.text;
+			string joinCode = await RelayManager.Instance.CreateRelay();
 
 			CreateLobbyOptions options = new CreateLobbyOptions {
 				IsPrivate = isPrivateToggle.isOn,
 				Player = GetPlayer(),
 				Data = new Dictionary<string, DataObject> {
-					{"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "false")}
+					{"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "false")},
+					{"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
+					// {"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, "")}  // Initialize JoinCode
 				}
 			};
+
 			int maxPlayers = 2;
 			currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 			Debug.Log("Room Created: " + currentLobby.Id);
 
-			EnterRoom();
+			// Update the JoinCode with the actual code from Relay
+			// string joinCode = await RelayManager.Instance.CreateRelay();
+			// UpdateLobbyOptions updateOptions = new UpdateLobbyOptions {
+			// 	Data = new Dictionary<string, DataObject> {
+			// 		{"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
+			// 	}
+			// };
+			// currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
 
-			string joinCode = await RelayManager.Instance.CreateRelay();
-			Debug.Log("Relay Join Code: " + joinCode);
-			// Store the join code in the lobby data
-			await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, new UpdateLobbyOptions {
-				Data = new Dictionary<string, DataObject> {
-					{ "JoinCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode) }
-				}
-			});
+			EnterRoom();
 		} catch (LobbyServiceException e) {
 			Debug.Log(e);
 		}
 	}
+
 
 	private void EnterRoom() {
 		if (mainPanel != null) mainPanel.SetActive(false);
@@ -221,11 +226,13 @@ public class LobbyManager : MonoBehaviour {
 		}
 
 		foreach (Lobby lobby in publicLobbies) {
-			GameObject newLobbyInfo = Instantiate(lobbyInfoPrefab, lobbiesInfoContent.transform);
-			var lobbyDetailsTexts = newLobbyInfo.GetComponentsInChildren<TMP_Text>();
-			lobbyDetailsTexts[0].text = lobby.Name;
-			lobbyDetailsTexts[1].text = ((lobby.MaxPlayers - lobby.AvailableSlots).ToString() + "/" + lobby.MaxPlayers.ToString());
-			newLobbyInfo.GetComponentInChildren<Button>().onClick.AddListener(() => JoinLobby(lobby.Id)); //We will call join lobby;
+			if (lobby.AvailableSlots == 1 || lobby.AvailableSlots == 2) {
+				GameObject newLobbyInfo = Instantiate(lobbyInfoPrefab, lobbiesInfoContent.transform);
+				var lobbyDetailsTexts = newLobbyInfo.GetComponentsInChildren<TMP_Text>();
+				lobbyDetailsTexts[0].text = lobby.Name;
+				lobbyDetailsTexts[1].text = ((lobby.MaxPlayers - lobby.AvailableSlots).ToString() + "/" + lobby.MaxPlayers.ToString());
+				newLobbyInfo.GetComponentInChildren<Button>().onClick.AddListener(() => JoinLobby(lobby.Id)); //We will call join lobby;
+			}
 		}
 	}
 
