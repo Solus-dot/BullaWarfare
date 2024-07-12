@@ -4,12 +4,13 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 
-public class LobbyManager : MonoBehaviour {
+public class LobbyManager : NetworkBehaviour {
 	private string playerId;
 
 	[Header("Main Lobby Panel")]
@@ -395,9 +396,18 @@ public class LobbyManager : MonoBehaviour {
 	}
 
 	private void EnterGame() {
-		// Transition all players to the game scene
-		Debug.Log("Entering game...");
-		// Load your game scene here
-		UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
+		if (IsHost()) {
+            UpdateLobbyState();
+            // Change scene for all clients using NetworkSceneManager
+            NetworkManager.SceneManager.LoadScene("CharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
+        else if (!IsHost() && IsGameStarted()) {
+            // Change scene for the client using NetworkSceneManager
+            NetworkManager.SceneManager.LoadScene("CharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
+	}
+
+	private void UpdateLobbyState() {
+        // Additional logic to update lobby state
 	}
 }
