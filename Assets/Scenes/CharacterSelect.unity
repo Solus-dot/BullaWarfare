@@ -295,6 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 2ccc2b1b9fcab17468ef08320104d253, type: 3}
+  characterIndex: 9
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 93253416}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -534,6 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 48fed0b48c1f8084182ef896d8541f95, type: 3}
+  characterIndex: 6
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 156660205}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -770,6 +772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 307375d5c4e89d04792a133399ce09da, type: 3}
+  characterIndex: 0
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 354725568}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -1497,6 +1500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 264ba7494f5216649b5c7fc45dfc5fa4, type: 3}
+  characterIndex: 5
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 593656931}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -2158,6 +2162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 99e7ac25c84548943a6cf3bd27d3d4a8, type: 3}
+  characterIndex: 7
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 836782609}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -2386,6 +2391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: db2bf498a4ad5f946a4cf6c3c5a3bd27, type: 3}
+  characterIndex: 3
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 924811394}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -2829,6 +2835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 6a5da43b085023346814465f523363f2, type: 3}
+  characterIndex: 2
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1259047705}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -3194,6 +3201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: ec52bfeeb773e3247ada7cd7ec0de64c, type: 3}
+  characterIndex: 10
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1295989674}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -3766,6 +3774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 4c23ab0916ad2cc42bcc22669e3fd615, type: 3}
+  characterIndex: 8
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1494362082}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -3919,6 +3928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: 382301ddf4e385a41b9fd1aefdb3ad34, type: 3}
+  characterIndex: 11
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1552836081}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -4072,6 +4082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 4808498191648398044, guid: 11eb8a938c7ad5e4b9ec67541f8843ab, type: 3}
+  characterIndex: 1
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1560232579}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
@@ -4503,6 +4514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 6884295409158445089, guid: ec7675106dc5f074dbd37b597235968b, type: 3}
+  characterIndex: 4
   characterSelectManager: {fileID: 1571579882}
   frameImage: {fileID: 1701981154}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}

@@ -397,17 +397,9 @@ public class LobbyManager : NetworkBehaviour {
 
 	private void EnterGame() {
 		if (IsHost()) {
-            UpdateLobbyState();
-            // Change scene for all clients using NetworkSceneManager
-            NetworkManager.SceneManager.LoadScene("CharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        }
-        else if (!IsHost() && IsGameStarted()) {
-            // Change scene for the client using NetworkSceneManager
-            NetworkManager.SceneManager.LoadScene("CharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        }
-	}
-
-	private void UpdateLobbyState() {
-        // Additional logic to update lobby state
+			NetworkManager.SceneManager.LoadScene("BasicSyncScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+		} else {
+			NetworkManager.Singleton.StartClient();
+		}
 	}
 }
