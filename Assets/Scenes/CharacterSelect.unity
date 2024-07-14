@@ -297,11 +297,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 2ccc2b1b9fcab17468ef08320104d253, type: 3}
   characterIndex: 9
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 93253416}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &93253415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,11 +532,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 48fed0b48c1f8084182ef896d8541f95, type: 3}
   characterIndex: 6
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 156660205}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &156660204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,11 +764,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 307375d5c4e89d04792a133399ce09da, type: 3}
   characterIndex: 0
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 354725568}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &354725567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1502,11 +1487,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 264ba7494f5216649b5c7fc45dfc5fa4, type: 3}
   characterIndex: 5
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 593656931}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &593656930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1889,8 +1869,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 4.5}
-  m_SizeDelta: {x: 14, y: 1.4}
+  m_AnchoredPosition: {x: 0, y: 4.75}
+  m_SizeDelta: {x: 14, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774736850
 MonoBehaviour:
@@ -2164,11 +2144,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 99e7ac25c84548943a6cf3bd27d3d4a8, type: 3}
   characterIndex: 7
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 836782609}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &836782608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2393,11 +2368,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: db2bf498a4ad5f946a4cf6c3c5a3bd27, type: 3}
   characterIndex: 3
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 924811394}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &924811393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2837,11 +2807,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 6a5da43b085023346814465f523363f2, type: 3}
   characterIndex: 2
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1259047705}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1259047704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3203,11 +3168,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: ec52bfeeb773e3247ada7cd7ec0de64c, type: 3}
   characterIndex: 10
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1295989674}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1295989673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3776,11 +3736,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 4c23ab0916ad2cc42bcc22669e3fd615, type: 3}
   characterIndex: 8
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1494362082}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1494362081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3930,11 +3885,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: 382301ddf4e385a41b9fd1aefdb3ad34, type: 3}
   characterIndex: 11
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1552836081}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1552836080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4084,11 +4034,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 4808498191648398044, guid: 11eb8a938c7ad5e4b9ec67541f8843ab, type: 3}
   characterIndex: 1
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1560232579}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1560232578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4245,6 +4190,10 @@ MonoBehaviour:
   P1Right: {fileID: 834238031}
   P2Left: {fileID: 44715925}
   P2Right: {fileID: 1734587050}
+  confirmedCharacterIndexPlayer1:
+    m_InternalValue: -1
+  confirmedCharacterIndexPlayer2:
+    m_InternalValue: -1
 --- !u!114 &1571579883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4516,11 +4465,6 @@ MonoBehaviour:
   characterPrefab: {fileID: 6884295409158445089, guid: ec7675106dc5f074dbd37b597235968b, type: 3}
   characterIndex: 4
   characterSelectManager: {fileID: 1571579882}
-  frameImage: {fileID: 1701981154}
-  defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
-  P1Frame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
-  P2Frame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
-  P1P2Frame: {fileID: 21300000, guid: 23e2ce719e0153443a1ced32dd31c829, type: 3}
 --- !u!114 &1701981153
 MonoBehaviour:
   m_ObjectHideFlags: 0

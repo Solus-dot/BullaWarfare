@@ -2,65 +2,113 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
+
+[System.Serializable]
+public class Character {
+	public string name;
+	public GameObject prefab;
+	public Button button;
+}
 
 public class SyncSceneManager : NetworkBehaviour {
-	[Header("Prefabs")]
-	[SerializeField] private GameObject redPrefab;
-	[SerializeField] private GameObject greenPrefab;
-	[SerializeField] private GameObject bluePrefab;
+	[Header("Characters")]
+	[SerializeField] private List<Character> characters;
 
 	[Header("Spawnpoints")]
 	[SerializeField] private Transform leftSpawnPoint;
 	[SerializeField] private Transform rightSpawnPoint;
 
-	[Header("Buttons")]
-	[SerializeField] private Button redButton;
-	[SerializeField] private Button greenButton;
-	[SerializeField] private Button blueButton;
+	[Header("UI Elements")]
+	[SerializeField] private Button readyButton;
+	[SerializeField] private TMP_Text hostReadyText;
+	[SerializeField] private TMP_Text clientReadyText;
 
-	private enum PrefabType {
-		Blue,
-		Red,
-		Green
-	}
+	private bool isReady = false;
+	private bool characterSelected = false;
 
 	private void Start() {
-		blueButton.onClick.AddListener(() => OnButtonClick(PrefabType.Blue));
-		redButton.onClick.AddListener(() => OnButtonClick(PrefabType.Red));
-		greenButton.onClick.AddListener(() => OnButtonClick(PrefabType.Green));
+		foreach (var character in characters) {
+			var charCopy = character;
+			charCopy.button.onClick.AddListener(() => OnButtonClick(charCopy));
+		}
+
+		readyButton.onClick.AddListener(OnReadyButtonClick);
+		readyButton.interactable = false;  // Disable the ready button initially
+		UpdateReadyText(false, IsHost);
 	}
 
-	private void OnButtonClick(PrefabType prefabType) {
+	private void OnButtonClick(Character character) {
+		if (isReady) return;  // Prevent button click if already ready
+
 		if (IsHost) {
-			SpawnSpriteServerRpc(prefabType, true);
+			SpawnSpriteServerRpc(character.name, true);
 		} else {
-			SpawnSpriteServerRpc(prefabType, false);
+			SpawnSpriteServerRpc(character.name, false);
+		}
+
+		// Enable the ready button after a character has been selected
+		if (!characterSelected) {
+			characterSelected = true;
+			readyButton.interactable = true;
+		}
+	}
+
+	private void OnReadyButtonClick() {
+		isReady = !isReady;
+		UpdateReadyText(isReady, IsHost);
+		ToggleCharacterButtons(!isReady);  // Disable buttons when ready
+
+		if (IsHost) {
+			UpdateReadyStateClientRpc(isReady, IsHost);
+		} else {
+			UpdateReadyStateServerRpc(isReady);
+		}
+	}
+
+	private void ToggleCharacterButtons(bool enable) {
+		foreach (var character in characters) {
+			character.button.interactable = enable;
 		}
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	private void SpawnSpriteServerRpc(PrefabType prefabType, bool isHost, ServerRpcParams rpcParams = default) {
+	private void UpdateReadyStateServerRpc(bool readyState, ServerRpcParams rpcParams = default) {
+		UpdateReadyText(readyState, false);
+		UpdateReadyStateClientRpc(readyState, false);
+	}
+
+	[ClientRpc]
+	private void UpdateReadyStateClientRpc(bool readyState, bool isHost) {
+		UpdateReadyText(readyState, isHost);
+	}
+
+	private void UpdateReadyText(bool readyState, bool isHost) {
+		if (isHost) {
+			hostReadyText.text = readyState ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+		} else {
+			clientReadyText.text = readyState ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SpawnSpriteServerRpc(string characterName, bool isHost, ServerRpcParams rpcParams = default) {
 		var spawnPoint = isHost ? leftSpawnPoint.position : rightSpawnPoint.position;
 		DeleteExistingPrefab(spawnPoint);
-		GameObject prefab = GetPrefabByType(prefabType);
+		GameObject prefab = GetPrefabByName(characterName);
 		GameObject newSprite = Instantiate(prefab, spawnPoint, Quaternion.identity);
 		newSprite.GetComponent<NetworkObject>().Spawn(true);
 
-		// Notify clients about the new prefab
-		NotifyClientsAboutNewPrefabClientRpc(newSprite.GetComponent<NetworkObject>().NetworkObjectId, prefabType, isHost);
+		NotifyClientsAboutNewPrefabClientRpc(newSprite.GetComponent<NetworkObject>().NetworkObjectId, characterName, isHost);
 	}
 
-	private GameObject GetPrefabByType(PrefabType prefabType) {
-		switch (prefabType) {
-			case PrefabType.Blue:
-				return bluePrefab;
-			case PrefabType.Red:
-				return redPrefab;
-			case PrefabType.Green:
-				return greenPrefab;
-			default:
-				return null;
+	private GameObject GetPrefabByName(string characterName) {
+		foreach (var character in characters) {
+			if (character.name == characterName) {
+				return character.prefab;
+			}
 		}
+		return null;
 	}
 
 	private void DeleteExistingPrefab(Vector3 spawnPosition) {
@@ -78,12 +126,12 @@ public class SyncSceneManager : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void NotifyClientsAboutNewPrefabClientRpc(ulong networkObjectId, PrefabType prefabType, bool isHost) {
+	private void NotifyClientsAboutNewPrefabClientRpc(ulong networkObjectId, string characterName, bool isHost) {
 		if (IsHost) return;
 
 		var spawnPoint = isHost ? leftSpawnPoint.position : rightSpawnPoint.position;
 		DeleteExistingPrefab(spawnPoint);
-		GameObject prefab = GetPrefabByType(prefabType);
+		GameObject prefab = GetPrefabByName(characterName);
 		GameObject newSprite = Instantiate(prefab, spawnPoint, Quaternion.identity);
 		newSprite.GetComponent<NetworkObject>().Spawn(true);
 	}
