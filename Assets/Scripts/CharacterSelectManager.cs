@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
 
-public enum CharacterSelectionState { Default, P1Selected, P2Selected, P1P2Selected }
-
 public class CharacterSelectManager : NetworkBehaviour {
 	public static CharacterSelectManager Instance;
 
@@ -87,9 +85,6 @@ public class CharacterSelectManager : NetworkBehaviour {
 
 		// Find all player selection buttons
 		playerButtons.AddRange(FindObjectsOfType<PlayerSelectionButton>());
-
-		confirmedCharacterIndexPlayer1.OnValueChanged += OnPlayer1CharacterChanged;
-		confirmedCharacterIndexPlayer2.OnValueChanged += OnPlayer2CharacterChanged;
 	}
 
 	void Update() {
@@ -134,7 +129,6 @@ public class CharacterSelectManager : NetworkBehaviour {
 		} else {
 			// Second click on the same character
 			confirmedCharacterIndexPlayer1.Value = characterIndex;
-			SetButtonFrame(characterPrefab, CharacterSelectionState.P1Selected);
 			titleText.text = "Player 2: Pick your Character!";
 		}
 	}
@@ -155,21 +149,7 @@ public class CharacterSelectManager : NetworkBehaviour {
 		} else {
 			// Second click on the same character
 			confirmedCharacterIndexPlayer2.Value = characterIndex;
-			if (confirmedCharacterIndexPlayer1.Value == confirmedCharacterIndexPlayer2.Value) {
-				SetButtonFrame(characterPrefab, CharacterSelectionState.P1P2Selected);
-			} else {
-				SetButtonFrame(characterPrefab, CharacterSelectionState.P2Selected);
-			}
 			titleText.text = "Press Space to confirm your selections!";
-		}
-	}
-
-	void SetButtonFrame(GameObject characterPrefab, CharacterSelectionState state) {
-		foreach (var button in playerButtons) {
-			if (button.characterPrefab == characterPrefab) {
-				button.SetFrameImage(state);
-				break;
-			}
 		}
 	}
 
@@ -213,10 +193,6 @@ public class CharacterSelectManager : NetworkBehaviour {
 		titleText.text = "Player 1: Pick your Character!";
 		player1DetailsPanel.SetActive(false);
 		player2DetailsPanel.SetActive(false);
-
-		foreach (var button in playerButtons) {
-			button.SetFrameImage(CharacterSelectionState.Default);
-		}
 	}
 
 	void CycleMove(int direction, int playerIndex) {
@@ -229,51 +205,8 @@ public class CharacterSelectManager : NetworkBehaviour {
 		}
 	}
 
-	private void OnPlayer1CharacterChanged(int oldIndex, int newIndex) {
-		if (newIndex != -1) {
-			foreach (var button in playerButtons) {
-				if (button.characterIndex == newIndex) {
-					if (confirmedCharacterIndexPlayer2.Value == newIndex) {
-						button.SetFrameImage(CharacterSelectionState.P1P2Selected);
-					} else {
-						button.SetFrameImage(CharacterSelectionState.P1Selected);
-					}
-				} else if (confirmedCharacterIndexPlayer2.Value == button.characterIndex) {
-					button.SetFrameImage(CharacterSelectionState.P2Selected);
-				} else {
-					button.SetFrameImage(CharacterSelectionState.Default);
-				}
-			}
-		}
-	}
-
-	private void OnPlayer2CharacterChanged(int oldIndex, int newIndex) {
-		if (newIndex != -1) {
-			foreach (var button in playerButtons) {
-				if (button.characterIndex == newIndex) {
-					if (confirmedCharacterIndexPlayer1.Value == newIndex) {
-						button.SetFrameImage(CharacterSelectionState.P1P2Selected);
-					} else {
-						button.SetFrameImage(CharacterSelectionState.P2Selected);
-					}
-				} else if (confirmedCharacterIndexPlayer1.Value == button.characterIndex) {
-					button.SetFrameImage(CharacterSelectionState.P1Selected);
-				} else {
-					button.SetFrameImage(CharacterSelectionState.Default);
-				}
-			}
-		}
-	}
-
-	public override void OnNetworkSpawn() {
-		if (IsClient && !IsOwner) {
-			enabled = false;
-		}
-	}
-
 	private GameObject InstantiateCharacter(GameObject characterPrefab, int characterIndex) {
 		var character = Instantiate(characterPrefab);
-		character.GetComponent<NetworkObject>().Spawn();
 		selectedCharacterPrefabs[characterIndex] = character;
 		return character;
 	}
