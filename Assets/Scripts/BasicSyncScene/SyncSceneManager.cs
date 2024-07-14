@@ -115,11 +115,9 @@ public class SyncSceneManager : NetworkBehaviour {
 			hostMoves = GetMovesForUnit(unit);
 			hostCurrentMoveIndex = 0;
 			UpdateMoveText(true);
-			
-			// Notify the client about the character selection and its stats and moves
-			UpdateCharacterStatsClientRpc(unit.unitName, stats, true);
+			UpdateCharacterStatsClientRpc(unit.unitName, stats, hostMoves.Count, true);
 			for (int i = 0; i < hostMoves.Count; i++) {
-				UpdateCharacterMoveClientRpc(unit.unitName, stats, i, hostMoves[i].moveName, hostMoves[i].moveDesc, true);
+				UpdateCharacterMoveClientRpc(i, hostMoves[i].moveName, hostMoves[i].moveDesc, true);
 			}
 		} else {
 			clientNameText.text = unit.unitName;
@@ -128,11 +126,9 @@ public class SyncSceneManager : NetworkBehaviour {
 			clientMoves = GetMovesForUnit(unit);
 			clientCurrentMoveIndex = 0;
 			UpdateMoveText(false);
-			
-			// Notify the host about the character selection and its stats and moves
-			UpdateCharacterStatsServerRpc(unit.unitName, stats);
+			UpdateCharacterStatsServerRpc(unit.unitName, stats, clientMoves.Count);
 			for (int i = 0; i < clientMoves.Count; i++) {
-				UpdateCharacterMoveServerRpc(unit.unitName, stats, i, clientMoves[i].moveName, clientMoves[i].moveDesc);
+				UpdateCharacterMoveServerRpc(i, clientMoves[i].moveName, clientMoves[i].moveDesc);
 			}
 		}
 	}
@@ -180,47 +176,43 @@ public class SyncSceneManager : NetworkBehaviour {
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	private void UpdateCharacterStatsServerRpc(string name, string stats, ServerRpcParams rpcParams = default) {
-		UpdateCharacterStatsClientRpc(name, stats, false);
+	private void UpdateCharacterStatsServerRpc(string name, string stats, int moveCount, ServerRpcParams rpcParams = default) {
+		UpdateCharacterStatsClientRpc(name, stats, moveCount, false);
 	}
 
 	[ClientRpc]
-	private void UpdateCharacterStatsClientRpc(string name, string stats, bool isHost) {
+	private void UpdateCharacterStatsClientRpc(string name, string stats, int moveCount, bool isHost) {
 		if (isHost) {
 			hostNameText.text = name;
 			hostStatsText.text = stats;
 			hostStatsPanel.SetActive(true);
-		} else {
-			clientNameText.text = name;
-			clientStatsText.text = stats;
-			clientStatsPanel.SetActive(true);
-		}
-	}
-
-	// Server RPC to update moves for the client
-	[ServerRpc(RequireOwnership = false)]
-	private void UpdateCharacterMoveServerRpc(string name, string stats, int moveIndex, string moveName, string moveDesc, ServerRpcParams rpcParams = default) {
-		UpdateCharacterMoveClientRpc(name, stats, moveIndex, moveName, moveDesc, false);
-	}
-
-	// Client RPC to update moves for the host
-	[ClientRpc]
-	private void UpdateCharacterMoveClientRpc(string name, string stats, int moveIndex, string moveName, string moveDesc, bool isHost) {
-		if (isHost) {
-			hostNameText.text = name;
-			hostStatsText.text = stats;
-			// Update moves
-			if (moveIndex == 0) hostMoves.Clear(); // Clear existing moves on the first move
-			hostMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
-			hostStatsPanel.SetActive(true);
+			hostMoves = new List<Move>(moveCount);
 			UpdateMoveText(true);
 		} else {
 			clientNameText.text = name;
 			clientStatsText.text = stats;
-			// Update moves
-			if (moveIndex == 0) clientMoves.Clear(); // Clear existing moves on the first move
-			clientMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
 			clientStatsPanel.SetActive(true);
+			clientMoves = new List<Move>(moveCount);
+			UpdateMoveText(false);
+		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void UpdateCharacterMoveServerRpc(int index, string moveName, string moveDesc, ServerRpcParams rpcParams = default) {
+		UpdateCharacterMoveClientRpc(index, moveName, moveDesc, false);
+	}
+
+	[ClientRpc]
+	private void UpdateCharacterMoveClientRpc(int index, string moveName, string moveDesc, bool isHost) {
+		if (isHost) {
+			if (hostMoves == null) hostMoves = new List<Move>();
+			if (index >= hostMoves.Count) hostMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
+			else hostMoves[index] = new Move { moveName = moveName, moveDesc = moveDesc };
+			UpdateMoveText(true);
+		} else {
+			if (clientMoves == null) clientMoves = new List<Move>();
+			if (index >= clientMoves.Count) clientMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
+			else clientMoves[index] = new Move { moveName = moveName, moveDesc = moveDesc };
 			UpdateMoveText(false);
 		}
 	}
