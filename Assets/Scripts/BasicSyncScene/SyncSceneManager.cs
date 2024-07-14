@@ -23,6 +23,28 @@ public class SyncSceneManager : NetworkBehaviour {
 	[SerializeField] private Button readyButton;
 	[SerializeField] private TMP_Text hostReadyText;
 	[SerializeField] private TMP_Text clientReadyText;
+	[SerializeField] private GameObject hostStatsPanel;
+	[SerializeField] private GameObject clientStatsPanel;
+
+	private TMP_Text hostNameText;
+	private TMP_Text hostStatsText;
+	private TMP_Text clientNameText;
+	private TMP_Text clientStatsText;
+
+	private TMP_Text hostMoveNameText;
+	private TMP_Text hostMoveDescText;
+	private TMP_Text clientMoveNameText;
+	private TMP_Text clientMoveDescText;
+
+	private Button hostLeftButton;
+	private Button hostRightButton;
+	private Button clientLeftButton;
+	private Button clientRightButton;
+
+	private int hostCurrentMoveIndex = 0;
+	private int clientCurrentMoveIndex = 0;
+	private List<Move> hostMoves;
+	private List<Move> clientMoves;
 
 	private bool isReady = false;
 	private bool characterSelected = false;
@@ -35,6 +57,32 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		readyButton.onClick.AddListener(OnReadyButtonClick);
 		readyButton.interactable = false;  // Disable the ready button initially
+
+		// Get TMP_Text components from host and client stats panels
+		hostNameText = hostStatsPanel.GetComponentsInChildren<TMP_Text>()[0];
+		hostStatsText = hostStatsPanel.GetComponentsInChildren<TMP_Text>()[1];
+		hostMoveNameText = hostStatsPanel.GetComponentsInChildren<TMP_Text>()[2];
+		hostMoveDescText = hostStatsPanel.GetComponentsInChildren<TMP_Text>()[3];
+
+		clientNameText = clientStatsPanel.GetComponentsInChildren<TMP_Text>()[0];
+		clientStatsText = clientStatsPanel.GetComponentsInChildren<TMP_Text>()[1];
+		clientMoveNameText = clientStatsPanel.GetComponentsInChildren<TMP_Text>()[2];
+		clientMoveDescText = clientStatsPanel.GetComponentsInChildren<TMP_Text>()[3];
+
+		// Get Button components for cycling through moves
+		hostLeftButton = hostStatsPanel.GetComponentsInChildren<Button>()[0];
+		hostRightButton = hostStatsPanel.GetComponentsInChildren<Button>()[1];
+		clientLeftButton = clientStatsPanel.GetComponentsInChildren<Button>()[0];
+		clientRightButton = clientStatsPanel.GetComponentsInChildren<Button>()[1];
+
+		hostLeftButton.onClick.AddListener(() => OnMoveButtonClick(false, true));
+		hostRightButton.onClick.AddListener(() => OnMoveButtonClick(true, true));
+		clientLeftButton.onClick.AddListener(() => OnMoveButtonClick(false, false));
+		clientRightButton.onClick.AddListener(() => OnMoveButtonClick(true, false));
+
+		hostStatsPanel.SetActive(false);
+		clientStatsPanel.SetActive(false);
+
 		UpdateReadyText(false, IsHost);
 	}
 
@@ -51,6 +99,129 @@ public class SyncSceneManager : NetworkBehaviour {
 		if (!characterSelected) {
 			characterSelected = true;
 			readyButton.interactable = true;
+		}
+
+		UpdateCharacterStats(character);
+	}
+
+	private void UpdateCharacterStats(Character character) {
+		var unit = character.prefab.GetComponent<Unit>();
+		string stats = $"HP: {unit.maxHP}\nAtk: {unit.attack}\nDef: {unit.defense}";
+
+		if (IsHost) {
+			hostNameText.text = unit.unitName;
+			hostStatsText.text = stats;
+			hostStatsPanel.SetActive(true);
+			hostMoves = GetMovesForUnit(unit);
+			hostCurrentMoveIndex = 0;
+			UpdateMoveText(true);
+			
+			// Notify the client about the character selection and its stats and moves
+			UpdateCharacterStatsClientRpc(unit.unitName, stats, true);
+			for (int i = 0; i < hostMoves.Count; i++) {
+				UpdateCharacterMoveClientRpc(unit.unitName, stats, i, hostMoves[i].moveName, hostMoves[i].moveDesc, true);
+			}
+		} else {
+			clientNameText.text = unit.unitName;
+			clientStatsText.text = stats;
+			clientStatsPanel.SetActive(true);
+			clientMoves = GetMovesForUnit(unit);
+			clientCurrentMoveIndex = 0;
+			UpdateMoveText(false);
+			
+			// Notify the host about the character selection and its stats and moves
+			UpdateCharacterStatsServerRpc(unit.unitName, stats);
+			for (int i = 0; i < clientMoves.Count; i++) {
+				UpdateCharacterMoveServerRpc(unit.unitName, stats, i, clientMoves[i].moveName, clientMoves[i].moveDesc);
+			}
+		}
+	}
+
+	private List<Move> GetMovesForUnit(Unit unit) {
+		List<Move> moves = new List<Move>();
+		for (int i = 0; i < 4; i++) {
+			moves.Add(unit.GetMove(i));
+		}
+		return moves;
+	}
+
+	private void UpdateMoveText(bool isHost) {
+		if (isHost) {
+			if (hostMoves != null && hostMoves.Count > 0) {
+				var move = hostMoves[hostCurrentMoveIndex];
+				hostMoveNameText.text = move.moveName;
+				hostMoveDescText.text = move.moveDesc;
+			}
+		} else {
+			if (clientMoves != null && clientMoves.Count > 0) {
+				var move = clientMoves[clientCurrentMoveIndex];
+				clientMoveNameText.text = move.moveName;
+				clientMoveDescText.text = move.moveDesc;
+			}
+		}
+	}
+
+	private void OnMoveButtonClick(bool next, bool isHost) {
+		if (isHost) {
+			if (next) {
+				hostCurrentMoveIndex = (hostCurrentMoveIndex + 1) % hostMoves.Count;
+			} else {
+				hostCurrentMoveIndex = (hostCurrentMoveIndex - 1 + hostMoves.Count) % hostMoves.Count;
+			}
+			UpdateMoveText(true);
+		} else {
+			if (next) {
+				clientCurrentMoveIndex = (clientCurrentMoveIndex + 1) % clientMoves.Count;
+			} else {
+				clientCurrentMoveIndex = (clientCurrentMoveIndex - 1 + clientMoves.Count) % clientMoves.Count;
+			}
+			UpdateMoveText(false);
+		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void UpdateCharacterStatsServerRpc(string name, string stats, ServerRpcParams rpcParams = default) {
+		UpdateCharacterStatsClientRpc(name, stats, false);
+	}
+
+	[ClientRpc]
+	private void UpdateCharacterStatsClientRpc(string name, string stats, bool isHost) {
+		if (isHost) {
+			hostNameText.text = name;
+			hostStatsText.text = stats;
+			hostStatsPanel.SetActive(true);
+		} else {
+			clientNameText.text = name;
+			clientStatsText.text = stats;
+			clientStatsPanel.SetActive(true);
+		}
+	}
+
+	// Server RPC to update moves for the client
+	[ServerRpc(RequireOwnership = false)]
+	private void UpdateCharacterMoveServerRpc(string name, string stats, int moveIndex, string moveName, string moveDesc, ServerRpcParams rpcParams = default) {
+		UpdateCharacterMoveClientRpc(name, stats, moveIndex, moveName, moveDesc, false);
+	}
+
+	// Client RPC to update moves for the host
+	[ClientRpc]
+	private void UpdateCharacterMoveClientRpc(string name, string stats, int moveIndex, string moveName, string moveDesc, bool isHost) {
+		if (isHost) {
+			hostNameText.text = name;
+			hostStatsText.text = stats;
+			// Update moves
+			if (moveIndex == 0) hostMoves.Clear(); // Clear existing moves on the first move
+			hostMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
+			hostStatsPanel.SetActive(true);
+			UpdateMoveText(true);
+		} else {
+			clientNameText.text = name;
+			clientStatsText.text = stats;
+			// Update moves
+			if (moveIndex == 0) clientMoves.Clear(); // Clear existing moves on the first move
+			clientMoves.Add(new Move { moveName = moveName, moveDesc = moveDesc });
+			clientStatsPanel.SetActive(true);
+			UpdateMoveText(false);
 		}
 	}
 
