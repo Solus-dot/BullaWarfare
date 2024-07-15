@@ -115,7 +115,7 @@ public class SyncSceneManager : NetworkBehaviour {
 			hostMoves = GetMovesForUnit(unit);
 			hostCurrentMoveIndex = 0;
 			UpdateMoveText(true);
-			UpdateCharacterStatsClientRpc(unit.unitName, stats, hostMoves.Count, true);
+			UpdateCharacterStatsClientRpc(unit.unitName, stats, true);
 			for (int i = 0; i < hostMoves.Count; i++) {
 				UpdateCharacterMoveClientRpc(i, hostMoves[i].moveName, hostMoves[i].moveDesc, true);
 			}
@@ -126,7 +126,7 @@ public class SyncSceneManager : NetworkBehaviour {
 			clientMoves = GetMovesForUnit(unit);
 			clientCurrentMoveIndex = 0;
 			UpdateMoveText(false);
-			UpdateCharacterStatsServerRpc(unit.unitName, stats, clientMoves.Count);
+			UpdateCharacterStatsServerRpc(unit.unitName, stats);
 			for (int i = 0; i < clientMoves.Count; i++) {
 				UpdateCharacterMoveServerRpc(i, clientMoves[i].moveName, clientMoves[i].moveDesc);
 			}
@@ -176,23 +176,21 @@ public class SyncSceneManager : NetworkBehaviour {
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	private void UpdateCharacterStatsServerRpc(string name, string stats, int moveCount, ServerRpcParams rpcParams = default) {
-		UpdateCharacterStatsClientRpc(name, stats, moveCount, false);
+	private void UpdateCharacterStatsServerRpc(string name, string stats, ServerRpcParams rpcParams = default) {
+		UpdateCharacterStatsClientRpc(name, stats, false);
 	}
 
 	[ClientRpc]
-	private void UpdateCharacterStatsClientRpc(string name, string stats, int moveCount, bool isHost) {
+	private void UpdateCharacterStatsClientRpc(string name, string stats, bool isHost) {
 		if (isHost) {
 			hostNameText.text = name;
 			hostStatsText.text = stats;
 			hostStatsPanel.SetActive(true);
-			hostMoves = new List<Move>(moveCount);
 			UpdateMoveText(true);
 		} else {
 			clientNameText.text = name;
 			clientStatsText.text = stats;
 			clientStatsPanel.SetActive(true);
-			clientMoves = new List<Move>(moveCount);
 			UpdateMoveText(false);
 		}
 	}

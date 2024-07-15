@@ -397,7 +397,7 @@ public class LobbyManager : NetworkBehaviour {
 
 	private void EnterGame() {
 		if (IsHost()) {
-			NetworkManager.SceneManager.LoadScene("BasicSyncScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+			NetworkManager.SceneManager.LoadScene("MPCharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
 		} else {
 			NetworkManager.Singleton.StartClient();
 		}
