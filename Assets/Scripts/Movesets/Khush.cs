@@ -5,8 +5,8 @@
 // He gets 1 ATK with 20% HP recovery, Opponent gets 1 ATK,
 
 // Move 2 : Shower Boy
-// Comes out of the shower only wearing a towel and embarrasses the opponent. 
-// Causes the opponent to get flashed and has a 75% chance to flinch him.
+// Comes out of the shower only wearing a towel and embarrasses the opponent.
+// Causes the opponent to get flashed and has a 50% chance to flinch him. Reduced DEF by 1.
 
 // Move 3: Speeder Cuber
 // Quickly solves his cubes and attacks the opponents using them,
@@ -18,7 +18,7 @@
 
 // Move Messages
 // Move 1: Khushal dials a call to his GF. He starts talking all lovey dovey with her which boosts his Will and Health. (opp_name) is angered by Khushal's happiness. Attack goes up by 1 on both sides. Khushal restores 20% Health!
-// Move 2: Khushal you dirty dog! A towel-only Khushal has somewhat flashed and partially (opp_name)!
+// Move 2: Khushal you dirty dog! A towel-only Khushal has somewhat flashed and partially blinded (opp_name)! Defense dropped by 1 stage!
 // Move 3: Speedcubing expert Khushal solves a barrage of cubes and throws them at (opp_name). (value) damage dealt!
 // Move 4: Mclub Secy Khushal Wadhwa shows his Keyboard Skills to (opp_name) who boos him. Enraged, Khushal slams his keyboard straight into (opp_name)'s face. Ouch! (value) damage dealt!
 
@@ -48,14 +48,18 @@ public static class Khush
 		// Shower Boy Move
 		new Move() {
 			moveName = "Shower Boy",
-			moveDesc = "Comes out of the shower only wearing a towel and embarrasses the opponent. Causes the opponent to get flashed and has a 50% chance to flinch him.",
-			moveMessage = "Khushal you dirty dog! A towel-only Khushal has somewhat flashed and partially blinded (opp_name)!",
+			moveDesc = "Comes out of the shower only wearing a towel and embarrasses the opponent. Causes the opponent to get flashed and has a 50% chance to flinch him. Reduced DEF by 1.",
+			moveMessage = "Khushal you dirty dog! A towel-only Khushal has somewhat flashed and partially blinded (opp_name)! Defense dropped by 1 stage!",
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = false,
-			isStatChange = false,
-			flinch = 75
+			isStatChange = true,
+			selfAttackChange = 0,
+			selfDefenseChange = 0,
+			oppAttackChange = -1,
+			oppDefenseChange = 0,
+			flinch = 50
 		},
 
 		// Speeder Cuber Move

@@ -44,7 +44,7 @@ public static class Hima
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = 0,
-            recoil = 33
+            recoil = 0.33f
 		},
 
 		// Memories, Bro! Move

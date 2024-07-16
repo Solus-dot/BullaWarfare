@@ -49,6 +49,9 @@ public class SyncSceneManager : NetworkBehaviour {
 	private bool isReady = false;
 	private bool characterSelected = false;
 
+	private bool hostReady = false;
+	private bool clientReady = false;
+
 	private void Start() {
 		foreach (var character in characters) {
 			var charCopy = character;
@@ -221,10 +224,14 @@ public class SyncSceneManager : NetworkBehaviour {
 		ToggleCharacterButtons(!isReady);  // Disable buttons when ready
 
 		if (IsHost) {
+			hostReady = isReady;
 			UpdateReadyStateClientRpc(isReady, IsHost);
 		} else {
+			clientReady = isReady;
 			UpdateReadyStateServerRpc(isReady);
 		}
+
+		CheckBothPlayersReady();
 	}
 
 	private void ToggleCharacterButtons(bool enable) {
@@ -235,13 +242,21 @@ public class SyncSceneManager : NetworkBehaviour {
 
 	[ServerRpc(RequireOwnership = false)]
 	private void UpdateReadyStateServerRpc(bool readyState, ServerRpcParams rpcParams = default) {
+		clientReady = readyState;
 		UpdateReadyText(readyState, false);
 		UpdateReadyStateClientRpc(readyState, false);
+		CheckBothPlayersReady();
 	}
 
 	[ClientRpc]
 	private void UpdateReadyStateClientRpc(bool readyState, bool isHost) {
+		if (isHost) {
+			hostReady = readyState;
+		} else {
+			clientReady = readyState;
+		}
 		UpdateReadyText(readyState, isHost);
+		CheckBothPlayersReady();
 	}
 
 	private void UpdateReadyText(bool readyState, bool isHost) {
@@ -249,6 +264,18 @@ public class SyncSceneManager : NetworkBehaviour {
 			hostReadyText.text = readyState ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
 		} else {
 			clientReadyText.text = readyState ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+		}
+	}
+
+	private void CheckBothPlayersReady() {
+			if (hostReady && clientReady) {
+				TransitionToBattleScene();
+		}
+	}
+
+	private void TransitionToBattleScene() {
+		if(IsHost) {
+			NetworkManager.SceneManager.LoadScene("MPBattleScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
 		}
 	}
 
