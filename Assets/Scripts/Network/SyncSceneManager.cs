@@ -1,6 +1,8 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
@@ -9,6 +11,11 @@ public class Character {
 	public string name;
 	public GameObject prefab;
 	public Button button;
+}
+
+public static class SelectedCharacterData {
+    public static string HostCharacterName { get; set; }
+    public static string ClientCharacterName { get; set; }
 }
 
 public class SyncSceneManager : NetworkBehaviour {
@@ -25,6 +32,7 @@ public class SyncSceneManager : NetworkBehaviour {
 	[SerializeField] private TMP_Text clientReadyText;
 	[SerializeField] private GameObject hostStatsPanel;
 	[SerializeField] private GameObject clientStatsPanel;
+	[SerializeField] private TMP_Text countdownText;
 
 	private TMP_Text hostNameText;
 	private TMP_Text hostStatsText;
@@ -85,6 +93,7 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		hostStatsPanel.SetActive(false);
 		clientStatsPanel.SetActive(false);
+		countdownText.gameObject.SetActive(false);  // Add this line
 
 		UpdateReadyText(false, IsHost);
 	}
@@ -94,8 +103,10 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		if (IsHost) {
 			SpawnSpriteServerRpc(character.name, true);
+			SelectedCharacterData.HostCharacterName = character.name;  // Store host character
 		} else {
 			SpawnSpriteServerRpc(character.name, false);
+			SelectedCharacterData.ClientCharacterName = character.name;  // Store client character
 		}
 
 		// Enable the ready button after a character has been selected
@@ -106,6 +117,7 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		UpdateCharacterStats(character);
 	}
+
 
 	private void UpdateCharacterStats(Character character) {
 		var unit = character.prefab.GetComponent<Unit>();
@@ -221,7 +233,7 @@ public class SyncSceneManager : NetworkBehaviour {
 	private void OnReadyButtonClick() {
 		isReady = !isReady;
 		UpdateReadyText(isReady, IsHost);
-		ToggleCharacterButtons(!isReady);  // Disable buttons when ready
+		ToggleCharacterButtons(!isReady);
 
 		if (IsHost) {
 			hostReady = isReady;
@@ -231,7 +243,9 @@ public class SyncSceneManager : NetworkBehaviour {
 			UpdateReadyStateServerRpc(isReady);
 		}
 
-		CheckBothPlayersReady();
+		if (hostReady && clientReady) {
+			StartCountdown();
+		}
 	}
 
 	private void ToggleCharacterButtons(bool enable) {
@@ -244,8 +258,10 @@ public class SyncSceneManager : NetworkBehaviour {
 	private void UpdateReadyStateServerRpc(bool readyState, ServerRpcParams rpcParams = default) {
 		clientReady = readyState;
 		UpdateReadyText(readyState, false);
-		UpdateReadyStateClientRpc(readyState, false);
-		CheckBothPlayersReady();
+
+		if (hostReady && clientReady) {
+			StartCountdown();
+		}
 	}
 
 	[ClientRpc]
@@ -255,8 +271,8 @@ public class SyncSceneManager : NetworkBehaviour {
 		} else {
 			clientReady = readyState;
 		}
+
 		UpdateReadyText(readyState, isHost);
-		CheckBothPlayersReady();
 	}
 
 	private void UpdateReadyText(bool readyState, bool isHost) {
@@ -267,16 +283,29 @@ public class SyncSceneManager : NetworkBehaviour {
 		}
 	}
 
-	private void CheckBothPlayersReady() {
-			if (hostReady && clientReady) {
-				TransitionToBattleScene();
+	private void StartCountdown() {
+		if (IsHost) {
+			StartCoroutine(CountdownCoroutine());
 		}
 	}
 
-	private void TransitionToBattleScene() {
-		if(IsHost) {
-			NetworkManager.SceneManager.LoadScene("MPBattleScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+	private IEnumerator CountdownCoroutine() {
+		foreach (var character in characters) {
+			character.button.gameObject.SetActive(false);
 		}
+		countdownText.gameObject.SetActive(true);
+
+		for (int i = 3; i >= 0; i--) {
+			UpdateCountdownClientRpc(i.ToString());
+			yield return new WaitForSeconds(1f);
+		}
+
+		NetworkManager.SceneManager.LoadScene("MPBattleScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+	}
+
+	[ClientRpc]
+	private void UpdateCountdownClientRpc(string text) {
+		countdownText.text = text;
 	}
 
 	[ServerRpc(RequireOwnership = false)]

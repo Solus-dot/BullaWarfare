@@ -2505,6 +2505,7 @@ MonoBehaviour:
   clientReadyText: {fileID: 1343199445}
   hostStatsPanel: {fileID: 1123533249}
   clientStatsPanel: {fileID: 261878902}
+  countdownText: {fileID: 1034567178}
 --- !u!1 &771502634
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,7 +3303,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bfa69fdf033fbc44f8e52cd67134ed07, type: 2}
   m_sharedMaterial: {fileID: 191214615630441628, guid: bfa69fdf033fbc44f8e52cd67134ed07, type: 2}
