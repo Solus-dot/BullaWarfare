@@ -14,13 +14,13 @@ public class Character {
 }
 
 public static class SelectedCharacterData {
-    public static string HostCharacterName { get; set; }
-    public static string ClientCharacterName { get; set; }
+	public static string HostCharacterName { get; set; }
+	public static string ClientCharacterName { get; set; }
 }
 
 public class SyncSceneManager : NetworkBehaviour {
 	[Header("Characters")]
-	[SerializeField] private List<Character> characters;
+	public List<Character> characters;
 
 	[Header("Spawnpoints")]
 	[SerializeField] private Transform leftSpawnPoint;
@@ -93,7 +93,7 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		hostStatsPanel.SetActive(false);
 		clientStatsPanel.SetActive(false);
-		countdownText.gameObject.SetActive(false);  // Add this line
+		countdownText.gameObject.SetActive(false);
 
 		UpdateReadyText(false, IsHost);
 	}
@@ -117,7 +117,6 @@ public class SyncSceneManager : NetworkBehaviour {
 
 		UpdateCharacterStats(character);
 	}
-
 
 	private void UpdateCharacterStats(Character character) {
 		var unit = character.prefab.GetComponent<Unit>();
@@ -287,14 +286,10 @@ public class SyncSceneManager : NetworkBehaviour {
 		if (IsHost) {
 			StartCoroutine(CountdownCoroutine());
 		}
+		UpdateCountdownClientRpc("3");
 	}
 
 	private IEnumerator CountdownCoroutine() {
-		foreach (var character in characters) {
-			character.button.gameObject.SetActive(false);
-		}
-		countdownText.gameObject.SetActive(true);
-
 		for (int i = 3; i >= 0; i--) {
 			UpdateCountdownClientRpc(i.ToString());
 			yield return new WaitForSeconds(1f);
@@ -305,6 +300,10 @@ public class SyncSceneManager : NetworkBehaviour {
 
 	[ClientRpc]
 	private void UpdateCountdownClientRpc(string text) {
+		foreach (var character in characters) {
+			character.button.gameObject.SetActive(false);
+		}
+		countdownText.gameObject.SetActive(true);
 		countdownText.text = text;
 	}
 
@@ -319,7 +318,7 @@ public class SyncSceneManager : NetworkBehaviour {
 		NotifyClientsAboutNewPrefabClientRpc(newSprite.GetComponent<NetworkObject>().NetworkObjectId, characterName, isHost);
 	}
 
-	private GameObject GetPrefabByName(string characterName) {
+	public GameObject GetPrefabByName(string characterName) {
 		foreach (var character in characters) {
 			if (character.name == characterName) {
 				return character.prefab;

@@ -6,7 +6,7 @@
 
 // Move 2 : Sakht Commando
 // Aditya takes off his shorts and goes Mushkil waqt Commando Sakt, the opponent is repelled by this.
-// Enemy loses DEF by 1 stage and 50% to flinch them.
+// Enemy loses DEF by 1 stage and 40% to flinch them.
 
 // Move 3 : Ramehameha
 // Aditya uses his belief in Shree Ram and deals damage with a Ram powered Kamehameha.
@@ -48,7 +48,7 @@ public static class Aditi
 		// Sakht Commando Move
 		new Move() {
 			moveName = "Sakht Commando",
-			moveDesc = "Aditya takes off his shorts and goes Mushkil waqt Commando Sakt, the opponent is repelled by this. Enemy loses DEF by 1 stage and 50% to flinch them.",
+			moveDesc = "Aditya takes off his shorts and goes Mushkil waqt Commando Sakt, the opponent is repelled by this. Enemy loses DEF by 1 stage and 40% to flinch them.",
 			moveMessage = "Mushkil Waqt, Commando Saqt. In these hard times Aditya has no choice but to go commando. (opp_name) looks visibly disgusted. Defense dropped by 1!",
 			isCooldown = false,
 			accuracy = 100,
@@ -59,7 +59,7 @@ public static class Aditi
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = -1,
-			flinch = 50
+			flinch = 40
 		},
 
 		// Ramehameha Move
