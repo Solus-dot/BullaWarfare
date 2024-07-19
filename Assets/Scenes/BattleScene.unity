@@ -401,7 +401,7 @@ GameObject:
   - component: {fileID: 203167429}
   - component: {fileID: 203167428}
   m_Layer: 0
-  m_Name: P2Hud
+  m_Name: P2HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4158,7 +4158,7 @@ GameObject:
   - component: {fileID: 1463783920}
   - component: {fileID: 1463783922}
   m_Layer: 0
-  m_Name: P1Hud
+  m_Name: P1HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
