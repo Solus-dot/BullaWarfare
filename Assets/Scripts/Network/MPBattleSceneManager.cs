@@ -10,7 +10,7 @@ public class MPBattleSceneManager : NetworkBehaviour {
     [SerializeField] private Transform hostSpawnPoint;
     [SerializeField] private Transform clientSpawnPoint;
 
-    private SyncSceneManager syncSceneManager;
+    private MPCharacterSelectManager mpCharacterSelectManager;
 
     private void Start() {
             if (IsHost) {
@@ -42,7 +42,7 @@ public class MPBattleSceneManager : NetworkBehaviour {
         if (IsHost) return;
 
         var spawnPoint = isHost ? hostSpawnPoint.position : clientSpawnPoint.position;
-        GameObject prefab = syncSceneManager.GetPrefabByName(characterName);
+        GameObject prefab = mpCharacterSelectManager.GetPrefabByName(characterName);
         if (prefab != null) {
             Debug.Log("Client spawning prefab: " + characterName + " at " + spawnPoint);
             GameObject newSprite = Instantiate(prefab, spawnPoint, Quaternion.identity);

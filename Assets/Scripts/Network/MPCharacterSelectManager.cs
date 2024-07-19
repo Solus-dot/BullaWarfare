@@ -18,7 +18,7 @@ public static class SelectedCharacterData {
 	public static string ClientCharacterName { get; set; }
 }
 
-public class SyncSceneManager : NetworkBehaviour {
+public class MPCharacterSelectManager : NetworkBehaviour {
 	[Header("Characters")]
 	public List<Character> characters;
 
