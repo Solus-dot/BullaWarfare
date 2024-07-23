@@ -3,6 +3,7 @@ using Unity.Netcode;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class MPBattleSystem : NetworkBehaviour {
 	[Header("Characters")]
@@ -24,11 +25,22 @@ public class MPBattleSystem : NetworkBehaviour {
 	[SerializeField] private Button moveButton3;
 	[SerializeField] private Button moveButton4;
 
+	private TMP_Text moveButton1Text;
+	private TMP_Text moveButton2Text;
+	private TMP_Text moveButton3Text;
+	private TMP_Text moveButton4Text;
+
 	private MPCharacterSelectManager mpCharacterSelectManager;
 	private Vector3 Offset;
 
 	private void Start() {
 		Offset = new Vector3(0, 1f, 0);
+
+		// Find TMP_Text components on the buttons
+		moveButton1Text = moveButton1.GetComponentInChildren<TMP_Text>();
+		moveButton2Text = moveButton2.GetComponentInChildren<TMP_Text>();
+		moveButton3Text = moveButton3.GetComponentInChildren<TMP_Text>();
+		moveButton4Text = moveButton4.GetComponentInChildren<TMP_Text>();
 
 		// Set up move buttons
 		moveButton1.onClick.AddListener(() => OnMoveButtonClicked(0));
@@ -58,11 +70,13 @@ public class MPBattleSystem : NetworkBehaviour {
 			if (isHost) {
 				hostUnit = unit;
 				hostHUD.SetHUD(unit);
+				UpdateMoveButtons(); // Update move buttons for the host
 			} else {
 				clientUnit = unit;
 				clientHUD.SetHUD(unit);
 			}
 
+			// Pass the NetworkObjectId to the clients
 			SpawnCharacterClientRpc(newSprite.GetComponent<NetworkObject>().NetworkObjectId, characterName, isHost);
 		} else {
 			Debug.LogError("Prefab not found for character: " + characterName);
@@ -71,13 +85,15 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	[ClientRpc]
 	private void SpawnCharacterClientRpc(ulong networkObjectId, string characterName, bool isHost) {
-		// Avoid host execution
 		if (IsHost) return;
+		StartCoroutine(WaitAndSetUpHUD(networkObjectId, isHost));
+	}
 
-		NetworkObject networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
-		if (networkObject == null) {
-			Debug.LogError("Client: NetworkObject not found for ID: " + networkObjectId);
-			return;
+	private IEnumerator WaitAndSetUpHUD(ulong networkObjectId, bool isHost) {
+		NetworkObject networkObject = null;
+
+		while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out networkObject)) {
+			yield return null;
 		}
 
 		Unit unit = networkObject.GetComponent<Unit>();
@@ -91,6 +107,9 @@ public class MPBattleSystem : NetworkBehaviour {
 			Debug.Log("Client setting client HUD.");
 			clientHUD.SetHUD(clientUnit);
 		}
+
+		Debug.Log("Client: HUDs set up. HostUnit: " + (hostUnit != null) + ", ClientUnit: " + (clientUnit != null));
+		UpdateMoveButtons();
 	}
 
 	private bool IsHost {
@@ -234,5 +253,15 @@ public class MPBattleSystem : NetworkBehaviour {
 		yield return new WaitForSeconds(1f);
 		move.isCooldown = false;
 		ToggleCooldownServerRpc(isHost, false);
+	}
+
+	private void UpdateMoveButtons() {
+		Unit localPlayerUnit = IsHost ? hostUnit : clientUnit;
+		if (localPlayerUnit != null) {
+			moveButton1Text.text = localPlayerUnit.GetMove(0).moveName;
+			moveButton2Text.text = localPlayerUnit.GetMove(1).moveName;
+			moveButton3Text.text = localPlayerUnit.GetMove(2).moveName;
+			moveButton4Text.text = localPlayerUnit.GetMove(3).moveName;
+		}
 	}
 }

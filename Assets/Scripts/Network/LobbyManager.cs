@@ -5,6 +5,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -35,6 +36,7 @@ public class LobbyManager : NetworkBehaviour {
 	[SerializeField] private Button startGameButton;
 	[SerializeField] private Button deleteLobbyButton;
 	[SerializeField] private Button leaveRoomButton;
+	[SerializeField] private GameObject loadingScreen;
 
 	[Header("Join Room With Code")]
 	[SerializeField] private GameObject joinRoomPanel;
@@ -84,22 +86,12 @@ public class LobbyManager : NetworkBehaviour {
 				Data = new Dictionary<string, DataObject> {
 					{"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "false")},
 					{"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
-					// {"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, "")}  // Initialize JoinCode
 				}
 			};
 
 			int maxPlayers = 2;
 			currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 			Debug.Log("Room Created: " + currentLobby.Id);
-
-			// Update the JoinCode with the actual code from Relay
-			// string joinCode = await RelayManager.Instance.CreateRelay();
-			// UpdateLobbyOptions updateOptions = new UpdateLobbyOptions {
-			// 	Data = new Dictionary<string, DataObject> {
-			// 		{"JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
-			// 	}
-			// };
-			// currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
 
 			EnterRoom();
 		} catch (LobbyServiceException e) {
@@ -245,7 +237,6 @@ public class LobbyManager : NetworkBehaviour {
 
 			currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
 
-			// Ensure RelayManager instance is correctly referenced and initialized
 			if (RelayManager.Instance != null) {
 				string joinCode = currentLobby.Data["JoinCode"].Value;
 				await RelayManager.Instance.JoinRelay(joinCode);
@@ -269,13 +260,12 @@ public class LobbyManager : NetworkBehaviour {
 
 			currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
 			Debug.Log("Successfully joined the lobby with code: " + lobbyCode);
-			EnterRoom();  // Ensure the room panel is activated after joining the lobby
+			EnterRoom();
 			Debug.Log("Players in room: " + currentLobby.Players.Count);
 		} catch (LobbyServiceException e) {
 			Debug.Log(e);
 		}
 	}
-
 
 	private async void HandleLobbyHeartbeat() {
 		if (currentLobby != null && currentLobby.HostId == playerId) {
@@ -368,9 +358,6 @@ public class LobbyManager : NetworkBehaviour {
 				};
 
 				currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateOptions);
-				// Let other players know to transition to the game
-				EnterGame();
-
 			} catch (LobbyServiceException e) {
 				Debug.Log(e);
 			}
@@ -395,11 +382,16 @@ public class LobbyManager : NetworkBehaviour {
 		return false;
 	}
 
-	private void EnterGame() {
+	private async void EnterGame() {
 		if (IsHost()) {
-			NetworkManager.SceneManager.LoadScene("MPCharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
+			string sceneName = "MPCharacterSelect";
+			loadingScreen.SetActive(true);
+			Debug.Log("Loading scene: " + sceneName);
+			NetworkManager.Singleton.SceneManager.LoadScene("MPCharacterSelect", UnityEngine.SceneManagement.LoadSceneMode.Single);
 		} else {
-			NetworkManager.Singleton.StartClient();
+			loadingScreen.SetActive(true);
+			string joinCode = currentLobby.Data["JoinCode"].Value;
+			await RelayManager.Instance.JoinRelay(joinCode);
 		}
 	}
 }

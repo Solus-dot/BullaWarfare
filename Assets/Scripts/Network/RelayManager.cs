@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 
 public class RelayManager : MonoBehaviour {
 	public static RelayManager Instance { get; private set; }
@@ -38,6 +39,7 @@ public class RelayManager : MonoBehaviour {
 
 	public async Task JoinRelay(string joinCode) {
 		JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+		RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
 
 		UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
 		transport.SetClientRelayData(
@@ -49,6 +51,7 @@ public class RelayManager : MonoBehaviour {
 			joinAllocation.HostConnectionData
 		);
 
+		NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 		NetworkManager.Singleton.StartClient();
 	}
 }
