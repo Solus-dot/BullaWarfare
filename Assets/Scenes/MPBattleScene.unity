@@ -1411,6 +1411,8 @@ MonoBehaviour:
   moveButton2: {fileID: 1900991315}
   moveButton3: {fileID: 417439365}
   moveButton4: {fileID: 1222362344}
+  dialogueText: {fileID: 1427496844}
+  moveText: {fileID: 899285351}
 --- !u!1 &733725830
 GameObject:
   m_ObjectHideFlags: 0
