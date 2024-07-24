@@ -180,8 +180,9 @@ public class MPBattleSystem : NetworkBehaviour {
 		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
 		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
 
-		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, isHost);
-		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, !isHost);
+		// Update stat changes on both host and client
+		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, isHost, attacker.name);
+		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, !isHost, defender.name);
 	}
 
 	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
@@ -199,11 +200,16 @@ public class MPBattleSystem : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void UpdateStatChangesClientRpc(int attackStage, int defenseStage, bool isHost) {
-		Debug.Log($"Updating stat changes for {(isHost ? "Host" : "Client")}. Attack Stage: {attackStage}, Defense Stage: {defenseStage}");
+	private void UpdateStatChangesClientRpc(int attackStage, int defenseStage, bool isHost, string unitName) {
+		Debug.Log($"Updating stat changes for {unitName} - {(isHost ? "Host" : "Client")}. Attack Stage: {attackStage}, Defense Stage: {defenseStage}");
+
 		if (isHost) {
+			hostUnit.attackStage = attackStage;
+			hostUnit.defenseStage = defenseStage;
 			hostHUD.SetStatChange(hostUnit);
 		} else {
+			clientUnit.attackStage = attackStage;
+			clientUnit.defenseStage = defenseStage;
 			clientHUD.SetStatChange(clientUnit);
 		}
 	}

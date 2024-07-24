@@ -303,6 +303,7 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 		foreach (var character in characters) {
 			character.button.gameObject.SetActive(false);
 		}
+		readyButton.gameObject.SetActive(false);
 		countdownText.gameObject.SetActive(true);
 		countdownText.text = text;
 	}
