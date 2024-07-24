@@ -30,19 +30,15 @@ public class MPBattleSystem : NetworkBehaviour {
 	private TMP_Text moveButton3Text;
 	private TMP_Text moveButton4Text;
 
-	private MPCharacterSelectManager mpCharacterSelectManager;
-	private Vector3 Offset;
+	private int? hostSelectedMove = null;
+	private int? clientSelectedMove = null;
 
 	private void Start() {
-		Offset = new Vector3(0, 1f, 0);
-
-		// Find TMP_Text components on the buttons
 		moveButton1Text = moveButton1.GetComponentInChildren<TMP_Text>();
 		moveButton2Text = moveButton2.GetComponentInChildren<TMP_Text>();
 		moveButton3Text = moveButton3.GetComponentInChildren<TMP_Text>();
 		moveButton4Text = moveButton4.GetComponentInChildren<TMP_Text>();
 
-		// Set up move buttons
 		moveButton1.onClick.AddListener(() => OnMoveButtonClicked(0));
 		moveButton2.onClick.AddListener(() => OnMoveButtonClicked(1));
 		moveButton3.onClick.AddListener(() => OnMoveButtonClicked(2));
@@ -59,7 +55,7 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	[ServerRpc(RequireOwnership = false)]
 	private void SpawnCharacterServerRpc(string characterName, bool isHost, ServerRpcParams rpcParams = default) {
-		var spawnPoint = (isHost ? hostSpawnPoint.position : clientSpawnPoint.position) + Offset;
+		var spawnPoint = (isHost ? hostSpawnPoint.position : clientSpawnPoint.position) + new Vector3(0, 1f, 0);
 		GameObject prefab = GetPrefabByName(characterName);
 		if (prefab != null) {
 			Debug.Log("Spawning prefab: " + characterName + " at " + spawnPoint);
@@ -125,37 +121,76 @@ public class MPBattleSystem : NetworkBehaviour {
 		return null;
 	}
 
-	private void Update() {
+	private void OnMoveButtonClicked(int moveIndex) {
+		Debug.Log($"Move button {moveIndex + 1} clicked.");
 		if (IsHost) {
-			if (hostUnit != null && clientUnit != null) {
-				if (hostUnit.currentHP <= 0 || clientUnit.currentHP <= 0) {
-					EndBattle();
-				}
-			}
+			hostSelectedMove = moveIndex;
+			Debug.Log($"Host selected move {moveIndex}");
+		} else {
+			clientSelectedMove = moveIndex;
+			Debug.Log($"Client selected move {moveIndex}");
+			SelectMoveServerRpc(moveIndex);  // Inform server about client move
 		}
+
+		CheckMovesAndExecute();
 	}
 
-	private void EndBattle() {
-		if (hostUnit.currentHP <= 0) {
-			Debug.Log("Client wins!");
-		} else if (clientUnit.currentHP <= 0) {
-			Debug.Log("Host wins!");
+	[ServerRpc(RequireOwnership = false)]
+	private void SelectMoveServerRpc(int clientMove, ServerRpcParams rpcParams = default) {
+		clientSelectedMove = clientMove;
+		Debug.Log($"Server registered client move: {clientMove}");
+		CheckMovesAndExecute();
+	}
+
+	private void CheckMovesAndExecute() {
+		if (hostSelectedMove.HasValue && clientSelectedMove.HasValue) {
+			Debug.Log("Both moves selected, executing moves.");
+			ExecuteMovesServerRpc(hostSelectedMove.Value, clientSelectedMove.Value);
+			hostSelectedMove = null;
+			clientSelectedMove = null;
 		}
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	public void ApplyDamageServerRpc(bool isHost, int damage) {
-		if (isHost) {
-			hostUnit.TakeDamage(damage);
-			UpdateHealthClientRpc(hostUnit.currentHP, hostUnit.maxHP, isHost);
-		} else {
-			clientUnit.TakeDamage(damage);
-			UpdateHealthClientRpc(clientUnit.currentHP, clientUnit.maxHP, isHost);
+	private void ExecuteMovesServerRpc(int hostMove, int clientMove) {
+		Debug.Log($"Executing moves: HostMove = {hostMove}, ClientMove = {clientMove}");
+		List<System.Action> moveActions = new List<System.Action> {
+			() => PerformMove(hostUnit, clientUnit, hostMove, true),
+			() => PerformMove(clientUnit, hostUnit, clientMove, false)
+		};
+
+		moveActions.Shuffle(); // Randomize move execution order
+
+		foreach (var moveAction in moveActions) {
+			moveAction();
 		}
+	}
+
+	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
+		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
+		// Get move and calculate damage
+		Move move = attacker.GetMove(moveIndex);
+		int damage = CalculateDamage(attacker, defender, move);
+
+		// Apply damage
+		defender.TakeDamage(damage);
+		UpdateHealthClientRpc(defender.currentHP, defender.maxHP, !isHost);
+
+		// Apply stat changes
+		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
+		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
+
+		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, isHost);
+		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, !isHost);
+	}
+
+	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
+		return (attacker.attack * move.damage) / defender.defense;
 	}
 
 	[ClientRpc]
 	private void UpdateHealthClientRpc(int currentHP, int maxHP, bool isHost) {
+		Debug.Log($"Updating health for {(isHost ? "Host" : "Client")} to {currentHP}/{maxHP}");
 		if (isHost) {
 			hostHUD.SetHP(currentHP);
 		} else {
@@ -163,96 +198,14 @@ public class MPBattleSystem : NetworkBehaviour {
 		}
 	}
 
-	[ServerRpc(RequireOwnership = false)]
-	public void UpdateStatChangesServerRpc(bool isHost, int attackStage, int defenseStage) {
-		if (isHost) {
-			hostUnit.attackStage = attackStage;
-			hostUnit.defenseStage = defenseStage;
-			UpdateStatChangesClientRpc(attackStage, defenseStage, isHost);
-		} else {
-			clientUnit.attackStage = attackStage;
-			clientUnit.defenseStage = defenseStage;
-			UpdateStatChangesClientRpc(attackStage, defenseStage, isHost);
-		}
-	}
-
 	[ClientRpc]
 	private void UpdateStatChangesClientRpc(int attackStage, int defenseStage, bool isHost) {
+		Debug.Log($"Updating stat changes for {(isHost ? "Host" : "Client")}. Attack Stage: {attackStage}, Defense Stage: {defenseStage}");
 		if (isHost) {
 			hostHUD.SetStatChange(hostUnit);
 		} else {
 			clientHUD.SetStatChange(clientUnit);
 		}
-	}
-
-	[ServerRpc(RequireOwnership = false)]
-	public void ToggleCooldownServerRpc(bool isHost, bool on) {
-		if (on) {
-			CooldownOnClientRpc(isHost);
-		} else {
-			CooldownOffClientRpc(isHost);
-		}
-	}
-
-	[ClientRpc]
-	private void CooldownOnClientRpc(bool isHost) {
-		if (isHost) {
-			hostHUD.CooldownOn();
-		} else {
-			clientHUD.CooldownOn();
-		}
-	}
-
-	[ClientRpc]
-	private void CooldownOffClientRpc(bool isHost) {
-		if (isHost) {
-			hostHUD.CooldownOff();
-		} else {
-			clientHUD.CooldownOff();
-		}
-	}
-
-	private void OnMoveButtonClicked(int moveIndex) {
-		if (IsHost) {
-			PerformMoveServerRpc(moveIndex, true);
-		} else {
-			PerformMoveServerRpc(moveIndex, false);
-		}
-	}
-
-	// Move handling implementation
-	[ServerRpc(RequireOwnership = false)]
-	public void PerformMoveServerRpc(int moveIndex, bool isHost, ServerRpcParams rpcParams = default) {
-		Unit attacker = isHost ? hostUnit : clientUnit;
-		Unit defender = isHost ? clientUnit : hostUnit;
-
-		// Apply move logic here
-		Move move = attacker.GetMove(moveIndex);
-		if (move.isCooldown) return; // If the move is on cooldown, do nothing
-
-		int damage = CalculateDamage(attacker, defender, move);
-
-		ApplyDamageServerRpc(!isHost, damage);
-		ToggleCooldownServerRpc(isHost, true);
-
-		// Update HUD
-		UpdateHealthClientRpc(defender.currentHP, defender.maxHP, !isHost);
-		UpdateStatChangesServerRpc(isHost, attacker.attackStage, attacker.defenseStage);
-		UpdateStatChangesServerRpc(!isHost, defender.attackStage, defender.defenseStage);
-
-		StartCoroutine(CooldownCoroutine(isHost, move));
-	}
-
-	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
-		// Simplified damage calculation logic
-		return (attacker.attack * move.damage) / defender.defense;
-	}
-
-	private IEnumerator CooldownCoroutine(bool isHost, Move move) {
-		move.isCooldown = true;
-		yield return new WaitForSeconds(1f);
-		move.isCooldown = false;
-		ToggleCooldownServerRpc(isHost, false);
 	}
 
 	private void UpdateMoveButtons() {
@@ -262,6 +215,21 @@ public class MPBattleSystem : NetworkBehaviour {
 			moveButton2Text.text = localPlayerUnit.GetMove(1).moveName;
 			moveButton3Text.text = localPlayerUnit.GetMove(2).moveName;
 			moveButton4Text.text = localPlayerUnit.GetMove(3).moveName;
+		}
+	}
+}
+
+public static class ListExtensions {
+	private static System.Random rng = new System.Random();
+
+	public static void Shuffle<T>(this IList<T> list) {
+		int n = list.Count;
+		while (n > 1) {
+			n--;
+			int k = rng.Next(n + 1);
+			T value = list[k];
+			list[k] = list[n];
+			list[n] = value;
 		}
 	}
 }
