@@ -77,7 +77,7 @@ public static class Harsh
 		new Move() {
 			moveName = "Funny Valentine",
 			moveDesc = "Makes an incredibly funny and self-depricating joke that they hurt themselves, Deals good damage but reduces the DEF stat of himself.",
-			moveMessage = "cracks a joke about having no game, (opp_name) laughs so hard that it starts to hurt badly, (value) damage dealt. A hint of loneliness can be seen in HVA's eyes! True comedy is done only by the saddest people. Harsh's Defense drops by 1 stage.",
+			moveMessage = "Harsh cracks a joke about having no game, (opp_name) laughs so hard that it starts to hurt badly, (value) damage dealt. A hint of loneliness can be seen in HVA's eyes! True comedy is done only by the saddest people. Harsh's Defense drops by 1 stage.",
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,

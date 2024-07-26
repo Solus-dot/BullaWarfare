@@ -80,8 +80,11 @@ public class MPBattleSystem : NetworkBehaviour {
 			SelectMoveServerRpc(moveIndex);  // Inform server about client move
 			ShowWaitingForOpponentUI(); // Update client UI immediately
 		}
+		Debug.Log($"Before CheckMovesAndExecute: HostSelectedMove = {hostSelectedMove}, ClientSelectedMove = {clientSelectedMove}");
 		CheckMovesAndExecute(); // Check moves immediately after selection
+		Debug.Log($"After CheckMovesAndExecute: HostSelectedMove = {hostSelectedMove}, ClientSelectedMove = {clientSelectedMove}");
 	}
+
 
 	private void UpdateUIAfterMoveSelection(bool isHost) {
 		if (isHost) {
@@ -129,6 +132,11 @@ public class MPBattleSystem : NetworkBehaviour {
 		}
 	}
 
+	[ClientRpc]
+	private void ResetUIAfterMoveExecutionClientRpc() {
+		ResetUIAfterMoveExecution();
+	}
+
 	private void ResetUIAfterMoveExecution() {
 		moveText.gameObject.SetActive(false);
 		dialogueText.gameObject.SetActive(true);
@@ -142,44 +150,65 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	[ServerRpc(RequireOwnership = false)]
 	private void ExecuteMovesServerRpc(int hostMove, int clientMove) {
-		Debug.Log($"Executing moves: HostMove = {hostMove}, ClientMove = {clientMove}");
+		Debug.Log($"Executing moves: HostMove = {hostMove}, ClientMove = {clientMove}");		
 		List<System.Action> moveActions = new List<System.Action> {
 			() => PerformMove(hostUnit, clientUnit, hostMove, true),
 			() => PerformMove(clientUnit, hostUnit, clientMove, false)
 		};
 
-		moveActions.Shuffle(); // Randomize move execution order
-
 		foreach (var moveAction in moveActions) {
 			moveAction();
 		}
 
-		// Inform clients to reset their UI after moves execution
-		ResetUIAfterMoveExecutionClientRpc();
+		if (!CheckForGameOver()) {
+			// Only reset the UI if the game is not over
+			ResetUIAfterMoveExecutionClientRpc();
+		}
 	}
 
+	private bool CheckForGameOver() {
+		Debug.Log($"Checking for game over: Host HP = {hostUnit.currentHP}, Client HP = {clientUnit.currentHP}");
+		if (hostUnit.currentHP <= 0 || clientUnit.currentHP <= 0) {
+			string winnerName = hostUnit.currentHP > 0 ? SelectedCharacterData.HostCharacterName : SelectedCharacterData.ClientCharacterName;
+			Debug.Log($"Game over detected. Winner: {winnerName}");
+			EndGameClientRpc($"{winnerName} has Won!");
+			return true;
+		}
+		return false;
+	}
+
+
 	[ClientRpc]
-	private void ResetUIAfterMoveExecutionClientRpc() {
-		ResetUIAfterMoveExecution();
+	private void EndGameClientRpc(string message) {
+		Debug.Log("Ending game with message: " + message);
+		dialogueText.gameObject.SetActive(false);
+		moveButton1.gameObject.SetActive(false);
+		moveButton2.gameObject.SetActive(false);
+		moveButton3.gameObject.SetActive(false);
+		moveButton4.gameObject.SetActive(false);
+
+		moveText.gameObject.SetActive(true);
+		moveText.text = message;
 	}
 
 	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
 		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
-		// Get move and calculate damage
 		Move move = attacker.GetMove(moveIndex);
 		int damage = CalculateDamage(attacker, defender, move);
 
-		// Apply damage
-		defender.TakeDamage(damage);
+		bool isDefeated = defender.TakeDamage(damage);
 		UpdateHealthClientRpc(defender.currentHP, defender.maxHP, !isHost);
 
-		// Apply stat changes
 		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
 		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
 
-		// Update stat changes on both host and client
 		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, isHost, attacker.name);
 		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, !isHost, defender.name);
+
+		if (isDefeated) {
+			Debug.Log($"{(isHost ? "Client" : "Host")} is defeated. Checking for game over.");
+			CheckForGameOver();
+		}
 	}
 
 	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
@@ -287,20 +316,5 @@ public class MPBattleSystem : NetworkBehaviour {
 			}
 		}
 		return null;
-	}
-}
-
-public static class ListExtensions {
-	private static System.Random rng = new System.Random();
-
-	public static void Shuffle<T>(this IList<T> list) {
-		int n = list.Count;
-		while (n > 1) {
-			n--;
-			int k = rng.Next(n + 1);
-			T value = list[k];
-			list[k] = list[n];
-			list[n] = value;
-		}
 	}
 }

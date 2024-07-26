@@ -37,14 +37,18 @@ public class AudioManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        switch (scene.buildIndex)
+        switch (scene.name)
         {
-            case 0: // Main Menu Scene
+            case "MainMenuScene":
                 ChangeMusic(mainMenuMusic);
                 break;
-            case 2: // Character Select Scene
+            case "CharacterSelect":
                 ChangeMusic(characterSelectMusic);
                 break;
+            case "MPCharacterSelect":
+                ChangeMusic(characterSelectMusic);
+                break;
+
             // Add more cases as needed for other scenes with corresponding build indices
         }
     }

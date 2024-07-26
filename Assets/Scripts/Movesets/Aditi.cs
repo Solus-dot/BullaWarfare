@@ -6,7 +6,7 @@
 
 // Move 2 : Sakht Commando
 // Aditya takes off his shorts and goes Mushkil waqt Commando Sakt, the opponent is repelled by this.
-// Enemy loses DEF by 1 stage and 40% to flinch them.
+// Enemy loses DEF by 1 stage and 30% to flinch them.
 
 // Move 3 : Ramehameha
 // Aditya uses his belief in Shree Ram and deals damage with a Ram powered Kamehameha.
@@ -59,7 +59,7 @@ public static class Aditi
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = -1,
-			flinch = 40
+			flinch = 30
 		},
 
 		// Ramehameha Move

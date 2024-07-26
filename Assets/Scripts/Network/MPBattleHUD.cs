@@ -82,12 +82,11 @@ public class MPBattleHUD : NetworkBehaviour {
 
 		// Animate HP slider over multiple steps
 		for (int i = 0; i < steps; i++) {
-			hpSlider.value += stepAmount;  // Increment HP slider value
-			UpdateHPColor();               // Update HP bar color
-			yield return new WaitForSeconds(duration / steps);  // Wait for the next step
+			hpSlider.value += stepAmount;
+			UpdateHPColor();
+			yield return new WaitForSeconds(duration / steps);
 		}
 
-		// Ensure the slider value reaches the exact target value
 		hpSlider.value = endHP;
 		UpdateHPColor();
 	}

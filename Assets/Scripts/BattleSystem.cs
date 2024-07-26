@@ -36,7 +36,7 @@ public class BattleSystem : MonoBehaviour {
 	GameObject P2_GameObject;
 
 	SpriteRenderer P1_SpriteRenderer;
-    SpriteRenderer P2_SpriteRenderer;
+	SpriteRenderer P2_SpriteRenderer;
 
 	private BattleState state;
 	private bool actionInProgress = false;
@@ -116,7 +116,7 @@ public class BattleSystem : MonoBehaviour {
 		P1_SpriteRenderer.color = originalColor;
 		P2_SpriteRenderer.color = originalColor;
 
-		yield return StartCoroutine(DisplayMoveText("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...", 0.05f));
+		yield return StartCoroutine(DisplayMoveTextUnskip("An intense battle between " + P1_Unit.unitName + " and " + P2_Unit.unitName + " commences...", 0.05f));
 		yield return new WaitForSeconds(turnDelay);
 
 		StartCoroutine(BobbingEffect(P1_GameObject.transform, P1BattleStation.position + Offset));
@@ -326,6 +326,32 @@ public class BattleSystem : MonoBehaviour {
 
 
 	IEnumerator DisplayMoveText(string text, float delay) {
+		moveText.gameObject.SetActive(true);
+		moveText.text = "";
+		
+		for (int i = 0; i < text.Length; i++) {
+			moveText.text += text[i];
+			
+			if (Input.GetKeyDown(KeyCode.Space)) {
+				moveText.text = text;
+				break;
+			}
+			
+			float elapsedTime = 0f;
+			while (elapsedTime < delay) {
+				elapsedTime += Time.deltaTime;
+				yield return null;
+				
+				if (Input.GetKeyDown(KeyCode.Space)) {
+					moveText.text = text;
+					yield break;
+				}
+			}
+		}
+		yield return new WaitForSeconds(turnDelay);
+	}
+
+	IEnumerator DisplayMoveTextUnskip(string text, float delay) {
 		moveText.gameObject.SetActive(true);
 		moveText.text = "";
 		foreach (char letter in text.ToCharArray()) {
