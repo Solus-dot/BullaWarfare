@@ -1490,7 +1490,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuMusic: {fileID: 8300000, guid: 1d013a594af9d974d9b2f66300666cf1, type: 3}
-  characterSelectMusic: {fileID: 8300000, guid: 66aaceee0853c94469307d120b4dbd10, type: 3}
+  characterSelectMusic: {fileID: 8300000, guid: 18f94375fb1fbce4ba708b6db60058f5, type: 3}
+  battleMusic: {fileID: 8300000, guid: 66aaceee0853c94469307d120b4dbd10, type: 3}
 --- !u!1 &1193377713
 GameObject:
   m_ObjectHideFlags: 0

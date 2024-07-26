@@ -9,37 +9,36 @@ public enum CharacterSelectionState { Default, P1Selected, P2Selected, P1P2Selec
 public class CharacterSelectManager : MonoBehaviour {
 	public static CharacterSelectManager Instance;
 
-	public TMP_Text titleText;
-	public GameObject CharacterSelectParent;
-	public GameObject BackgroundSelectParent;
+	[SerializeField] private TMP_Text titleText;
+	[SerializeField] private GameObject CharacterSelectParent;
 
 	[Header("Character Select", order = 0)]
-	[Header("PlayerPanel", order = 1)]
-	public GameObject player1DetailsPanel;
-	public GameObject player2DetailsPanel;
+	[Header("PlayerPanel", order = 10)]
+	[SerializeField] private GameObject player1DetailsPanel;
+	[SerializeField] private GameObject player2DetailsPanel;
 
 	// Names of the characters hovered on
-	public TMP_Text P1Name;
-	public TMP_Text P2Name;
+	[SerializeField] private TMP_Text P1Name;
+	[SerializeField] private TMP_Text P2Name;
 
 	// Stats of the characters hovered on
-	public TMP_Text P1Stats;
-	public TMP_Text P2Stats;
+	[SerializeField] private TMP_Text P1Stats;
+	[SerializeField] private TMP_Text P2Stats;
 
 	[Header("Move Details", order = 1)]
 	// Moves of the characters hovered on
-	public TMP_Text P1MoveName;
-	public TMP_Text P2MoveName;
+	[SerializeField] private TMP_Text P1MoveName;
+	[SerializeField] private TMP_Text P2MoveName;
 
 	// Descs of the characters hovered on
-	public TMP_Text P1MoveDesc;
-	public TMP_Text P2MoveDesc;
+	[SerializeField] private TMP_Text P1MoveDesc;
+	[SerializeField] private TMP_Text P2MoveDesc;
 
 	// Move switch Buttons
-	public Button P1Left;
-	public Button P1Right;
-	public Button P2Left;
-	public Button P2Right;
+	[SerializeField] private Button P1Left;
+	[SerializeField] private Button P1Right;
+	[SerializeField] private Button P2Left;
+	[SerializeField] private Button P2Right;
 
 	// The game objects that show up when hovering/selecting
 	private GameObject selectedCharacterPlayer1;
