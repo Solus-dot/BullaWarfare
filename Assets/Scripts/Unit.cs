@@ -24,8 +24,10 @@ public class Move {
 	public bool isStatChange;		// Flag indicating if the move changes stats
 	public int selfAttackChange;	// Amount by which the self attack stat changes (positive for increase, negative for decrease)
 	public int selfDefenseChange;	// Amount by which the self defense stat changes (positive for increase, negative for decrease)
+	public int selfSpeedChange;		// Amount by which the self speed stat changes (positive for increase, negative for decrease)
 	public int oppAttackChange;		// Amount by which the opponent attack stat changes (positive for increase, negative for decrease)
 	public int oppDefenseChange;	// Amount by which the opponent defense stat changes (positive for increase, negative for decrease)
+	public int oppSpeedChange;		// Amount by which the opponent speed stat changes (positive for increase, negative for decrease)
 
 	public float recoil;			// Percentage recoil damage to self from the move (optional)
 	public int flinch;				// Percentage of opponent getting flinched from the move (optional)
@@ -37,14 +39,17 @@ public class Unit : MonoBehaviour {
 	public int maxHP;
 	public int attack;
 	public int defense;
+	public int speed;
 	public int baseAccuracy = 100;
 
 	public int attackStage = 0;
 	public int defenseStage = 0;
+	public int speedStage = 0;
 	
 	public int currentHP;
 	public int currentAtk;
 	public int currentDef;
+	public int currentSpeed;
 
 	public MovesetEnum moveset;
 	public string cooldownMessage;
