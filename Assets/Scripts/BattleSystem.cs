@@ -275,8 +275,8 @@ public class BattleSystem : MonoBehaviour {
 			}
 
 			if (move.isStatChange) {
-				attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
-				defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
+				attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, 0);
+				defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, 0);
 
 				P1_HUD.SetStatChange(P1_Unit);
 				P2_HUD.SetStatChange(P2_Unit);

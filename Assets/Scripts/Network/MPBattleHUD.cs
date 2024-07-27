@@ -10,33 +10,36 @@ public class MPBattleHUD : NetworkBehaviour {
 	[SerializeField] private TMP_Text nameText;
 	[SerializeField] private TMP_Text atkText;
 	[SerializeField] private TMP_Text defText;
+	[SerializeField] private TMP_Text speText;
 
 	[Header("HUD Icons")]
 	[SerializeField] private SpriteRenderer AtkIcon;        // Reference to the icon used for attack stages
 	[SerializeField] private SpriteRenderer DefIcon;        // Reference to the icon used for defense stages
+	[SerializeField] private SpriteRenderer SpeIcon;		// Reference to the icon used for speed stages
 	[SerializeField] private SpriteRenderer CDIcon;         // Reference to the icon used for turn cooldown
 
 	[SerializeField] private Sprite AttackUp;
 	[SerializeField] private Sprite AttackDown;
 	[SerializeField] private Sprite DefenseUp;
 	[SerializeField] private Sprite DefenseDown;
+	[SerializeField] private Sprite SpeedUp;
+	[SerializeField] private Sprite SpeedDown;
 
 	[Header("HP Bar")]
-	[SerializeField] private Slider hpSlider;               // Reference to the slider representing unit's HP
-	[SerializeField] private Gradient hpGradient;           // Gradient for HP bar color
+	[SerializeField] private Slider hpSlider;
+	[SerializeField] private Gradient hpGradient;
 
 	public void SetHUD(Unit unit) {
-		nameText.text = unit.unitName;              // Update the name text with unit's name
+		nameText.text = unit.unitName;
 		AtkIcon.gameObject.SetActive(false);
 		DefIcon.gameObject.SetActive(false);
+		SpeIcon.gameObject.SetActive(false);
 		CDIcon.gameObject.SetActive(false);
 
-		atkText.text = ""; defText.text = "";                      // Leave blank at the start
+		atkText.text = ""; defText.text = ""; speText.text = "";
 
-		hpSlider.maxValue = unit.maxHP;             // Set max value of HP slider to unit's max HP
-		hpSlider.value = unit.currentHP;            // Set current value of HP slider to unit's current HP
-
-		// Update HP bar color based on HP percentage
+		hpSlider.maxValue = unit.maxHP;
+		hpSlider.value = unit.currentHP;
 		UpdateHPColor();
 	}
 
@@ -69,15 +72,14 @@ public class MPBattleHUD : NetworkBehaviour {
 	}
 
 	public void SetHP(int hp) {
-		StartCoroutine(SlideHP(hp));    // Start coroutine to animate HP slider
+		StartCoroutine(SlideHP(hp));
 	}
 
 	IEnumerator SlideHP(int newHP) {
 		float startHP = hpSlider.value;
 		float endHP = newHP;
-		float duration = 0.7f;          // Duration of the sliding effect
-		int steps = 5;                  // Number of steps for the sliding effect
-
+		float duration = 0.7f;
+		int steps = 5;
 		float stepAmount = (endHP - startHP) / steps;
 
 		// Animate HP slider over multiple steps
@@ -92,8 +94,8 @@ public class MPBattleHUD : NetworkBehaviour {
 	}
 
 	void UpdateHPColor() {
-		float fillAmount = hpSlider.value / hpSlider.maxValue;  // Calculate HP percentage
-		hpSlider.fillRect.GetComponent<Image>().color = hpGradient.Evaluate(fillAmount);  // Apply gradient color based on HP percentage
+		float fillAmount = hpSlider.value / hpSlider.maxValue;
+		hpSlider.fillRect.GetComponent<Image>().color = hpGradient.Evaluate(fillAmount);
 	}
 
 	[ClientRpc]

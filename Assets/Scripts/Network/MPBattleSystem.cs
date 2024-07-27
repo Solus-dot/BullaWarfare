@@ -199,11 +199,11 @@ public class MPBattleSystem : NetworkBehaviour {
 		bool isDefeated = defender.TakeDamage(damage);
 		UpdateHealthClientRpc(defender.currentHP, defender.maxHP, !isHost);
 
-		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange);
-		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange);
+		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
+		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
 
-		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, isHost, attacker.name);
-		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, !isHost, defender.name);
+		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, attacker.speedStage, isHost, attacker.name);
+		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, defender.speedStage, !isHost, defender.name);
 
 		if (isDefeated) {
 			Debug.Log($"{(isHost ? "Client" : "Host")} is defeated. Checking for game over.");
@@ -226,16 +226,18 @@ public class MPBattleSystem : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void UpdateStatChangesClientRpc(int attackStage, int defenseStage, bool isHost, string unitName) {
-		Debug.Log($"Updating stat changes for {unitName} - {(isHost ? "Host" : "Client")}. Attack Stage: {attackStage}, Defense Stage: {defenseStage}");
+	private void UpdateStatChangesClientRpc(int attackStage, int defenseStage, int speedStage, bool isHost, string unitName) {
+		Debug.Log($"Updating stat changes for {unitName} - {(isHost ? "Host" : "Client")}. Attack Stage: {attackStage}, Defense Stage: {defenseStage}, Speed Stage: {speedStage}");
 
 		if (isHost) {
 			hostUnit.attackStage = attackStage;
 			hostUnit.defenseStage = defenseStage;
+			hostUnit.speedStage = speedStage;
 			hostHUD.SetStatChange(hostUnit);
 		} else {
 			clientUnit.attackStage = attackStage;
 			clientUnit.defenseStage = defenseStage;
+			clientUnit.speedStage = speedStage;
 			clientHUD.SetStatChange(clientUnit);
 		}
 	}

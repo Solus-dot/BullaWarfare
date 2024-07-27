@@ -96,13 +96,15 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public void TakeBuff(int attackChange, int defenseChange) {
+	public void TakeBuff(int attackChange, int defenseChange, int speedChange) {
 		attackStage = Mathf.Clamp(attackStage + attackChange, -6, 6);
 		defenseStage = Mathf.Clamp(defenseStage + defenseChange, -6, 6);
+		speedChange = Mathf.Clamp(speedStage + speedChange, -6, 6);
 
 		// Recalculate attack and defense based on the new stages
 		currentAtk = Mathf.FloorToInt(attack * GetStatMultiplier(attackStage));
 		currentDef = Mathf.FloorToInt(defense * GetStatMultiplier(defenseStage));
+		currentSpeed = Mathf.FloorToInt(speed * GetStatMultiplier(speedStage));
 	}
 
 	public void AttemptFlinch(Move move) {
