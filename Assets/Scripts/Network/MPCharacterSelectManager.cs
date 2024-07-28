@@ -22,6 +22,17 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 	[Header("Characters")]
 	public List<Character> characters;
 
+	[Header("Selection Frames")]
+	[SerializeField] private Sprite defaultFrame;
+	[SerializeField] private Sprite p1SelectFrame;
+	[SerializeField] private Sprite p2SelectFrame;
+	[SerializeField] private Sprite p1P2SelectFrame;
+
+	private Button hostSelectedButton;
+	private Button clientSelectedButton;
+	private string hostPreviousCharacter = null;
+	private string clientPreviousCharacter = null;
+
 	[Header("Spawnpoints")]
 	[SerializeField] private Transform leftSpawnPoint;
 	[SerializeField] private Transform rightSpawnPoint;
@@ -102,11 +113,15 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 		if (isReady) return;  // Prevent button click if already ready
 
 		if (IsHost) {
-			SpawnSpriteServerRpc(character.name, true);
+			UpdateButtonImage(hostPreviousCharacter, character.name, true);
 			SelectedCharacterData.HostCharacterName = character.name;  // Store host character
+			hostPreviousCharacter = character.name;  // Update previous character
+			SpawnSpriteServerRpc(character.name, true);
 		} else {
-			SpawnSpriteServerRpc(character.name, false);
+			UpdateButtonImage(clientPreviousCharacter, character.name, false);
 			SelectedCharacterData.ClientCharacterName = character.name;  // Store client character
+			clientPreviousCharacter = character.name;  // Update previous character
+			SpawnSpriteServerRpc(character.name, false);
 		}
 
 		// Enable the ready button after a character has been selected
@@ -116,6 +131,89 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 		}
 
 		UpdateCharacterStats(character);
+	}
+
+	private void UpdateButtonImage(string previousCharacterName, string newCharacterName, bool isHost) {
+		Debug.Log($"UpdateButtonImage called with previousCharacterName: {previousCharacterName}, newCharacterName: {newCharacterName}, isHost: {isHost}");
+
+		foreach (var character in characters) {
+			if (character.name == previousCharacterName) {
+				// Reset previous character button to appropriate frame
+				if (isHost) {
+					if (SelectedCharacterData.ClientCharacterName == previousCharacterName) {
+						character.button.image.sprite = p2SelectFrame;
+					} else {
+						character.button.image.sprite = defaultFrame;
+					}
+				} else {
+					if (SelectedCharacterData.HostCharacterName == previousCharacterName) {
+						character.button.image.sprite = p1SelectFrame;
+					} else {
+						character.button.image.sprite = defaultFrame;
+					}
+				}
+			}
+
+			if (character.name == newCharacterName) {
+				// Update new character button based on current selection state
+				if (isHost) {
+					if (SelectedCharacterData.ClientCharacterName == newCharacterName) {
+						character.button.image.sprite = p1P2SelectFrame;
+					} else {
+						character.button.image.sprite = p1SelectFrame;
+					}
+				} else {
+					if (SelectedCharacterData.HostCharacterName == newCharacterName) {
+						character.button.image.sprite = p1P2SelectFrame;
+					} else {
+						character.button.image.sprite = p2SelectFrame;
+					}
+				}
+			}
+		}
+
+		UpdateButtonImageClientRpc(previousCharacterName, newCharacterName, isHost);
+	}
+
+	[ClientRpc]
+	private void UpdateButtonImageClientRpc(string previousCharacterName, string newCharacterName, bool isHost) {
+		Debug.Log($"UpdateButtonImageClientRpc called with previousCharacterName: {previousCharacterName}, newCharacterName: {newCharacterName}, isHost: {isHost}");
+
+		foreach (var character in characters) {
+			if (character.name == previousCharacterName) {
+				// Reset previous character button to appropriate frame
+				if (isHost) {
+					if (SelectedCharacterData.ClientCharacterName == previousCharacterName) {
+						character.button.image.sprite = p2SelectFrame;
+					} else {
+						character.button.image.sprite = defaultFrame;
+					}
+				} else {
+					if (SelectedCharacterData.HostCharacterName == previousCharacterName) {
+						character.button.image.sprite = p1SelectFrame;
+					} else {
+						character.button.image.sprite = defaultFrame;
+					}
+				}
+			}
+
+			if (character.name == newCharacterName) {
+				// Update new character button based on current selection state
+				if (isHost) {
+					if (SelectedCharacterData.ClientCharacterName == newCharacterName) {
+						character.button.image.sprite = p1P2SelectFrame;
+					} else {
+						character.button.image.sprite = p1SelectFrame;
+					}
+				} else {
+					if (SelectedCharacterData.HostCharacterName == newCharacterName) {
+						character.button.image.sprite = p1P2SelectFrame;
+					} else {
+						character.button.image.sprite = p2SelectFrame;
+					}
+				}
+			}
+		}
 	}
 
 	private void UpdateCharacterStats(Character character) {
