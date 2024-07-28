@@ -298,15 +298,16 @@ public class LobbyManager : NetworkBehaviour {
 	}
 
 	private async void LeaveRoom() {
-		try {
-			if (currentLobby.AvailableSlots == 1) {
-				DeleteLobby();
-			} else {
+		if (currentLobby != null) {
+			try {
 				await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+				Debug.Log("Player left the room.");
+				RelayManager.Instance.LeaveRelay();
+				currentLobby = null;
 				ExitRoom();
+			} catch (LobbyServiceException e) {
+				Debug.Log(e);
 			}
-		} catch (LobbyServiceException e) {
-			Debug.Log(e);
 		}
 	}
 

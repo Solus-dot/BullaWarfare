@@ -10,7 +10,7 @@
 
 // Move 3: Gambling is Fun
 // Himanshu offers a diabolical gamble to the opponent, a coin toss,
-// whose winner heals 15% of his total HP. 
+// whose winner heals 15% of his total HP. Little does the opponent know it is a biased coin to favour himself.
 
 // Move 4 : Master(de)bater (65 BP) 
 // Himanshu uses his excellent master(de)bating skills and convinces the opponent to hurt himself.
@@ -44,7 +44,7 @@ public static class Hima
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = 0,
-            recoil = 0.33f
+            recoil = 0.25f
 		},
 
 		// Memories, Bro! Move
@@ -66,7 +66,7 @@ public static class Hima
 		// Gambling is Fun Move
 		new Move() { 
 			moveName = "Gambling is Fun",
-			moveDesc = "Himanshu offers a diabolical gamble to the opponent, a coin toss,whose winner heals 15% of his total HP.",
+			moveDesc = "Himanshu offers a diabolical gamble to the opponent, a coin toss, whose winner heals 15% of his total HP. Little does the opponent know it is a biased coin to favour himself.",
 			moveMessage = "Himanshu switches on his gambling mode, approaching the opponent with a coin. The rules are simple, the winner gets a free oreo shake from the loser. The coin goes in the air and... ",
 			isCooldown = false,
 			accuracy = 100,
@@ -83,7 +83,7 @@ public static class Hima
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 65,
+			damage = 70,
 			isHealingMove = false,
 			isStatChange = false,
 		}
@@ -91,8 +91,12 @@ public static class Hima
 
 	// Initialize function for any random/niche Move effect
 	public static void Initialize() {
+		moves[2].moveMessage = "Himanshu switches on his gambling mode, approaching the opponent with a coin. The rules are simple, the winner gets a free oreo shake from the loser. The coin goes in the air and...";
+		moves[2].selfHealAmount = 0;
+		moves[2].oppHealAmount = 0;
+
 		int x = Random.Range(0, 100);
-		if (x < 50) {
+		if (x < 75) {
             // Himanshu win
             moves[2].moveMessage += "Himanshu has done it, he has done it, he won a free Oreo Shake ! He thinks to add it into his dangerous drink but for now just drinks it on its own. HP Recovered";
 			moves[2].selfHealAmount = 15;

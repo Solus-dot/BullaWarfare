@@ -134,11 +134,10 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 	}
 
 	private void UpdateButtonImage(string previousCharacterName, string newCharacterName, bool isHost) {
-		Debug.Log($"UpdateButtonImage called with previousCharacterName: {previousCharacterName}, newCharacterName: {newCharacterName}, isHost: {isHost}");
-
+		Debug.Log($"Updating button image. Previous: {previousCharacterName}, New: {newCharacterName}, IsHost: {isHost}");
 		foreach (var character in characters) {
 			if (character.name == previousCharacterName) {
-				// Reset previous character button to appropriate frame
+				Debug.Log($"Resetting previous character {previousCharacterName} to default or appropriate frame.");
 				if (isHost) {
 					if (SelectedCharacterData.ClientCharacterName == previousCharacterName) {
 						character.button.image.sprite = p2SelectFrame;
@@ -155,7 +154,7 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 			}
 
 			if (character.name == newCharacterName) {
-				// Update new character button based on current selection state
+				Debug.Log($"Updating new character {newCharacterName} to appropriate frame.");
 				if (isHost) {
 					if (SelectedCharacterData.ClientCharacterName == newCharacterName) {
 						character.button.image.sprite = p1P2SelectFrame;
@@ -177,11 +176,9 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 
 	[ClientRpc]
 	private void UpdateButtonImageClientRpc(string previousCharacterName, string newCharacterName, bool isHost) {
-		Debug.Log($"UpdateButtonImageClientRpc called with previousCharacterName: {previousCharacterName}, newCharacterName: {newCharacterName}, isHost: {isHost}");
-
+		Debug.Log($"ClientRpc: Updating button image. Previous: {previousCharacterName}, New: {newCharacterName}, IsHost: {isHost}");
 		foreach (var character in characters) {
 			if (character.name == previousCharacterName) {
-				// Reset previous character button to appropriate frame
 				if (isHost) {
 					if (SelectedCharacterData.ClientCharacterName == previousCharacterName) {
 						character.button.image.sprite = p2SelectFrame;
@@ -198,7 +195,6 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 			}
 
 			if (character.name == newCharacterName) {
-				// Update new character button based on current selection state
 				if (isHost) {
 					if (SelectedCharacterData.ClientCharacterName == newCharacterName) {
 						character.button.image.sprite = p1P2SelectFrame;
