@@ -193,6 +193,8 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
 		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
+		InitializeMoveset();
+
 		Move move = attacker.GetMove(moveIndex);
 		int damage = CalculateDamage(attacker, defender, move);
 
@@ -212,7 +214,7 @@ public class MPBattleSystem : NetworkBehaviour {
 	}
 
 	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
-		return (attacker.attack * move.damage) / defender.defense;
+		return ((attacker.attack * move.damage) / defender.defense) + move.trueDamage;
 	}
 
 	[ClientRpc]
@@ -318,5 +320,21 @@ public class MPBattleSystem : NetworkBehaviour {
 			}
 		}
 		return null;
+	}
+
+	void InitializeMoveset() {
+		Sohom.Initialize();
+		Ravi.Initialize();
+		Manas.Initialize();
+		Harsh.Initialize();
+		Arya.Initialize();
+		Khush.Initialize();
+		Aditi.Initialize();
+		Sarv.Initialize();
+		Daksh.Initialize();
+		Aarav.Initialize();
+		Hima.Initialize();
+		Vrush.Initialize();
+		Mrman.Initialize();
 	}
 }

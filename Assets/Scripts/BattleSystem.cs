@@ -236,8 +236,8 @@ public class BattleSystem : MonoBehaviour {
 
 		if (moveHits) {
 			if (move.isDamaging) {
-				int damage = (move.damage * attacker.currentAtk) / defender.currentDef; // Calculate effective damage (with Defender Defense)
-				Debug.Log($"({move.damage} * {attacker.attack}) / {defender.defense} = {damage}");
+				int damage = ((move.damage * attacker.currentAtk) / defender.currentDef) + move.trueDamage; // Calculate effective damage (with Defender Defense)
+				Debug.Log($"({move.damage} * {attacker.attack} / {defender.defense}) + {move.trueDamage} = {damage}");
 
 				message = move.moveMessage.Replace("(opp_name)", defender.unitName).Replace("(value)", damage.ToString());
 
@@ -415,5 +415,7 @@ public class BattleSystem : MonoBehaviour {
 		Daksh.Initialize();
 		Aarav.Initialize();
 		Hima.Initialize();
+		Vrush.Initialize();
+		Mrman.Initialize();
 	}
 }

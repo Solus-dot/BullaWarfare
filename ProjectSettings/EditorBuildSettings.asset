@@ -5,22 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenuScene.unity
     guid: 65d68c0988d34244d85de1e4f467c680
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/LobbyScene.unity
     guid: b30904751905d3f4dacde62ac85ec7c2
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MPCharacterSelect.unity
     guid: c9269acaa093f3c4c95f37316132e717
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CharacterSelect.unity
     guid: de4ad71d0c5a4a24eaacd3adfe1ee270
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BattleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MPBattleScene.unity
     guid: 62ac74eda2d91cb4f9b929ba2fbc3c1a
   m_configObjects: {}

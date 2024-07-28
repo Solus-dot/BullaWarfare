@@ -95,7 +95,7 @@ public static class Sarv
 		int x = Random.Range(1, 100);
 		Debug.Log(x);
 		if (x <= 50) {
-			moves[3].moveMessage = "Sarvesh ingests the special Churan bestowed to him by his ancestors. He feels the heat inside him bubbling up and in a moment, the heat releases in a huge blast! (opp_name) takes (value) damage!! (opp_name) gets burnt by the heatwave! Defense dropped by 1!";
+			moves[3].moveMessage += " Defense dropped by 1!";
 			moves[3].oppDefenseChange = -1;
 		}
 	}

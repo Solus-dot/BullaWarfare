@@ -83,7 +83,7 @@ public static class Hima
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 70,
+			damage = 100,
 			isHealingMove = false,
 			isStatChange = false,
 		}
@@ -99,7 +99,7 @@ public static class Hima
 		if (x < 75) {
             // Himanshu win
             moves[2].moveMessage += "Himanshu has done it, he has done it, he won a free Oreo Shake ! He thinks to add it into his dangerous drink but for now just drinks it on its own. HP Recovered";
-			moves[2].selfHealAmount = 15;
+			moves[2].selfHealAmount = 20;
 		} else {
             // Opponent win
             moves[2].moveMessage += "(opp_name) has done it! He has won a free oreo shake of Himanshu. This is why you don't gamble kids. (opp_name) recovers HP!";

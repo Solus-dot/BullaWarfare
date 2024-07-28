@@ -114,14 +114,16 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 
 		if (IsHost) {
 			UpdateButtonImage(hostPreviousCharacter, character.name, true);
-			SelectedCharacterData.HostCharacterName = character.name;  // Store host character
-			hostPreviousCharacter = character.name;  // Update previous character
+			hostPreviousCharacter = character.name;
+			SelectedCharacterData.HostCharacterName = character.name;
 			SpawnSpriteServerRpc(character.name, true);
+			UpdateHostCharacterServerRpc(character.name);  // Update server
 		} else {
 			UpdateButtonImage(clientPreviousCharacter, character.name, false);
-			SelectedCharacterData.ClientCharacterName = character.name;  // Store client character
-			clientPreviousCharacter = character.name;  // Update previous character
+			clientPreviousCharacter = character.name;
+			SelectedCharacterData.ClientCharacterName = character.name;
 			SpawnSpriteServerRpc(character.name, false);
+			UpdateClientCharacterServerRpc(character.name);  // Update server
 		}
 
 		// Enable the ready button after a character has been selected
@@ -132,6 +134,21 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 
 		UpdateCharacterStats(character);
 	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void UpdateHostCharacterServerRpc(string characterName, ServerRpcParams rpcParams = default) {
+		SelectedCharacterData.HostCharacterName = characterName;
+		UpdateButtonImageClientRpc(hostPreviousCharacter, characterName, true);
+		hostPreviousCharacter = characterName;
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void UpdateClientCharacterServerRpc(string characterName, ServerRpcParams rpcParams = default) {
+		SelectedCharacterData.ClientCharacterName = characterName;
+		UpdateButtonImageClientRpc(clientPreviousCharacter, characterName, false);
+		clientPreviousCharacter = characterName;
+	}
+
 
 	private void UpdateButtonImage(string previousCharacterName, string newCharacterName, bool isHost) {
 		Debug.Log($"Updating button image. Previous: {previousCharacterName}, New: {newCharacterName}, IsHost: {isHost}");
@@ -176,37 +193,20 @@ public class MPCharacterSelectManager : NetworkBehaviour {
 
 	[ClientRpc]
 	private void UpdateButtonImageClientRpc(string previousCharacterName, string newCharacterName, bool isHost) {
-		Debug.Log($"ClientRpc: Updating button image. Previous: {previousCharacterName}, New: {newCharacterName}, IsHost: {isHost}");
 		foreach (var character in characters) {
 			if (character.name == previousCharacterName) {
 				if (isHost) {
-					if (SelectedCharacterData.ClientCharacterName == previousCharacterName) {
-						character.button.image.sprite = p2SelectFrame;
-					} else {
-						character.button.image.sprite = defaultFrame;
-					}
+					character.button.image.sprite = (SelectedCharacterData.ClientCharacterName == previousCharacterName) ? p2SelectFrame : defaultFrame;
 				} else {
-					if (SelectedCharacterData.HostCharacterName == previousCharacterName) {
-						character.button.image.sprite = p1SelectFrame;
-					} else {
-						character.button.image.sprite = defaultFrame;
-					}
+					character.button.image.sprite = (SelectedCharacterData.HostCharacterName == previousCharacterName) ? p1SelectFrame : defaultFrame;
 				}
 			}
 
 			if (character.name == newCharacterName) {
 				if (isHost) {
-					if (SelectedCharacterData.ClientCharacterName == newCharacterName) {
-						character.button.image.sprite = p1P2SelectFrame;
-					} else {
-						character.button.image.sprite = p1SelectFrame;
-					}
+					character.button.image.sprite = (SelectedCharacterData.ClientCharacterName == newCharacterName) ? p1P2SelectFrame : p1SelectFrame;
 				} else {
-					if (SelectedCharacterData.HostCharacterName == newCharacterName) {
-						character.button.image.sprite = p1P2SelectFrame;
-					} else {
-						character.button.image.sprite = p2SelectFrame;
-					}
+					character.button.image.sprite = (SelectedCharacterData.HostCharacterName == newCharacterName) ? p1P2SelectFrame : p2SelectFrame;
 				}
 			}
 		}

@@ -16,6 +16,7 @@ public class Move {
 
 	public bool isDamaging;			// Flag indicating if the move deals damage
 	public int damage;				// Base damage dealt by the move
+	public int trueDamage;			// Damage that bypasses both defense, and stat changes
 
 	public bool isHealingMove;		// Flag indicating if the move heals (optional)
 	public int selfHealAmount;		// Amount of health healed by self (if isHealingMove is true)
@@ -133,6 +134,7 @@ public class Unit : MonoBehaviour {
 			case MovesetEnum.AARAV: return Aarav.moves[index];
 			case MovesetEnum.HIMA: return Hima.moves[index];
 			case MovesetEnum.VRUSH: return Vrush.moves[index];
+			case MovesetEnum.MRMAN: return Mrman.moves[index];
 			default: return null;
 		}
 	}
