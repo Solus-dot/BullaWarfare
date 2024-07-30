@@ -33,7 +33,7 @@ public static class Mrman
 			moveName = "Chill Like'At",
 			moveDesc = "Aaryaman approaches the opponent with utter coolness and does a perfect dap with the opponent. The opponent loses guard and loses 1 stage of DEF. The echoes of the perfect dap raises ATK of both sides by 1 Stage.",
 			moveMessage = "Aaryaman starts walking towards (opp_name) with utter chillness. And all of a sudden CLAP, the sound of the perfect dap echoes the battlefield. Attack of both sides Increase by 1 stage. The opponent loses Defense by 1 stage.",
-            isCooldown = false,
+			isCooldown = false,
 			accuracy = 100,
 			isDamaging = false,
 			isHealingMove = false,
@@ -54,7 +54,7 @@ public static class Mrman
 			isDamaging = false,
 			isHealingMove = false,
 			isStatChange = true,
-            selfAttackChange = 1,
+			selfAttackChange = 1,
 			selfDefenseChange = 0,
 			oppAttackChange = 0,
 			oppDefenseChange = 0
@@ -95,20 +95,20 @@ public static class Mrman
 		int x = Random.Range(1, 100);
 		Debug.Log(x);
 		if (x <= 20) {
-            moves[3].moveMessage += "He shoots it twice, dealing (value) damage!";
+			moves[3].moveMessage += "He shoots it twice, dealing (value) damage!";
 			moves[3].damage = 50;
 		} else if (x <= 40) {
-            moves[3].moveMessage += "He shoots it thrice, dealing (value) damage!";
-            moves[3].damage = 75;
-        } else if (x <= 60) {
-            moves[3].moveMessage += "He shoots it 4 times, dealing (value) damage!";
-            moves[3].damage = 100;           
-        } else if (x <= 80) {
-            moves[3].moveMessage += "He shoots it 5 times, dealing (value) damage!";
-            moves[3].damage = 125;
-        } else {
-            moves[3].moveMessage += "He shoots it 6 times, dealing (value) damage!";
-            moves[3].damage = 150;
-        }
+			moves[3].moveMessage += "He shoots it thrice, dealing (value) damage!";
+			moves[3].damage = 75;
+		} else if (x <= 60) {
+			moves[3].moveMessage += "He shoots it 4 times, dealing (value) damage!";
+			moves[3].damage = 100;           
+		} else if (x <= 80) {
+			moves[3].moveMessage += "He shoots it 5 times, dealing (value) damage!";
+			moves[3].damage = 125;
+		} else {
+			moves[3].moveMessage += "He shoots it 6 times, dealing (value) damage!";
+			moves[3].damage = 150;
+		}
 	}
 }

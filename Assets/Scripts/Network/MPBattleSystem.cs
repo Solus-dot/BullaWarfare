@@ -40,7 +40,7 @@ public class MPBattleSystem : NetworkBehaviour {
 	private string playerName;
 
 	private void Start() {
-		playerName = PlayerPrefs.GetString("Name", "Player");
+		playerName = PlayerPrefs.GetString("Name");
 
 		moveButton1Text = moveButton1.GetComponentInChildren<TMP_Text>();
 		moveButton2Text = moveButton2.GetComponentInChildren<TMP_Text>();
@@ -176,7 +176,6 @@ public class MPBattleSystem : NetworkBehaviour {
 		}
 		return false;
 	}
-
 
 	[ClientRpc]
 	private void EndGameClientRpc(string message) {

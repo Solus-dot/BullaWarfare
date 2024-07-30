@@ -27,12 +27,12 @@ public class MainMenu : MonoBehaviour {
         PlayerPrefs.SetFloat("Volume", volumeSlider.value);
 	}
 
-	public void OnPlayButtonClick() {
+	public void OnOfflineButtonClick() {
 		Debug.Log("Start Game button clicked");
 		SceneManager.LoadScene("CharacterSelect");
 	}
 
-	public void OnLobbyButtonClick() {
+	public void OnOnlineButtonClick() {
 		Debug.Log("Lobby Button clicked");
 		SceneManager.LoadScene("LobbyScene");
 	}

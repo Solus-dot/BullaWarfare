@@ -38,17 +38,11 @@ public class StepwiseFadeIn : MonoBehaviour
 
 		for (int step = 0; step < numberOfSteps; step++)
 		{
-			// Calculate the target alpha for this step
 			float targetAlpha = (step + 1) / (float)numberOfSteps;
-
-			// Update alpha value
 			canvasGroup.alpha = targetAlpha;
-
-			// Wait for the next step
 			yield return new WaitForSeconds(stepTime);
 		}
 
-		// Ensure alpha is exactly 1 at the end
 		canvasGroup.alpha = 1f;
 	}
 }
