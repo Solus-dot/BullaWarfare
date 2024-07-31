@@ -52,11 +52,21 @@ public class LobbyManager : NetworkBehaviour {
 
 	private async void Start() {
 		await UnityServices.InitializeAsync();
-		AuthenticationService.Instance.SignedIn += () => {
+
+		if (!AuthenticationService.Instance.IsSignedIn) {
+			AuthenticationService.Instance.SignedIn += () => {
+				playerId = AuthenticationService.Instance.PlayerId;
+				Debug.Log("Signed in " + playerId);
+			};
+			await AuthenticationService.Instance.SignInAnonymouslyAsync();
+		} else {
 			playerId = AuthenticationService.Instance.PlayerId;
-			Debug.Log("Signed in " + playerId);
-		};
-		await AuthenticationService.Instance.SignInAnonymouslyAsync();
+			Debug.Log("Already signed in " + playerId);
+		}
+
+		playerNameInputField.characterLimit = 15;
+		roomNameInputField.characterLimit = 15;
+		roomCodeInputField.characterLimit = 6;
 
 		playerNameInputField.onValueChanged.AddListener(delegate {
 			PlayerPrefs.SetString("Name", playerNameInputField.text);

@@ -3,6 +3,7 @@ using Unity.Netcode;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class MPBattleSystem : NetworkBehaviour {
@@ -28,6 +29,9 @@ public class MPBattleSystem : NetworkBehaviour {
 	[Header("Dialogue")]
 	[SerializeField] private TMP_Text dialogueText;
 	[SerializeField] private TMP_Text moveText;
+
+	[Header("Disconnect UI")]
+	[SerializeField] private GameObject disconnectPanel;
 
 	private TMP_Text moveButton1Text;
 	private TMP_Text moveButton2Text;
@@ -187,7 +191,35 @@ public class MPBattleSystem : NetworkBehaviour {
 		moveButton4.gameObject.SetActive(false);
 
 		moveText.gameObject.SetActive(true);
-		moveText.text = message;
+		moveText.text = message + "\nPress Spacebar to return to lobby.";
+
+		StartCoroutine(WaitForExitInput());
+	}
+
+	private IEnumerator WaitForExitInput() {
+		while (!Input.GetKeyDown(KeyCode.Space)) {
+			yield return null;
+		}
+
+		NotifyOpponentOfDisconnectServerRpc();
+		NetworkManager.Singleton.Shutdown();
+		SceneManager.LoadScene("LobbyScene");
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void NotifyOpponentOfDisconnectServerRpc() {
+		ShowDisconnectPanelClientRpc();
+	}
+
+	[ClientRpc]
+	private void ShowDisconnectPanelClientRpc() {
+		disconnectPanel.SetActive(true);
+		StartCoroutine(WaitAndReturnToLobby());
+	}
+
+	private IEnumerator WaitAndReturnToLobby() {
+		yield return new WaitForSeconds(3);
+		SceneManager.LoadScene("LobbyScene");
 	}
 
 	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
@@ -202,6 +234,9 @@ public class MPBattleSystem : NetworkBehaviour {
 
 		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
 		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
+
+		// attacker.Heal(move.selfHealAmount);
+		// defender.Heal(move.oppHealAmount);
 
 		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, attacker.speedStage, isHost, attacker.name);
 		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, defender.speedStage, !isHost, defender.name);
@@ -255,28 +290,26 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	[ServerRpc(RequireOwnership = false)]
 	private void SpawnCharacterServerRpc(string characterName, bool isHost, ServerRpcParams rpcParams = default) {
-		var spawnPoint = (isHost ? hostSpawnPoint.position : clientSpawnPoint.position) + new Vector3(0, 1f, 0);
-		GameObject prefab = GetPrefabByName(characterName);
-		if (prefab != null) {
-			Debug.Log("Spawning prefab: " + characterName + " at " + spawnPoint);
-			GameObject newSprite = Instantiate(prefab, spawnPoint, Quaternion.identity);
-			newSprite.GetComponent<NetworkObject>().Spawn(true);
-
-			Unit unit = newSprite.GetComponent<Unit>();
-			if (isHost) {
-				hostUnit = unit;
-				hostHUD.SetHUD(unit);
-				UpdateMoveButtons(); // Update move buttons for the host
-			} else {
-				clientUnit = unit;
-				clientHUD.SetHUD(unit);
-			}
-
-			// Pass the NetworkObjectId to the clients
-			SpawnCharacterClientRpc(newSprite.GetComponent<NetworkObject>().NetworkObjectId, characterName, isHost);
-		} else {
-			Debug.LogError("Prefab not found for character: " + characterName);
+		Character character = battleCharacters.Find(c => c.name == characterName);
+		if (character == null) {
+			Debug.LogError($"Character {characterName} not found in the battleCharacters list.");
+			return;
 		}
+
+		GameObject characterGO = Instantiate(character.prefab, (isHost ? hostSpawnPoint.position : clientSpawnPoint.position) + new Vector3(0, 1f, 0), Quaternion.identity);
+		NetworkObject networkObject = characterGO.GetComponent<NetworkObject>();
+		networkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+
+		if (isHost) {
+			hostUnit = characterGO.GetComponent<Unit>();
+			hostHUD.SetHUD(hostUnit);
+			UpdateMoveButtons();
+		} else {
+			clientUnit = characterGO.GetComponent<Unit>();
+			clientHUD.SetHUD(clientUnit);
+		}
+		
+		SpawnCharacterClientRpc(characterGO.GetComponent<NetworkObject>().NetworkObjectId, characterName, isHost);
 	}
 
 	[ClientRpc]
