@@ -75,21 +75,22 @@ public class MPBattleHUD : NetworkBehaviour {
 		StartCoroutine(SlideHP(hp));
 	}
 
-	IEnumerator SlideHP(int newHP) {
+	private IEnumerator SlideHP(float newHP) {
 		float startHP = hpSlider.value;
-		float endHP = newHP;
 		float duration = 0.7f;
+		float elapsed = 0f;
 		int steps = 5;
-		float stepAmount = (endHP - startHP) / steps;
 
-		// Animate HP slider over multiple steps
-		for (int i = 0; i < steps; i++) {
-			hpSlider.value += stepAmount;
+		while (elapsed < duration) {
+			elapsed += Time.deltaTime;
+			float t = Mathf.Clamp01(elapsed / duration);
+			t = Mathf.Floor(t * steps) / steps;
+			hpSlider.value = Mathf.Lerp(startHP, newHP, t);
 			UpdateHPColor();
-			yield return new WaitForSeconds(duration / steps);
+			yield return null;
 		}
 
-		hpSlider.value = endHP;
+		hpSlider.value = newHP;
 		UpdateHPColor();
 	}
 
