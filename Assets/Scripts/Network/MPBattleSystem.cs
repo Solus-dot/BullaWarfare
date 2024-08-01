@@ -31,7 +31,8 @@ public class MPBattleSystem : NetworkBehaviour {
 	[SerializeField] private TMP_Text moveText;
 
 	[Header("Disconnect UI")]
-	[SerializeField] private GameObject disconnectPanel;
+	[SerializeField] private GameObject leavePanel;
+	[SerializeField] private TMP_Text leaveMessage;
 
 	private TMP_Text moveButton1Text;
 	private TMP_Text moveButton2Text;
@@ -42,10 +43,21 @@ public class MPBattleSystem : NetworkBehaviour {
 	private int? clientSelectedMove = null;
 
 	private string playerName;
+	private string hostName;
+	private string clientName;
+	private string syncedClientName;
+
+	private bool isDisconnectingPlayer = false;
+
+	private void OnEnable() {
+		NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+	}
+
+	private void OnDisable() {
+		NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+	}
 
 	private void Start() {
-		playerName = PlayerPrefs.GetString("Name");
-
 		moveButton1Text = moveButton1.GetComponentInChildren<TMP_Text>();
 		moveButton2Text = moveButton2.GetComponentInChildren<TMP_Text>();
 		moveButton3Text = moveButton3.GetComponentInChildren<TMP_Text>();
@@ -57,18 +69,23 @@ public class MPBattleSystem : NetworkBehaviour {
 		moveButton4.onClick.AddListener(() => OnMoveButtonClicked(3));
 
 		if (IsHost) {
+			hostName = PlayerPrefs.GetString("Name");
 			Debug.Log("Host is spawning character: " + SelectedCharacterData.HostCharacterName);
 			SpawnCharacterServerRpc(SelectedCharacterData.HostCharacterName, true);
 		} else {
+			clientName = PlayerPrefs.GetString("Name");
 			Debug.Log("Client is spawning character: " + SelectedCharacterData.ClientCharacterName);
 			SpawnCharacterServerRpc(SelectedCharacterData.ClientCharacterName, false);
+			SyncClientNameServerRpc(clientName);
 		}
 
+		leavePanel.SetActive(false);
 		SetInitialUIState();
 	}
 
 	private void SetInitialUIState() {
-		dialogueText.text = $"{playerName}, pick your move.";
+		playerName = IsHost ? hostName : clientName;
+		dialogueText.text = $"{(playerName)}, pick your move.";
 		moveText.gameObject.SetActive(false);
 	}
 
@@ -81,11 +98,11 @@ public class MPBattleSystem : NetworkBehaviour {
 		} else {
 			clientSelectedMove = moveIndex;
 			Debug.Log($"Client selected move {moveIndex}");
-			SelectMoveServerRpc(moveIndex);  // Inform server about client move
-			ShowWaitingForOpponentUI(); // Update client UI immediately
+			SelectMoveServerRpc(moveIndex);
+			ShowWaitingForOpponentUI();
 		}
 		Debug.Log($"Before CheckMovesAndExecute: HostSelectedMove = {hostSelectedMove}, ClientSelectedMove = {clientSelectedMove}");
-		CheckMovesAndExecute(); // Check moves immediately after selection
+		CheckMovesAndExecute();
 		Debug.Log($"After CheckMovesAndExecute: HostSelectedMove = {hostSelectedMove}, ClientSelectedMove = {clientSelectedMove}");
 	}
 
@@ -117,7 +134,7 @@ public class MPBattleSystem : NetworkBehaviour {
 	private void SelectMoveServerRpc(int clientMove, ServerRpcParams rpcParams = default) {
 		clientSelectedMove = clientMove;
 		Debug.Log($"Server registered client move: {clientMove}");
-		UpdateHostUIAfterClientMoveSelection(); // Ensure the host UI updates correctly
+		UpdateHostUIAfterClientMoveSelection();
 		CheckMovesAndExecute();
 	}
 
@@ -149,6 +166,7 @@ public class MPBattleSystem : NetworkBehaviour {
 		moveButton3.gameObject.SetActive(true);
 		moveButton4.gameObject.SetActive(true);
 
+		playerName = IsHost ? hostName : clientName;
 		dialogueText.text = $"{playerName}, pick your move.";
 	}
 
@@ -165,7 +183,6 @@ public class MPBattleSystem : NetworkBehaviour {
 		}
 
 		if (!CheckForGameOver()) {
-			// Only reset the UI if the game is not over
 			ResetUIAfterMoveExecutionClientRpc();
 		}
 	}
@@ -174,8 +191,9 @@ public class MPBattleSystem : NetworkBehaviour {
 		Debug.Log($"Checking for game over: Host HP = {hostUnit.currentHP}, Client HP = {clientUnit.currentHP}");
 		if (hostUnit.currentHP <= 0 || clientUnit.currentHP <= 0) {
 			string winnerName = hostUnit.currentHP > 0 ? SelectedCharacterData.HostCharacterName : SelectedCharacterData.ClientCharacterName;
+			string winnerPlayerName = hostUnit.currentHP > 0 ? hostName : syncedClientName; // Use the synced client name
 			Debug.Log($"Game over detected. Winner: {winnerName}");
-			EndGameClientRpc($"{winnerName} has Won!");
+			EndGameClientRpc($"{winnerName} ({winnerPlayerName}) has Won!");
 			return true;
 		}
 		return false;
@@ -201,42 +219,61 @@ public class MPBattleSystem : NetworkBehaviour {
 			yield return null;
 		}
 
-		NotifyOpponentOfDisconnectServerRpc();
+		isDisconnectingPlayer = true;
+		NotifyOpponentOfDisconnectServerRpc("Opponent Left\nReturning to Lobby...");
 		NetworkManager.Singleton.Shutdown();
+		ShowDisconnectPanel("Returning to Lobby...");
 		SceneManager.LoadScene("LobbyScene");
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	private void NotifyOpponentOfDisconnectServerRpc() {
-		ShowDisconnectPanelClientRpc();
+	private void NotifyOpponentOfDisconnectServerRpc(string message) {
+		ShowOpponentLeftPanelClientRpc(message);
 	}
 
 	[ClientRpc]
-	private void ShowDisconnectPanelClientRpc() {
-		disconnectPanel.SetActive(true);
+	private void ShowOpponentLeftPanelClientRpc(string message) {
+		if (!isDisconnectingPlayer) {
+			ShowDisconnectPanel(message);
+		}
+	}
+
+	private void ShowDisconnectPanel(string message) {
+		leaveMessage.text = message;
+		leavePanel.SetActive(true);
 		StartCoroutine(WaitAndReturnToLobby());
 	}
 
 	private IEnumerator WaitAndReturnToLobby() {
-		yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(2);
 		SceneManager.LoadScene("LobbyScene");
 	}
 
 	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
 		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
+		bool isDefeated = false;
 		InitializeMoveset();
-
 		Move move = attacker.GetMove(moveIndex);
-		int damage = CalculateDamage(attacker, defender, move);
 
-		bool isDefeated = defender.TakeDamage(damage);
-		UpdateHealthClientRpc(defender.currentHP, defender.maxHP, !isHost);
+		if (move.isDamaging) {
+			int damage = CalculateDamage(attacker, defender, move);
+			isDefeated = defender.TakeDamage(damage);
+		}
 
-		attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
-		defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
+		if (move.isStatChange) {
+			attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
+			defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
+		}
 
-		// attacker.Heal(move.selfHealAmount);
-		// defender.Heal(move.oppHealAmount);
+		if (move.isHealingMove) {
+			int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100);
+			int defHealAmount = (move.oppHealAmount * defender.maxHP / 100);
+			if (atkHealAmount != 0) attacker.Heal(atkHealAmount);
+			if (defHealAmount != 0) defender.Heal(defHealAmount);
+		}
+
+		UpdateHealthClientRpc(defender.currentHP, !isHost);
+		UpdateHealthClientRpc(attacker.currentHP, isHost);
 
 		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, attacker.speedStage, isHost, attacker.name);
 		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, defender.speedStage, !isHost, defender.name);
@@ -252,8 +289,7 @@ public class MPBattleSystem : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void UpdateHealthClientRpc(int currentHP, int maxHP, bool isHost) {
-		Debug.Log($"Updating health for {(isHost ? "Host" : "Client")} to {currentHP}/{maxHP}");
+	private void UpdateHealthClientRpc(int currentHP, bool isHost) {
 		if (isHost) {
 			hostHUD.SetHP(currentHP);
 		} else {
@@ -352,6 +388,27 @@ public class MPBattleSystem : NetworkBehaviour {
 			}
 		}
 		return null;
+	}
+
+	private void OnClientDisconnect(ulong clientId) {
+		if (!isDisconnectingPlayer) {
+			NotifyOpponentOfDisconnectServerRpc("Opponent has disconnected\nReturning to Lobby...");
+		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SyncClientNameServerRpc(string name, ServerRpcParams rpcParams = default) {
+		syncedClientName = name;
+		Debug.Log($"Client name synced to host: {name}");
+		SyncClientNameClientRpc(name); // Inform other clients (like the host) of this name
+	}
+
+	[ClientRpc]
+	private void SyncClientNameClientRpc(string name) {
+		if (!IsHost) {
+			clientName = name;
+			Debug.Log($"Client name synced: {name}");
+		}
 	}
 
 	void InitializeMoveset() {

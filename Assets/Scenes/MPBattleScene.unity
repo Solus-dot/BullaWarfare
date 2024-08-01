@@ -1293,9 +1293,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'opponent has disconnected!
-
-    Returning to lobby'
+  m_text: Returning to lobby...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
   m_sharedMaterial: {fileID: -6756554428829496531, guid: c206bbe7775989545badea6cc7413a5c, type: 2}
@@ -1328,7 +1326,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1861,7 +1859,8 @@ MonoBehaviour:
   moveButton4: {fileID: 1222362344}
   dialogueText: {fileID: 1427496844}
   moveText: {fileID: 899285351}
-  disconnectPanel: {fileID: 117867360}
+  leavePanel: {fileID: 117867360}
+  leaveMessage: {fileID: 658635008}
 --- !u!1 &733725830
 GameObject:
   m_ObjectHideFlags: 0
