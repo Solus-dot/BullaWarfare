@@ -1849,6 +1849,9 @@ MonoBehaviour:
   - name: Vrushabh
     prefab: {fileID: 6884295409158445089, guid: 382301ddf4e385a41b9fd1aefdb3ad34, type: 3}
     button: {fileID: 0}
+  - name: Aaryaman
+    prefab: {fileID: 6884295409158445089, guid: 337e3bcc434e84f4f82be1936a95fa44, type: 3}
+    button: {fileID: 0}
   hostSpawnPoint: {fileID: 1732814476}
   clientSpawnPoint: {fileID: 1036633996}
   hostHUD: {fileID: 1938192569}

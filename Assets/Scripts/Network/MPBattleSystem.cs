@@ -172,17 +172,30 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	[ServerRpc(RequireOwnership = false)]
 	private void ExecuteMovesServerRpc(int hostMove, int clientMove) {
-		Debug.Log($"Executing moves: HostMove = {hostMove}, ClientMove = {clientMove}");		
+		StartCoroutine(ExecuteMovesAndResetUI(hostMove, clientMove));
+	}
+
+	private IEnumerator ExecuteMovesAndResetUI(int hostMove, int clientMove) {
+		Debug.Log($"Executing moves: HostMove = {hostMove}, ClientMove = {clientMove}");
+
 		List<System.Action> moveActions = new List<System.Action> {
-			() => PerformMove(hostUnit, clientUnit, hostMove, true),
-			() => PerformMove(clientUnit, hostUnit, clientMove, false)
+			() => {
+				PerformMove(hostUnit, clientUnit, hostMove, true);
+				DisplayMoveTextClientRpc(hostUnit.GetMove(hostMove).moveMessage.Replace("(opp_name)", clientUnit.unitName), 1.0f);
+			},
+			() => {
+				PerformMove(clientUnit, hostUnit, clientMove, false);
+				DisplayMoveTextClientRpc(clientUnit.GetMove(clientMove).moveMessage.Replace("(opp_name)", hostUnit.unitName), 1.0f);
+			}
 		};
 
 		foreach (var moveAction in moveActions) {
 			moveAction();
+			yield return new WaitForSeconds(1.0f); // Ensure the display text coroutine completes before proceeding
 		}
 
 		if (!CheckForGameOver()) {
+			yield return new WaitForSeconds(1.0f); // Additional delay before resetting UI
 			ResetUIAfterMoveExecutionClientRpc();
 		}
 	}
@@ -232,6 +245,13 @@ public class MPBattleSystem : NetworkBehaviour {
 	}
 
 	[ClientRpc]
+	private void NotifyHostDisconnectedClientRpc() {
+		if (!isDisconnectingPlayer) {
+			ShowDisconnectPanel("Host Connection Lost\nReturning to Lobby...");
+		}
+	}
+
+	[ClientRpc]
 	private void ShowOpponentLeftPanelClientRpc(string message) {
 		if (!isDisconnectingPlayer) {
 			ShowDisconnectPanel(message);
@@ -251,13 +271,16 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
 		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
-		bool isDefeated = false;
 		InitializeMoveset();
+
+		bool isDefeated = false;
 		Move move = attacker.GetMove(moveIndex);
+		string message = move.moveMessage.Replace("(opp_name)", defender.unitName);
 
 		if (move.isDamaging) {
 			int damage = CalculateDamage(attacker, defender, move);
 			isDefeated = defender.TakeDamage(damage);
+			message = message.Replace("(value)", damage.ToString());
 		}
 
 		if (move.isStatChange) {
@@ -282,7 +305,9 @@ public class MPBattleSystem : NetworkBehaviour {
 			Debug.Log($"{(isHost ? "Client" : "Host")} is defeated. Checking for game over.");
 			CheckForGameOver();
 		}
+
 	}
+
 
 	private int CalculateDamage(Unit attacker, Unit defender, Move move) {
 		return ((attacker.attack * move.damage) / defender.defense) + move.trueDamage;
@@ -322,6 +347,18 @@ public class MPBattleSystem : NetworkBehaviour {
 			moveButton3Text.text = localPlayerUnit.GetMove(2).moveName;
 			moveButton4Text.text = localPlayerUnit.GetMove(3).moveName;
 		}
+	}
+
+	[ClientRpc]
+	private void DisplayMoveTextClientRpc(string text, float delay) {
+		StartCoroutine(DisplayMoveText(text, delay));
+	}
+
+	private IEnumerator DisplayMoveText(string text, float delay) {
+		moveText.text = text;
+		moveText.gameObject.SetActive(true);
+		yield return new WaitForSeconds(delay);
+		moveText.gameObject.SetActive(false);
 	}
 
 	[ServerRpc(RequireOwnership = false)]
@@ -392,7 +429,15 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	private void OnClientDisconnect(ulong clientId) {
 		if (!isDisconnectingPlayer) {
-			NotifyOpponentOfDisconnectServerRpc("Opponent has disconnected\nReturning to Lobby...");
+			if (NetworkManager.Singleton.IsServer) {
+				if (clientId == NetworkManager.ServerClientId) {
+					NotifyHostDisconnectedClientRpc();
+				} else {
+					NotifyOpponentOfDisconnectServerRpc("Opponent has disconnected\nReturning to Lobby...");
+				}
+			} else {
+				NotifyOpponentOfDisconnectServerRpc("Opponent has disconnected\nReturning to Lobby...");
+			}
 		}
 	}
 

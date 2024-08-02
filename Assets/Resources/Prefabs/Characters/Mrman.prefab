@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1214169731801516086}
   - component: {fileID: 4136278435108665487}
   - component: {fileID: 4359680699597046753}
-  - component: {fileID: -4160558585272395689}
+  - component: {fileID: 8515292954283412252}
   m_Layer: 0
-  m_Name: Vrushabh
+  m_Name: Mrman
   m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,17 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475d8d7ed9646504888a5702b5d7ed33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Vrushabh
-  maxHP: 475
-  attack: 290
-  defense: 265
+  unitName: Aaryaman
+  maxHP: 480
+  attack: 300
+  defense: 250
+  speed: 0
   baseAccuracy: 100
   attackStage: 0
   defenseStage: 0
-  currentHP: 475
+  speedStage: 0
+  currentHP: 480
   currentAtk: 0
   currentDef: 0
-  moveset: 11
+  currentSpeed: 0
+  moveset: 13
   cooldownMessage: 
   isFlinching: 0
   isOnCooldown: 0
@@ -101,7 +104,7 @@ SpriteRenderer:
   m_SortingLayerID: 390912351
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c4fd8055ccadcf24e8e10245dfab4fdb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ba3317ecaacb45a47b328c45c662ad4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -112,7 +115,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4160558585272395689
+--- !u!114 &8515292954283412252
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1035121338
+  GlobalObjectIdHash: 874217080
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
