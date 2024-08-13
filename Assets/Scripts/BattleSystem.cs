@@ -222,6 +222,8 @@ public class BattleSystem : MonoBehaviour {
 		// Calculate if the move hits or misses
 		int hitChance = attacker.baseAccuracy * move.accuracy / 100;
 		int randomHit = Random.Range(0, 100);
+		bool moveHits = randomHit < hitChance;
+
 
 		// Check for recoil condition before executing the move
 		if (move.recoil > 0 && move.recoil * attacker.maxHP >= attacker.currentHP) {
@@ -231,8 +233,6 @@ public class BattleSystem : MonoBehaviour {
 			actionInProgress = false;
 			yield break;
 		}
-
-		bool moveHits = randomHit < hitChance;
 
 		if (moveHits) {
 			if (move.isDamaging) {

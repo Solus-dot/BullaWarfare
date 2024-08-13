@@ -41,6 +41,9 @@ public class MPBattleSystem : NetworkBehaviour {
 
 	private int? hostSelectedMove = null;
 	private int? clientSelectedMove = null;
+	private string hostMessage; 
+	private string clientMessage;
+
 
 	private string playerName;
 	private string hostName;
@@ -180,12 +183,12 @@ public class MPBattleSystem : NetworkBehaviour {
 
 		List<System.Action> moveActions = new List<System.Action> {
 			() => {
-				PerformMove(hostUnit, clientUnit, hostMove, true);
-				DisplayMoveTextClientRpc(hostUnit.GetMove(hostMove).moveMessage.Replace("(opp_name)", clientUnit.unitName), 1.0f);
+				hostMessage = PerformMove(hostUnit, clientUnit, hostMove, true);
+				DisplayMoveTextClientRpc(hostMessage, 1.0f);
 			},
 			() => {
-				PerformMove(clientUnit, hostUnit, clientMove, false);
-				DisplayMoveTextClientRpc(clientUnit.GetMove(clientMove).moveMessage.Replace("(opp_name)", hostUnit.unitName), 1.0f);
+				clientMessage = PerformMove(clientUnit, hostUnit, clientMove, false);
+				DisplayMoveTextClientRpc(clientMessage, 1.0f);
 			}
 		};
 
@@ -269,7 +272,7 @@ public class MPBattleSystem : NetworkBehaviour {
 		SceneManager.LoadScene("LobbyScene");
 	}
 
-	private void PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
+	private string PerformMove(Unit attacker, Unit defender, int moveIndex, bool isHost) {
 		Debug.Log($"{(isHost ? "Host" : "Client")} performing move {moveIndex} on {(isHost ? "Client" : "Host")}.");
 		InitializeMoveset();
 
@@ -277,35 +280,52 @@ public class MPBattleSystem : NetworkBehaviour {
 		Move move = attacker.GetMove(moveIndex);
 		string message = move.moveMessage.Replace("(opp_name)", defender.unitName);
 
-		if (move.isDamaging) {
-			int damage = CalculateDamage(attacker, defender, move);
-			isDefeated = defender.TakeDamage(damage);
-			message = message.Replace("(value)", damage.ToString());
+		// Calculate if the move hits or misses
+		int hitChance = attacker.baseAccuracy * move.accuracy / 100;
+		int randomHit = Random.Range(0, 100);
+		bool moveHits = randomHit < hitChance;
+
+		if (moveHits) {
+			if (move.isDamaging) {
+				int damage = CalculateDamage(attacker, defender, move);
+				isDefeated = defender.TakeDamage(damage);
+
+				if (Random.Range(1, 100) <= 1) {
+						damage *= 2; 	// Critical hit chance (double damage)
+						Debug.Log("Critical Hit (x2 Damage)");
+						message += " It was a crit hit! It dealt double damage!";
+				}
+
+				message = message.Replace("(value)", damage.ToString());
+			}
+
+			if (move.isStatChange) {
+				attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
+				defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
+			}
+
+			if (move.isHealingMove) {
+				int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100);
+				int defHealAmount = (move.oppHealAmount * defender.maxHP / 100);
+				if (atkHealAmount != 0) attacker.Heal(atkHealAmount);
+				if (defHealAmount != 0) defender.Heal(defHealAmount);
+			}
+
+			UpdateHealthClientRpc(defender.currentHP, !isHost);
+			UpdateHealthClientRpc(attacker.currentHP, isHost);
+
+			UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, attacker.speedStage, isHost, attacker.name);
+			UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, defender.speedStage, !isHost, defender.name);
+
+			if (isDefeated) {
+				Debug.Log($"{(isHost ? "Client" : "Host")} is defeated. Checking for game over.");
+				CheckForGameOver();
+			}
+		} else {
+			message = move.missMessage != null ? move.missMessage.Replace("(opp_name)", defender.unitName) : "The move missed!";
 		}
 
-		if (move.isStatChange) {
-			attacker.TakeBuff(move.selfAttackChange, move.selfDefenseChange, move.selfSpeedChange);
-			defender.TakeBuff(move.oppAttackChange, move.oppDefenseChange, move.oppSpeedChange);
-		}
-
-		if (move.isHealingMove) {
-			int atkHealAmount = (move.selfHealAmount * attacker.maxHP / 100);
-			int defHealAmount = (move.oppHealAmount * defender.maxHP / 100);
-			if (atkHealAmount != 0) attacker.Heal(atkHealAmount);
-			if (defHealAmount != 0) defender.Heal(defHealAmount);
-		}
-
-		UpdateHealthClientRpc(defender.currentHP, !isHost);
-		UpdateHealthClientRpc(attacker.currentHP, isHost);
-
-		UpdateStatChangesClientRpc(attacker.attackStage, attacker.defenseStage, attacker.speedStage, isHost, attacker.name);
-		UpdateStatChangesClientRpc(defender.attackStage, defender.defenseStage, defender.speedStage, !isHost, defender.name);
-
-		if (isDefeated) {
-			Debug.Log($"{(isHost ? "Client" : "Host")} is defeated. Checking for game over.");
-			CheckForGameOver();
-		}
-
+		return message;
 	}
 
 
