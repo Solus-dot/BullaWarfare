@@ -81,7 +81,7 @@ public static class Mrman
 			isCooldown = false,
 			accuracy = 100,
 			isDamaging = true,
-			damage = 25,
+			damage = 30,
 			isHealingMove = false,
 			isStatChange = false,
 		}
@@ -89,7 +89,7 @@ public static class Mrman
 
 	// Initialize function for any random/niche Move effect
 	public static void Initialize() {
-		moves[3].moveMessage = "";
+		moves[3].moveMessage = "Skinny Legs Aaryaman summons a football, and starts performing a volley with skill, hitting the opponent repeatedly with the ball";
 		moves[3].damage = 25;
 
 		int x = Random.Range(1, 100);

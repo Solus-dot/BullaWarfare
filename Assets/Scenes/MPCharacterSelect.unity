@@ -2500,7 +2500,7 @@ MonoBehaviour:
     button: {fileID: 1503078373}
   - name: Aaryaman
     prefab: {fileID: 6884295409158445089, guid: 337e3bcc434e84f4f82be1936a95fa44, type: 3}
-    button: {fileID: 1503078373}
+    button: {fileID: 1173274911}
   defaultFrame: {fileID: 21300000, guid: 8a90005a887ee794bbff6197771168d3, type: 3}
   p1SelectFrame: {fileID: 21300000, guid: b3b2f3696d9190240935065182b6af50, type: 3}
   p2SelectFrame: {fileID: 21300000, guid: 0b987ff1660fbe84da4264454e0baf64, type: 3}
